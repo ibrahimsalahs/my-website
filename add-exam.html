@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>إضافة اختبار</title>
+
+<style>
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:#0b1220;
+  color:#fff;
+  font-family:Arial,sans-serif;
+}
+
+.container{
+  width:95%;
+  max-width:900px;
+  margin:auto;
+  padding:20px 0 50px;
+}
+
+h1{
+  text-align:center;
+  margin-bottom:8px;
+}
+
+.subtitle{
+  text-align:center;
+  color:#9caec8;
+  margin-bottom:25px;
+}
+
+.card{
+  background:#121c2d;
+  border:1px solid #263650;
+  border-radius:16px;
+  padding:18px;
+  margin-bottom:18px;
+}
+
+.card h2{
+  margin-top:0;
+  font-size:19px;
+}
+
+label{
+  display:block;
+  margin:10px 0 6px;
+  font-weight:bold;
+}
+
+input,
+textarea,
+select{
+  width:100%;
+  background:#0d1626;
+  border:1px solid #344866;
+  color:#fff;
+  border-radius:10px;
+  padding:11px;
+  font-size:15px;
+}
+
+textarea{
+  min-height:90px;
+  resize:vertical;
+}
+
+select[multiple]{
+  min-height:180px;
+}
+
+.question{
+  background:#0d1626;
+  border:1px solid #293b58;
+  border-radius:12px;
+  padding:14px;
+  margin:12px 0;
+}
+
+.question-title{
+  font-weight:bold;
+  margin-bottom:10px;
+}
+
+.option{
+  display:grid;
+  grid-template-columns:1fr 100px;
+  gap:8px;
+  margin-top:8px;
+}
+
+button{
+  border:0;
+  border-radius:10px;
+  padding:11px 15px;
+  cursor:pointer;
+  font-size:15px;
+  font-weight:bold;
+}
+
+.add{
+  background:#2563eb;
+  color:white;
+}
+
+.delete{
+  background:#991b1b;
+  color:white;
+}
+
+.save{
+  width:100%;
+  background:#16a34a;
+  color:white;
+  font-size:18px;
+  padding:15px;
+}
+
+.selected{
+  margin-top:10px;
+  color:#9fb2cf;
+  font-size:14px;
+}
+
+.status{
+  display:none;
+  padding:13px;
+  border-radius:10px;
+  margin-top:15px;
+  text-align:center;
+}
+
+.success{
+  display:block;
+  background:#123c2a;
+  color:#a7f3d0;
+}
+
+.error{
+  display:block;
+  background:#431b24;
+  color:#fecaca;
+}
+
+.small{
+  color:#94a7c2;
+  font-size:13px;
+  line-height:1.7;
+}
+
+@media(max-width:600px){
+
+  .option{
+    grid-template-columns:1fr;
+  }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>➕ إضافة اختبار</h1>
+
+<div class="subtitle">
+إنشاء اختبار للطلاب المختارين
+</div>
+
+
+<!-- ================= الطلاب ================= -->
+
+<div class="card">
+
+<h2>👨‍🎓 اختيار الطلاب</h2>
+
+<div class="small">
+يمكنك اختيار طالب واحد أو أكثر بالضغط المطول على الهاتف.
+</div>
+
+<label>
+الطلاب
+</label>
+
+<select id="students" multiple></select>
+
+<div id="selectedStudents" class="selected">
+لم يتم اختيار أي طالب.
+</div>
+
+</div>
+
+
+<!-- ================= اختيار من متعدد ================= -->
+
+<div class="card">
+
+<h2>1️⃣ اختيار من متعدد</h2>
+
+<div class="small">
+التخزين:
+<br>
+(السؤال_اختيار1-اختيار2-اختيار3/الإجابة الصحيحة)
+</div>
+
+<div id="choiceQuestions"></div>
+
+<button class="add" onclick="addChoiceQuestion()">
+＋ إضافة سؤال
+</button>
+
+</div>
+
+
+<!-- ================= صح وخطأ ================= -->
+
+<div class="card">
+
+<h2>2️⃣ صح وخطأ</h2>
+
+<div class="small">
+التخزين:
+<br>
+(السؤال/صح)
+<br>
+أو
+<br>
+(السؤال/خطأ)
+</div>
+
+<div id="tfQuestions"></div>
+
+<button class="add" onclick="addTFQuestion()">
+＋ إضافة سؤال
+</button>
+
+</div>
+
+
+<!-- ================= أكمل ================= -->
+
+<div class="card">
+
+<h2>3️⃣ أكمل</h2>
+
+<div class="small">
+التخزين:
+<br>
+(السؤال)
+</div>
+
+<div id="completeQuestions"></div>
+
+<button class="add" onclick="addCompleteQuestion()">
+＋ إضافة سؤال
+</button>
+
+</div>
+
+
+<!-- ================= متنوع ================= -->
+
+<div class="card">
+
+<h2>4️⃣ أسئلة متنوعة</h2>
+
+<div class="small">
+التخزين:
+<br>
+(نوع السؤال_سؤال1-سؤال2)
+</div>
+
+<div id="mixedQuestions"></div>
+
+<button class="add" onclick="addMixedQuestion()">
+＋ إضافة مجموعة
+</button>
+
+</div>
+
+
+<!-- ================= استخراج ================= -->
+
+<div class="card">
+
+<h2>5️⃣ استخرج من الفقرة</h2>
+
+<div class="small">
+التخزين:
+<br>
+(الفقرة)(سؤال1-سؤال2)
+</div>
+
+<div id="extractQuestions"></div>
+
+<button class="add" onclick="addExtractQuestion()">
+＋ إضافة فقرة
+</button>
+
+</div>
+
+
+<button
+id="saveButton"
+class="save"
+onclick="saveExam()">
+
+💾 حفظ الاختبار
+
+</button>
+
+
+<div id="status" class="status"></div>
+
+</div>
+
+
+<script src="add-exam.js"></script>
+
+</body>
+</html>
