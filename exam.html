@@ -1,83 +1,183 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>AlBayan Exam</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>اختبار أكاديمية البيان</title>
+
 <style>
-*{box-sizing:border-box;font-family:'Cairo',sans-serif}
-body{margin:0;background:#f0f2f5;padding:16px}
-.card{max-width:520px;margin:0 auto;background:#fff;border-radius:18px;padding:20px;box-shadow:0 8px 24px rgba(0,0,0,.08)}
-.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.top span{font-size:12px;background:#eef4ff;color:#0084ff;padding:6px 12px;border-radius:20px;direction:ltr}
-h2{text-align:center;margin:6px 0 14px}
-.timer{text-align:center;color:#ef4444;font-weight:700;margin-bottom:12px}
-.q{background:#f9fafb;border:1px solid #eee;border-radius:12px;padding:12px;margin-bottom:12px}
-.q b{display:block;margin-bottom:8px}
-label{display:block;padding:10px;border-radius:10px;margin-bottom:6px;background:#fff;border:1px solid #e5e7eb;cursor:pointer}
-button{width:100%;padding:14px;background:#0084ff;color:#fff;border:0;border-radius:12px;font-weight:700;font-size:16px;margin-top:10px}
-#result{display:none;text-align:center}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:#f3f6fa;
+  color:#182230;
+  font-family:Tahoma,Arial,sans-serif;
+}
+.container{
+  width:min(760px,94%);
+  margin:20px auto 50px;
+}
+.header{
+  background:#fff;
+  border-radius:24px;
+  padding:24px 20px;
+  margin-bottom:18px;
+  box-shadow:0 5px 22px rgba(0,0,0,.06);
+}
+.logo{
+  font-size:28px;
+  font-weight:800;
+  text-align:center;
+  margin-bottom:8px;
+}
+.exam-info{
+  text-align:center;
+  color:#667085;
+  line-height:1.9;
+  font-size:15px;
+}
+.section{
+  background:#fff;
+  border-radius:24px;
+  padding:18px;
+  margin:18px 0;
+  box-shadow:0 5px 22px rgba(0,0,0,.05);
+}
+.section-title{
+  font-size:22px;
+  font-weight:800;
+  margin:2px 4px 18px;
+}
+.question{
+  border:1px solid #e5e9ef;
+  border-radius:20px;
+  padding:18px;
+  margin:14px 0;
+  background:#fbfcfe;
+}
+.question-title{
+  font-size:18px;
+  font-weight:700;
+  line-height:1.8;
+  margin-bottom:14px;
+}
+.option{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:#fff;
+  border:1px solid #e1e6ed;
+  border-radius:14px;
+  padding:13px;
+  margin:9px 0;
+  cursor:pointer;
+  transition:.15s;
+}
+.option:has(input:checked){
+  border-color:#2563eb;
+  background:#eff6ff;
+}
+.option input{
+  width:19px;
+  height:19px;
+  flex:none;
+}
+.answer-input{
+  width:100%;
+  min-height:110px;
+  resize:vertical;
+  border:1px solid #d8dee8;
+  border-radius:16px;
+  padding:15px;
+  font:inherit;
+  font-size:16px;
+  outline:none;
+  background:#fff;
+}
+.answer-input:focus{
+  border-color:#2563eb;
+  box-shadow:0 0 0 3px rgba(37,99,235,.10);
+}
+.extract-passage{
+  background:#f8fafc;
+  border-right:4px solid #2563eb;
+  border-radius:12px;
+  padding:15px;
+  line-height:2;
+  margin-bottom:16px;
+}
+.btn{
+  width:100%;
+  border:0;
+  border-radius:16px;
+  padding:16px;
+  font:inherit;
+  font-size:17px;
+  font-weight:800;
+  cursor:pointer;
+}
+.submit{
+  background:#2563eb;
+  color:#fff;
+  margin-top:10px;
+}
+.submit:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+}
+.status{
+  display:none;
+  text-align:center;
+  padding:15px;
+  border-radius:15px;
+  margin-top:15px;
+  font-weight:700;
+}
+.loading{
+  background:#fff;
+  border-radius:20px;
+  padding:35px;
+  text-align:center;
+  box-shadow:0 5px 22px rgba(0,0,0,.05);
+}
+.error{color:#b42318;background:#fef3f2}
+.success{color:#027a48;background:#ecfdf3}
+.empty{text-align:center;color:#667085;padding:30px}
+.badge{
+  display:inline-block;
+  background:#eef4ff;
+  color:#175cd3;
+  padding:5px 10px;
+  border-radius:30px;
+  font-size:13px;
+  margin-bottom:10px;
+}
 </style>
 </head>
+
 <body>
-<div class="card">
-  <div class="top">
-    <a href="index.html" style="text-decoration:none;color:#0084ff">← الرئيسية</a>
-    <span id="psidShow">ID: ...</span>
-  </div>
-  <h2 dir="rtl">اختبار منصة البيان</h2>
-  <div class="timer" id="timer">10:00</div>
+<div class="container">
 
-  <div id="exam">
-    <div class="q" dir="rtl">
-      <b>1- إعراب "الطالب" في (نجح الطالب) ؟</b>
-      <label><input type="radio" name="q1" value="1"> فاعل مرفوع</label>
-      <label><input type="radio" name="q1" value="0"> مفعول به</label>
+  <div id="loading" class="loading">جاري تحميل الاختبار...</div>
+
+  <div id="app" style="display:none">
+    <div class="header">
+      <div class="logo">أكاديمية البيان</div>
+      <div id="studentInfo" class="exam-info"></div>
     </div>
-    <div class="q" dir="rtl">
-      <b>2- كم عدد أركان الإسلام؟</b>
-      <label><input type="radio" name="q2" value="0"> أربعة</label>
-      <label><input type="radio" name="q2" value="1"> خمسة</label>
-    </div>
-    <div class="q" dir="rtl">
-      <b>3- Download AlBayan Edu معناها؟</b>
-      <label><input type="radio" name="q3" value="1"> حمّل منصة البيان التعليمية</label>
-      <label><input type="radio" name="q3" value="0"> احذف المنصة</label>
-    </div>
-    <button onclick="submitExam()">إرسال الإجابة</button>
+
+    <form id="examForm"></form>
+
+    <button id="submitBtn" class="btn submit" type="button">
+      إرسال الاختبار
+    </button>
+
+    <div id="status" class="status"></div>
   </div>
 
-  <div id="result">
-    <h2 id="scoreText"></h2>
-    <p dir="rtl" id="msgText"></p>
-    <button onclick="location.href='index.html'">العودة للرئيسية</button>
-  </div>
 </div>
 
-<script>
-const params = new URLSearchParams(location.search);
-const psid = params.get('psid') || 'guest';
-document.getElementById('psidShow').innerText = 'ID: ' + psid;
-
-// مؤقت 10 دقايق
-let time=600; setInterval(()=>{ time--; let m=Math.floor(time/60), s=time%60; document.getElementById('timer').innerText=m+':'+(s<10?'0':'')+s; if(time<=0) submitExam(); },1000);
-
-function submitExam(){
-  let q1=document.querySelector('input[name="q1"]:checked');
-  let q2=document.querySelector('input[name="q2"]:checked');
-  let q3=document.querySelector('input[name="q3"]:checked');
-  if(!q1||!q2||!q3){ alert('جاوب على كل الأسئلة'); return; }
-  let score=parseInt(q1.value)+parseInt(q2.value)+parseInt(q3.value);
-  document.getElementById('exam').style.display='none';
-  document.getElementById('result').style.display='block';
-  document.getElementById('scoreText').innerText=`درجتك: ${score} / 3`;
-  document.getElementById('msgText').innerText=score>=2?'ممتاز، تم تسجيل نتيجتك ✅':'حاول مرة أخرى';
-  
-  // هنا هتحط رابط مشروع الطلاب عشان يسجل الدرجة
-  const SCRIPT_URL='https://script.google.com/macros/s/حط_رابطك_هنا/exec';
-  // fetch(`${SCRIPT_URL}?psid=${psid}&score=${score}`);
-}
-</script>
+<script src="exam-fetch.js"></script>
+<script src="exam-submit.js"></script>
 </body>
 </html>
