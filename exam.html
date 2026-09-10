@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AlBayan Exam</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;font-family:'Cairo',sans-serif}
+body{margin:0;background:#f0f2f5;padding:16px}
+.card{max-width:520px;margin:0 auto;background:#fff;border-radius:18px;padding:20px;box-shadow:0 8px 24px rgba(0,0,0,.08)}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.top span{font-size:12px;background:#eef4ff;color:#0084ff;padding:6px 12px;border-radius:20px;direction:ltr}
+h2{text-align:center;margin:6px 0 14px}
+.timer{text-align:center;color:#ef4444;font-weight:700;margin-bottom:12px}
+.q{background:#f9fafb;border:1px solid #eee;border-radius:12px;padding:12px;margin-bottom:12px}
+.q b{display:block;margin-bottom:8px}
+label{display:block;padding:10px;border-radius:10px;margin-bottom:6px;background:#fff;border:1px solid #e5e7eb;cursor:pointer}
+button{width:100%;padding:14px;background:#0084ff;color:#fff;border:0;border-radius:12px;font-weight:700;font-size:16px;margin-top:10px}
+#result{display:none;text-align:center}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="top">
+    <a href="index.html" style="text-decoration:none;color:#0084ff">← الرئيسية</a>
+    <span id="psidShow">ID: ...</span>
+  </div>
+  <h2 dir="rtl">اختبار منصة البيان</h2>
+  <div class="timer" id="timer">10:00</div>
+
+  <div id="exam">
+    <div class="q" dir="rtl">
+      <b>1- إعراب "الطالب" في (نجح الطالب) ؟</b>
+      <label><input type="radio" name="q1" value="1"> فاعل مرفوع</label>
+      <label><input type="radio" name="q1" value="0"> مفعول به</label>
+    </div>
+    <div class="q" dir="rtl">
+      <b>2- كم عدد أركان الإسلام؟</b>
+      <label><input type="radio" name="q2" value="0"> أربعة</label>
+      <label><input type="radio" name="q2" value="1"> خمسة</label>
+    </div>
+    <div class="q" dir="rtl">
+      <b>3- Download AlBayan Edu معناها؟</b>
+      <label><input type="radio" name="q3" value="1"> حمّل منصة البيان التعليمية</label>
+      <label><input type="radio" name="q3" value="0"> احذف المنصة</label>
+    </div>
+    <button onclick="submitExam()">إرسال الإجابة</button>
+  </div>
+
+  <div id="result">
+    <h2 id="scoreText"></h2>
+    <p dir="rtl" id="msgText"></p>
+    <button onclick="location.href='index.html'">العودة للرئيسية</button>
+  </div>
+</div>
+
+<script>
+const params = new URLSearchParams(location.search);
+const psid = params.get('psid') || 'guest';
+document.getElementById('psidShow').innerText = 'ID: ' + psid;
+
+// مؤقت 10 دقايق
+let time=600; setInterval(()=>{ time--; let m=Math.floor(time/60), s=time%60; document.getElementById('timer').innerText=m+':'+(s<10?'0':'')+s; if(time<=0) submitExam(); },1000);
+
+function submitExam(){
+  let q1=document.querySelector('input[name="q1"]:checked');
+  let q2=document.querySelector('input[name="q2"]:checked');
+  let q3=document.querySelector('input[name="q3"]:checked');
+  if(!q1||!q2||!q3){ alert('جاوب على كل الأسئلة'); return; }
+  let score=parseInt(q1.value)+parseInt(q2.value)+parseInt(q3.value);
+  document.getElementById('exam').style.display='none';
+  document.getElementById('result').style.display='block';
+  document.getElementById('scoreText').innerText=`درجتك: ${score} / 3`;
+  document.getElementById('msgText').innerText=score>=2?'ممتاز، تم تسجيل نتيجتك ✅':'حاول مرة أخرى';
+  
+  // هنا هتحط رابط مشروع الطلاب عشان يسجل الدرجة
+  const SCRIPT_URL='https://script.google.com/macros/s/حط_رابطك_هنا/exec';
+  // fetch(`${SCRIPT_URL}?psid=${psid}&score=${score}`);
+}
+</script>
+</body>
+</html>
