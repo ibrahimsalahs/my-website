@@ -8,48 +8,59 @@
 <style>
 *{box-sizing:border-box;font-family:'Cairo',sans-serif;margin:0;padding:0}
 body{background:#f8fafc;color:#0f172a}
-.hero{background:linear-gradient(135deg,#0084ff,#0061ff);color:#fff;padding:60px 20px;text-align:center}
-.hero h1{font-size:42px;font-weight:900;margin-bottom:10px}
-.hero p{font-size:18px;opacity:.9}
+.hero{background:linear-gradient(135deg,#0084ff,#0061ff);color:#fff;padding:60px 20px 80px;text-align:center}
+.hero h1{font-size:40px;font-weight:900}
+.hero p{opacity:.9;margin-top:8px}
 .wrap{max-width:900px;margin:0 auto;padding:20px}
-.card{background:#fff;border-radius:20px;padding:24px;box-shadow:0 8px 30px rgba(0,0,0,.06);margin-top:-30px;position:relative}
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:30px 0}
-.step{background:#f1f5f9;border-radius:16px;padding:18px;text-align:center}
-.step b{color:#0084ff;font-size:28px;display:block}
-.btn{display:block;width:100%;padding:16px;background:#0084ff;color:#fff;border:0;border-radius:12px;font-size:18px;font-weight:700;text-align:center;text-decoration:none;margin-top:12px}
-.inputRow{display:flex;gap:10px;margin-top:12px}
-.inputRow input{flex:1;padding:14px;border:1px solid #ddd;border-radius:12px;font-size:16px;text-align:center}
-@media(max-width:600px){.steps{grid-template-columns:1fr} .hero h1{font-size:32px}}
+.card{background:#fff;border-radius:20px;padding:24px;box-shadow:0 12px 30px rgba(0,0,0,.08);margin-top:-40px}
+.inputRow{display:flex;gap:10px;margin-top:14px}
+.inputRow input{flex:1;padding:14px;border:2px solid #e2e8f0;border-radius:12px;font-size:16px;text-align:center;outline:none}
+.inputRow input:focus{border-color:#0084ff}
+.btn{width:100%;padding:14px;border:0;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;text-decoration:none;display:block;text-align:center;margin-top:10px}
+.btn-blue{background:#0084ff;color:#fff}
+.btn-orange{background:#f59e0b;color:#fff}
+.btn-dark{background:#0f172a;color:#fff}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+.note{margin-top:14px;background:#f1f5f9;border-radius:12px;padding:12px;font-size:13px;color:#475569;text-align:center}
+@media(max-width:600px){.grid{grid-template-columns:1fr} .hero h1{font-size:30px}}
 </style>
 </head>
 <body>
 <div class="hero">
   <h1 dir="rtl">منصة البيان التعليمية</h1>
-  <p dir="rtl">حمّل المنصة وابدأ التعلم الآن 🚀</p>
+  <p dir="rtl">Download AlBayan Edu - منصتك للامتحان والواجب 🚀</p>
 </div>
+
 <div class="wrap">
   <div class="card" dir="rtl">
-    <h2>تفعيل المنصة</h2>
-    <p style="color:#64748b;margin:8px 0">اكتب كود الطالب بتاعك واضغط تفعيل</p>
+    <h3>تفعيل المنصة</h3>
+    <p style="color:#64748b;font-size:14px;margin-top:4px">اكتب كود الطالب وهيوديك للاختبار والواجب</p>
+    
     <div class="inputRow">
-      <input id="codeInput" placeholder="مثال: 589">
-      <button onclick="goExam()" style="padding:14px 18px;background:#0f172a;color:#fff;border:0;border-radius:12px;font-weight:700">تفعيل</button>
+      <input id="codeInput" placeholder="كود الطالب - مثال: 589">
     </div>
-    <p style="margin-top:12px;font-size:13px;color:#64748b">سيتم تحويلك لصفحة الاختبار - للتسجيل على الماسنجر ابعت: <b dir="ltr">Download AlBayan Edu [كودك]</b></p>
-    <a class="btn" href="exam.html">دخول صفحة الاختبار مباشرة</a>
-  </div>
 
-  <div class="steps" dir="rtl">
-    <div class="step"><b>1</b> احصل على كود الطالب<br><small>من المدرس</small></div>
-    <div class="step"><b>2</b> ابعت على الماسنجر<br><small>Download AlBayan Edu 589</small></div>
-    <div class="step"><b>3</b> ابدأ الامتحان<br><small>من اللينك</small></div>
+    <div class="grid">
+      <button class="btn btn-blue" onclick="go('exam.html')">📝 دخول الاختبار</button>
+      <button class="btn btn-orange" onclick="go('homework.html')">📚 دخول الواجب</button>
+    </div>
+
+    <a class="btn btn-dark" href="https://m.me/YOUR_PAGE" target="_blank">💬 تفعيل على الماسنجر: Download AlBayan Edu 589</a>
+
+    <div class="note">
+      لما الطالب يكتب <b>589</b> ويدوس اختبار هيروح لـ<br>
+      <span dir="ltr">.../exam.html?psid=589</span><br>
+      ولو داس واجب هيروح لـ<br>
+      <span dir="ltr">.../homework.html?psid=589</span>
+    </div>
   </div>
 </div>
+
 <script>
-function goExam(){
+function go(page){
   let c=document.getElementById('codeInput').value.trim();
-  if(!c){alert('اكتب الكود');return;}
-  location.href='exam.html?psid='+c;
+  if(!c){alert('اكتب كود الطالب الأول - مثال: 589');return;}
+  location.href=page+'?psid='+c;
 }
 </script>
 </body>
