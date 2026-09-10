@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>اختبار أكاديمية البيان</title>
+<style>
+:root{--bg:#f4f7fb;--card:#fff;--text:#182230;--muted:#6b7280;--border:#e6eaf0;--primary:#172033;--primary2:#25324a;--danger:#b42318;--ok:#087443}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);font-family:Tahoma,Arial,sans-serif;color:var(--text)}
+.app{max-width:900px;margin:auto;padding:18px 14px 50px}
+.hero{background:linear-gradient(135deg,#111827,#27364f);color:#fff;border-radius:22px;padding:24px;margin-bottom:16px;box-shadow:0 12px 35px rgba(0,0,0,.10)}
+.brand{font-size:13px;opacity:.75;margin-bottom:8px}.title{font-size:25px;font-weight:800;margin:0 0 14px}
+.meta{display:flex;flex-wrap:wrap;gap:8px}.pill{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.12);padding:8px 11px;border-radius:999px;font-size:13px}
+.section{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px;margin:14px 0;box-shadow:0 5px 18px rgba(16,24,40,.04)}
+.section h2{font-size:18px;margin:0 0 14px}.hint{color:var(--muted);font-size:13px}
+.question{border:1px solid var(--border);border-radius:15px;padding:15px;margin:12px 0;background:#fcfdff}
+.qhead{font-weight:800;margin-bottom:12px;line-height:1.8}
+.option{display:flex;align-items:flex-start;gap:9px;border:1px solid var(--border);padding:11px;border-radius:12px;margin:8px 0;cursor:pointer;transition:.15s;background:#fff}
+.option:hover{background:#f7f9fc}.option input{margin-top:4px;accent-color:#172033}
+.blank{border:1px dashed #cbd5e1;border-radius:12px;padding:13px;color:var(--muted);background:#fafbfc}
+.paragraph{white-space:pre-wrap;line-height:2;background:#f8fafc;border-radius:12px;padding:14px;border:1px solid var(--border);margin-bottom:12px}
+.inline-list{display:flex;flex-wrap:wrap;gap:8px}.tag{padding:8px 10px;background:#f1f5f9;border-radius:10px;font-size:13px}
+.error{color:var(--danger);background:#fff4f2;border:1px solid #ffd5d0;padding:14px;border-radius:14px}
+.loading{text-align:center;padding:35px;color:var(--muted)}
+footer{text-align:center;color:var(--muted);font-size:12px;margin-top:24px}
+.hidden{display:none!important}
+@media(max-width:600px){.app{padding:10px}.hero{padding:20px;border-radius:18px}.title{font-size:21px}.section{padding:14px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="hero">
+    <div class="brand">أكاديمية البيان</div>
+    <h1 class="title" id="examTitle">الاختبار</h1>
+    <div class="meta" id="meta"></div>
+  </header>
+
+  <div id="examPicker" class="section hidden"></div>
+  <main id="exam"></main>
+  <div id="state" class="loading">جاري تحميل الاختبار...</div>
+  <footer>أكاديمية البيان للتعليم أونلاين</footer>
+</div>
+<script src="exam.js"></script>
+</body>
+</html>
