@@ -1,149 +1,253 @@
-const API_URL = "https://script.google.com/macros/s/AKfycbwy0LYP84fqgl8-qUxcSIfnU4OQJFg2_dQkeIT-nCOgm45O7jWjfIVWTLbfQmAfX-x_0Q/exec";
-const userId = new URLSearchParams(location.search).get("userId");
+/*
+ * exam-fetch.js
+ * مسؤول عن جلب الاختبار من Google Apps Script وعرضه.
+ */
 
-const state = document.getElementById("state");
-const examEl = document.getElementById("exam");
-const picker = document.getElementById("examPicker");
+const API_URL = 'https://script.google.com/macros/s/AKfycbwy0LYP84fqgl8-qUxcSIfnU4OQJFg2_dQkeIT-nCOgm45O7jWjfIVWTLbfQmAfX-x_0Q/exec';
 
-let exams = [];
+const params = new URLSearchParams(window.location.search);
+const USER_ID = params.get('userId');
 
-function esc(v){
-  return String(v ?? "").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]));
-}
-function groups(text){
-  const out=[]; const re=/\(([^()]*)\)/g; let m;
-  while((m=re.exec(String(text||"")))!==null) if(m[1].trim()) out.push(m[1].trim());
-  return out;
-}
-function splitFirst(s, sep="_"){
-  const i=s.indexOf(sep); return i<0?[s.trim(),""]:[s.slice(0,i).trim(),s.slice(i+1).trim()];
-}
-function splitLast(s, sep="/"){
-  const i=s.lastIndexOf(sep); return i<0?[s.trim(),""]:[s.slice(0,i).trim(),s.slice(i+1).trim()];
-}
-function parseInfo(text){
-  const g=groups(text);
-  const student=g[0]?splitFirst(g[0],"-"):[ "", "" ];
-  const teacher=g[1]?splitFirst(g[1],"-"):[ "", "" ];
-  return {student:student[0], code:student[1], teacher:teacher[0], subject:teacher[1]};
-}
-function parseMC(text){
-  return groups(text).map((g,i)=>{
-    const [q,rest]=splitFirst(g,"_");
-    const [choices,answer]=splitLast(rest,"/");
-    return {n:i+1,q,choices:choices.split("-").map(x=>x.trim()).filter(Boolean),answer:answer.trim()};
-  });
-}
-function parseTF(text){
-  return groups(text).map((g,i)=>{
-    const [q,a]=splitLast(g,"/");
-    return {n:i+1,q:q.trim(),answer:a.trim()};
-  });
-}
-function parseComplete(text){
-  return groups(text).map((g,i)=>({n:i+1,q:g.trim()}));
-}
-function parseTypeQuestions(text){
-  return groups(text).map((g,i)=>{
-    const [type,questions]=splitFirst(g,"_");
-    return {n:i+1,type:type.trim(),questions:questions.split("-").map(x=>x.trim()).filter(Boolean)};
-  });
-}
-function parseExtract(text){
-  const g=groups(text);
-  return g.map((x,i)=>{
-    if(i===0) return {paragraph:x,questions:[]};
-    return {paragraph:"",questions:x.split("-").map(y=>y.trim()).filter(Boolean)};
-  }).reduce((a,x)=>{
-    if(x.paragraph) a.paragraph=x.paragraph; else a.questions.push(...x.questions);
-    return a;
-  },{paragraph:"",questions:[]});
-}
-function buildExam(row){
-  const info=parseInfo(row.info);
-  return {
-    ...row, info,
-    mc:parseMC(row.mc), tf:parseTF(row.tf), complete:parseComplete(row.complete),
-    typeq:parseTypeQuestions(row.typeq), extract:parseExtract(row.extract)
-  };
-}
-function renderMeta(ex){
-  document.getElementById("meta").innerHTML=[
-    ex.info.student ? `👤 ${esc(ex.info.student)}`:"",
-    ex.info.teacher ? `👨‍🏫 ${esc(ex.info.teacher)}`:"",
-    ex.info.subject ? `📚 ${esc(ex.info.subject)}`:"",
-    ex.mc.length+ex.tf.length+ex.complete.length+ex.typeq.length+ex.extract.questions.length ? `📝 ${ex.mc.length+ex.tf.length+ex.complete.length+ex.typeq.length+ex.extract.questions.length} سؤال`:""
-  ].filter(Boolean).map(x=>`<span class="pill">${x}</span>`).join("");
-}
-function section(title,body){
-  if(!body) return "";
-  return `<section class="section"><h2>${title}</h2>${body}</section>`;
-}
-function render(ex){
-  document.getElementById("examTitle").textContent = ex.info.subject ? `اختبار ${ex.info.subject}` : "الاختبار";
-  renderMeta(ex);
-  let html="";
+let EXAM_DATA = null;
 
-  if(ex.mc.length){
-    html+=section("🟦 أولًا: اختر الإجابة الصحيحة",
-      ex.mc.map(q=>`<div class="question"><div class="qhead">${q.n}. ${esc(q.q)}</div>${
-        q.choices.map((c,j)=>`<label class="option"><input type="radio" name="mc_${q.n}"> <span>${esc(c)}</span></label>`).join("")
-      }</div>`).join(""));
+document.addEventListener('DOMContentLoaded', loadExam);
+
+async function loadExam(){
+  const loading = document.getElementById('loading');
+
+  if(!USER_ID){
+    showError('لم يتم العثور على معرف الطالب في الرابط.');
+    return;
   }
-  if(ex.tf.length){
-    html+=section("🟩 ثانيًا: صح أم خطأ",
-      ex.tf.map(q=>`<div class="question"><div class="qhead">${q.n}. ${esc(q.q)}</div>
-        <label class="option"><input type="radio" name="tf_${q.n}"> <span>صح</span></label>
-        <label class="option"><input type="radio" name="tf_${q.n}"> <span>خطأ</span></label>
-      </div>`).join(""));
+
+  if(API_URL.includes('ضع_رابط')){
+    showError('ضع رابط Google Apps Script داخل المتغير API_URL في ملف exam-fetch.js');
+    return;
   }
-  if(ex.complete.length){
-    html+=section("🟨 ثالثًا: أكمل",
-      ex.complete.map(q=>`<div class="question"><div class="qhead">${q.n}. ${esc(q.q)}</div>
-        <input class="blank" style="width:100%;border-style:solid;color:var(--text);background:#fff" type="text" placeholder="اكتب الإجابة هنا">
-      </div>`).join(""));
-  }
-  if(ex.typeq.length){
-    html+=section("🟧 رابعًا: أسئلة متنوعة",
-      ex.typeq.map(block=>`<div class="question"><div class="qhead">نوع السؤال: ${esc(block.type)}</div>${
-        block.questions.map((q,j)=>`<div class="question"><div class="qhead">${j+1}. ${esc(q)}</div><div class="blank">اترك الإجابة للطالب</div></div>`).join("")
-      }</div>`).join(""));
-  }
-  if(ex.extract.paragraph || ex.extract.questions.length){
-    html+=section("🟥 خامسًا: استخرج من الفقرة السابقة",
-      ex.extract.paragraph?`<div class="paragraph">${esc(ex.extract.paragraph)}</div>`:"");
-    if(ex.extract.questions.length){
-      html+=`<div class="question"><div class="qhead">الأسئلة</div>${
-        ex.extract.questions.map((q,i)=>`<div style="margin:10px 0"><strong>${i+1}. ${esc(q)}</strong><input class="blank" style="display:block;width:100%;margin-top:7px;border-style:solid;color:var(--text);background:#fff" type="text" placeholder="اكتب الإجابة هنا"></div>`).join("")
-      }</div>`;
+
+  try{
+    const url = API_URL + '?userId=' + encodeURIComponent(USER_ID);
+
+    const response = await fetch(url, {method:'GET'});
+    const data = await response.json();
+
+    if(!data.success){
+      showError(data.message || 'تعذر جلب بيانات الاختبار.');
+      return;
     }
+
+    EXAM_DATA = data;
+    renderExam(data);
+
+  }catch(error){
+    console.error(error);
+    showError('حدث خطأ أثناء الاتصال بالخادم.');
   }
-  examEl.innerHTML=html;
-  state.classList.add("hidden");
 }
-function showPicker(){
-  if(exams.length<2) return;
-  picker.classList.remove("hidden");
-  picker.innerHTML=`<h2>اختر الاختبار</h2><select id="examSelect" style="width:100%;padding:12px;border:1px solid var(--border);border-radius:12px;font-size:15px">${exams.map((e,i)=>`<option value="${i}">${esc(e.title || e.info.subject || "اختبار "+(i+1))}</option>`).join("")}</select>`;
-  document.getElementById("examSelect").onchange=e=>render(exams[+e.target.value]);
+
+function renderExam(data){
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+
+  const student = data.student || {};
+  document.getElementById('studentInfo').innerHTML =
+    '<span class="badge">اختبار</span><br>' +
+    'الطالب: <b>' + escapeHtml(student.name || '') + '</b>' +
+    '<br>' +
+    'المعلم: <b>' + escapeHtml(student.teacher || '') + '</b>' +
+    '<br>' +
+    'المادة: <b>' + escapeHtml(student.subject || '') + '</b>';
+
+  const form = document.getElementById('examForm');
+  form.innerHTML = '';
+
+  renderChoiceSection(form, 'أولًا: أسئلة الاختيار من متعدد', data.sections.choice, 'choice');
+  renderTrueFalseSection(form, 'ثانيًا: صح وخطأ', data.sections.trueFalse);
+  renderOpenSection(form, 'ثالثًا: أكمل', data.sections.complete, 'complete');
+  renderMixedSection(form, 'رابعًا: أسئلة متنوعة', data.sections.mixed);
+  renderExtractSection(form, 'خامسًا: استخرج من الفقرة السابقة', data.sections.extract);
 }
-function fail(msg){
-  state.className="error"; state.textContent=msg;
+
+function renderChoiceSection(parent, title, questions, type){
+  if(!questions || !questions.length) return;
+
+  const section = createSection(title);
+
+  questions.forEach((q,i)=>{
+    const box = document.createElement('div');
+    box.className = 'question';
+
+    let options = '';
+    q.options.forEach((option,j)=>{
+      options += `
+        <label class="option">
+          <input type="radio"
+                 name="q_${q.id}"
+                 value="${escapeAttr(option)}">
+          <span>${escapeHtml(option)}</span>
+        </label>`;
+    });
+
+    box.innerHTML = `
+      <div class="question-title">${i+1}. ${escapeHtml(q.question)}</div>
+      ${options}
+    `;
+
+    section.appendChild(box);
+  });
+
+  parent.appendChild(section);
 }
-function loadViaJsonp(){
-  if(!API_URL || API_URL.includes("ضع_رابط")) return fail("ضع رابط مشروع Google Apps Script في ملف exam.js أولًا.");
-  if(!userId) return fail("لم يتم العثور على معرف الطالب في الرابط.");
-  const cb="albayanExamCallback_"+Date.now();
-  const script=document.createElement("script");
-  const url=API_URL+"?action=getExam&userId="+encodeURIComponent(userId)+"&callback="+cb;
-  window[cb]=(data)=>{
-    delete window[cb]; script.remove();
-    if(!data || !data.ok) return fail(data?.message || "تعذر تحميل الاختبار.");
-    exams=(data.exams||[]).map(buildExam);
-    if(!exams.length) return fail("لا يوجد اختبار متاح لهذا الطالب حاليًا.");
-    showPicker(); render(exams[0]);
-  };
-  script.onerror=()=>{delete window[cb];script.remove();fail("حدث خطأ في الاتصال بخادم الاختبارات.");};
-  script.src=url; document.body.appendChild(script);
+
+function renderTrueFalseSection(parent, title, questions){
+  if(!questions || !questions.length) return;
+
+  const section = createSection(title);
+
+  questions.forEach((q,i)=>{
+    const box = document.createElement('div');
+    box.className = 'question';
+
+    box.innerHTML = `
+      <div class="question-title">${i+1}. ${escapeHtml(q.question)}</div>
+      <label class="option">
+        <input type="radio" name="q_${q.id}" value="صح">
+        <span>صح</span>
+      </label>
+      <label class="option">
+        <input type="radio" name="q_${q.id}" value="خطأ">
+        <span>خطأ</span>
+      </label>
+    `;
+
+    section.appendChild(box);
+  });
+
+  parent.appendChild(section);
 }
-loadViaJsonp();
+
+function renderOpenSection(parent, title, questions, type){
+  if(!questions || !questions.length) return;
+
+  const section = createSection(title);
+
+  questions.forEach((q,i)=>{
+    const box = document.createElement('div');
+    box.className = 'question';
+
+    box.innerHTML = `
+      <div class="question-title">${i+1}. ${escapeHtml(q.question)}</div>
+      <textarea
+        class="answer-input"
+        data-question-id="${escapeAttr(q.id)}"
+        placeholder="اكتب الإجابة هنا"></textarea>
+    `;
+
+    section.appendChild(box);
+  });
+
+  parent.appendChild(section);
+}
+
+function renderMixedSection(parent, title, questions){
+  if(!questions || !questions.length) return;
+
+  const section = createSection(title);
+
+  questions.forEach((group,groupIndex)=>{
+    const groupBox = document.createElement('div');
+    groupBox.className = 'question';
+
+    groupBox.innerHTML =
+      '<div class="question-title">نوع السؤال: ' +
+      escapeHtml(group.type) +
+      '</div>';
+
+    group.questions.forEach((q,i)=>{
+      const inner = document.createElement('div');
+      inner.className = 'question';
+
+      inner.innerHTML = `
+        <div class="question-title">${i+1}. ${escapeHtml(q)}</div>
+        <textarea
+          class="answer-input"
+          data-question-id="${escapeAttr(group.id + '_' + i)}"
+          placeholder="اترك الإجابة للطالب هنا"></textarea>
+      `;
+
+      groupBox.appendChild(inner);
+    });
+
+    section.appendChild(groupBox);
+  });
+
+  parent.appendChild(section);
+}
+
+function renderExtractSection(parent, title, groups){
+  if(!groups || !groups.length) return;
+
+  const section = createSection(title);
+
+  groups.forEach((group,groupIndex)=>{
+    const groupBox = document.createElement('div');
+    groupBox.className = 'question';
+
+    groupBox.innerHTML = `
+      <div class="extract-passage">
+        ${escapeHtml(group.passage)}
+      </div>
+    `;
+
+    group.questions.forEach((q,i)=>{
+      const inner = document.createElement('div');
+      inner.className = 'question';
+
+      inner.innerHTML = `
+        <div class="question-title">${i+1}. ${escapeHtml(q)}</div>
+        <textarea
+          class="answer-input"
+          data-question-id="${escapeAttr(group.id + '_' + i)}"
+          placeholder="اكتب الإجابة هنا"></textarea>
+      `;
+
+      groupBox.appendChild(inner);
+    });
+
+    section.appendChild(groupBox);
+  });
+
+  parent.appendChild(section);
+}
+
+function createSection(title){
+  const section = document.createElement('section');
+  section.className = 'section';
+
+  const h = document.createElement('div');
+  h.className = 'section-title';
+  h.textContent = title;
+
+  section.appendChild(h);
+  return section;
+}
+
+function showError(message){
+  document.getElementById('loading').innerHTML =
+    '<div style="font-weight:800;margin-bottom:10px">تعذر فتح الاختبار</div>' +
+    escapeHtml(message);
+  document.getElementById('loading').style.color = '#b42318';
+}
+
+function escapeHtml(value){
+  return String(value ?? '')
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#039;');
+}
+
+function escapeAttr(value){
+  return escapeHtml(value);
+}
