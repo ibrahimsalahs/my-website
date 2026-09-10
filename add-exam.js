@@ -1,4 +1,4 @@
-const API_URL = 'https://script.google.com/macros/s/AKfycbxjMKQZcizhX_S3bnov-tvtnekqZ-0XjhL5i11T9ALIxJWfRRqyCQl0fU3LdH1OCAAS/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbyOpX-SgegQAWGKY0LmN29_johjik0b08DLgjTooUCX-ooBZktObb7DL2BzYFwQEnX4/exec';
 
 
 let choiceCounter = 0;
