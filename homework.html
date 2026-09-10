@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AlBayan Homework</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;font-family:'Cairo',sans-serif}
+body{margin:0;background:#f0f2f5;padding:16px}
+.card{max-width:560px;margin:0 auto;background:#fff;border-radius:20px;padding:22px;box-shadow:0 8px 24px rgba(0,0,0,.08)}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.top span{font-size:12px;background:#fef3c7;color:#d97706;padding:6px 12px;border-radius:20px;direction:ltr}
+h2{text-align:center;margin:6px 0}
+.sub{text-align:center;color:#64748b;font-size:13px;margin-bottom:16px}
+.task{background:#fffbeb;border:1px dashed #f59e0b;border-radius:14px;padding:14px;margin-bottom:14px}
+.task b{color:#d97706}
+.q{background:#f9fafb;border:1px solid #eee;border-radius:12px;padding:12px;margin-bottom:12px}
+label{display:block;padding:10px;border-radius:10px;margin-bottom:6px;background:#fff;border:1px solid #e5e7eb;cursor:pointer}
+textarea{width:100%;padding:12px;border:1px solid #e5e7eb;border-radius:12px;min-height:100px;resize:none}
+button{width:100%;padding:14px;background:#f59e0b;color:#fff;border:0;border-radius:12px;font-weight:700;font-size:16px;margin-top:10px}
+#result{display:none;text-align:center}
+.fileBox{border:2px dashed #cbd5e1;border-radius:12px;padding:18px;text-align:center;color:#64748b;margin-bottom:12px}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="top">
+    <a href="index.html" style="text-decoration:none;color:#0084ff">← الرئيسية</a>
+    <span id="psidShow">ID: ...</span>
+  </div>
+  <h2 dir="rtl">واجب منصة البيان 📚</h2>
+  <p class="sub" dir="rtl">Download AlBayan Edu - صفحة الواجبات</p>
+
+  <div id="homework">
+    <div class="task" dir="rtl">
+      <b>📝 مهمة اليوم:</b><br>
+      اكتب فقرة 3 أسطر عن أهمية العلم في الإسلام مع ذكر آية أو حديث.
+    </div>
+
+    <div class="fileBox" dir="rtl">
+      📎 ارفع صورة الواجب (اختياري)<br>
+      <input type="file" id="file" accept="image/*" style="margin-top:8px">
+    </div>
+
+    <div class="q" dir="rtl">
+      <b>اكتب إجابتك هنا:</b>
+      <textarea id="answer" placeholder="اكتب الواجب هنا..."></textarea>
+    </div>
+
+    <div class="q" dir="rtl">
+      <b>هل أنهيت الواجب كامل؟</b>
+      <label><input type="radio" name="done" value="1"> نعم، أنهيته ✅</label>
+      <label><input type="radio" name="done" value="0"> لا، سأكمله لاحقاً</label>
+    </div>
+
+    <button onclick="submitHW()">إرسال الواجب</button>
+    <a href="exam.html" id="toExam" style="display:block;text-align:center;margin-top:12px;color:#0084ff;text-decoration:none" dir="rtl">الذهاب للاختبار ←</a>
+  </div>
+
+  <div id="result">
+    <h2 id="scoreText">تم الاستلام ✅</h2>
+    <p dir="rtl" id="msgText">تم إرسال واجبك للمدرس، سيتم مراجعته قريباً</p>
+    <button onclick="location.href='index.html'">العودة للرئيسية</button>
+  </div>
+</div>
+
+<script>
+const params = new URLSearchParams(location.search);
+const psid = params.get('psid') || 'guest';
+document.getElementById('psidShow').innerText = 'ID: ' + psid;
+document.getElementById('toExam').href = 'exam.html?psid='+psid;
+
+function submitHW(){
+  let ans = document.getElementById('answer').value.trim();
+  let done = document.querySelector('input[name="done"]:checked');
+  if(!ans){ alert('اكتب الواجب الأول'); return; }
+  if(!done){ alert('اختار هل أنهيت الواجب؟'); return; }
+
+  document.getElementById('homework').style.display='none';
+  document.getElementById('result').style.display='block';
+
+  // ابعت للشيت
+  const SCRIPT_URL='https://script.google.com/macros/s/حط_رابطك_هنا/exec';
+  // fetch(`${SCRIPT_URL}?psid=${psid}&homework=${encodeURIComponent(ans)}`);
+}
+</script>
+</body>
+</html>
