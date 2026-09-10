@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>تصحيح الاختبار | أكاديمية البيان</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f4f7fb;color:#172033;font-family:Tahoma,Arial,sans-serif}
+.wrap{width:min(820px,94%);margin:20px auto 50px}
+.card{background:#fff;border-radius:24px;padding:20px;margin:16px 0;box-shadow:0 6px 24px rgba(15,23,42,.06)}
+.head{text-align:center}
+.brand{font-size:28px;font-weight:900}
+.meta{color:#667085;line-height:2;margin-top:8px}
+.section-title{font-size:21px;font-weight:900;margin-bottom:14px}
+.q{border:1px solid #e3e8ef;background:#fbfcfe;border-radius:18px;padding:16px;margin:12px 0}
+.qtitle{font-size:17px;font-weight:800;line-height:1.9}
+.answer,.correct{margin-top:10px;padding:12px;border-radius:12px;line-height:1.8}
+.answer{background:#eef6ff;border-right:4px solid #2563eb}
+.correct{background:#ecfdf3;border-right:4px solid #16a34a}
+.label{font-size:13px;color:#667085;font-weight:700}
+textarea,input{width:100%;font:inherit;border:1px solid #d5dce6;border-radius:13px;padding:12px;outline:0;background:#fff}
+textarea{min-height:85px;resize:vertical}
+input:focus,textarea:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+.grade{margin-top:12px;display:flex;gap:10px;align-items:center}
+.grade input{width:120px;text-align:center}
+.btn{width:100%;border:0;border-radius:16px;padding:16px;font:inherit;font-weight:900;font-size:17px;cursor:pointer}
+.save{background:#2563eb;color:#fff}
+.save:disabled{opacity:.55}
+.status{display:none;text-align:center;padding:14px;border-radius:14px;font-weight:800;margin-top:14px}
+.ok{display:block;background:#ecfdf3;color:#027a48}
+.err{display:block;background:#fef3f2;color:#b42318}
+.loading{text-align:center;padding:35px}
+.note{font-size:13px;color:#667085;line-height:1.8}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div id="loading" class="card loading">جاري تحميل إجابات الطالب...</div>
+  <main id="app" style="display:none">
+    <div class="card head">
+      <div class="brand">أكاديمية البيان</div>
+      <div id="meta" class="meta"></div>
+    </div>
+
+    <div id="exam"></div>
+
+    <div class="card">
+      <div class="section-title">النتيجة النهائية</div>
+      <div class="note">اكتب النتيجة التي تريد تسجيلها في صفحة النتائج. عند الحفظ سيتم حذف القيمة القديمة من العمود H وكتابة النتيجة الجديدة في نفس صف الطالب/المادة.</div>
+      <div style="margin-top:14px">
+        <input id="finalResult" type="text" inputmode="decimal" placeholder="مثال: 18 / 20">
+      </div>
+      <button id="saveBtn" class="btn save" style="margin-top:14px">حفظ النتيجة</button>
+      <div id="status" class="status"></div>
+    </div>
+  </main>
+</div>
+<script src="correction-fetch.js"></script>
+<script src="correction-submit.js"></script>
+</body>
+</html>
