@@ -1,993 +1,1339 @@
 <!DOCTYPE html>
+
 <html lang="ar" dir="rtl">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
 <title>أكاديمية البيان</title>
 
-<style>
-*{box-sizing:border-box}
 
-html,body{
- margin:0;
- width:100%;
- height:100%;
- font-family:Arial,Tahoma,sans-serif;
- background:#eef1f5;
- color:#1c1e21;
+<style>
+
+*{
+  box-sizing:border-box;
 }
 
 body{
- display:flex;
- justify-content:center;
+
+  margin:0;
+
+  background:#0b1220;
+
+  color:#fff;
+
+  font-family:
+    Tahoma,
+    Arial,
+    sans-serif;
+
 }
 
-.app{
- width:100%;
- height:100vh;
- display:flex;
- flex-direction:column;
- background:#fff;
+
+.container{
+
+  width:100%;
+
+  max-width:700px;
+
+  margin:auto;
+
+  padding:20px;
+
 }
 
-/* الهيدر */
 
 .header{
- height:64px;
- flex-shrink:0;
- background:#0866ff;
- color:#fff;
- display:flex;
- align-items:center;
- gap:12px;
- padding:0 16px;
+
+  text-align:center;
+
+  margin-bottom:20px;
+
 }
 
-.logo{
- width:42px;
- height:42px;
- border-radius:50%;
- background:#fff;
- color:#0866ff;
- display:flex;
- align-items:center;
- justify-content:center;
- font-size:21px;
- font-weight:bold;
+
+.header h1{
+
+  margin:0;
+
+  font-size:25px;
+
 }
 
-.headerText{
- flex:1;
+
+.header p{
+
+  color:#9ca3af;
+
+  margin-top:8px;
+
 }
 
-.headerText b{
- display:block;
- font-size:17px;
+
+.card{
+
+  background:#111827;
+
+  border:1px solid #1f2937;
+
+  border-radius:16px;
+
+  padding:18px;
+
+  margin-bottom:15px;
+
 }
 
-.headerText span{
- font-size:12px;
- opacity:.9;
+
+label{
+
+  display:block;
+
+  margin-bottom:8px;
+
+  color:#d1d5db;
+
 }
 
-.online{
- width:9px;
- height:9px;
- border-radius:50%;
- background:#35d46a;
+
+input{
+
+  width:100%;
+
+  padding:14px;
+
+  border-radius:10px;
+
+  border:1px solid #374151;
+
+  background:#0b1220;
+
+  color:white;
+
+  font-size:16px;
+
+  direction:ltr;
+
+  text-align:left;
+
+  outline:none;
+
 }
 
-/* شاشة تسجيل الدخول */
 
-.login{
- position:fixed;
- inset:0;
- z-index:20;
- background:#eef1f5;
- display:flex;
- align-items:center;
- justify-content:center;
- padding:20px;
+input:focus{
+
+  border-color:#3b82f6;
+
 }
 
-.loginBox{
- width:100%;
- max-width:420px;
- background:#fff;
- border-radius:20px;
- padding:28px 22px;
- box-shadow:0 5px 30px #0002;
- text-align:center;
+
+.main-button{
+
+  width:100%;
+
+  padding:14px;
+
+  margin-top:12px;
+
+  border:0;
+
+  border-radius:10px;
+
+  background:#2563eb;
+
+  color:white;
+
+  font-size:16px;
+
+  cursor:pointer;
+
 }
 
-.loginLogo{
- width:72px;
- height:72px;
- margin:auto auto 15px;
- border-radius:50%;
- background:#0866ff;
- color:#fff;
- display:flex;
- align-items:center;
- justify-content:center;
- font-size:30px;
- font-weight:bold;
+
+.main-button:disabled{
+
+  opacity:.5;
+
 }
 
-.loginBox h2{
- margin:5px 0 8px;
- font-size:23px;
+
+.status{
+
+  display:none;
+
+  margin-top:12px;
+
+  padding:12px;
+
+  border-radius:10px;
+
+  background:#0f172a;
+
+  color:#9ca3af;
+
 }
 
-.loginBox p{
- margin:0 0 20px;
- color:#65676b;
- font-size:14px;
-}
-
-.idInput{
- width:100%;
- height:48px;
- border:1px solid #ccd0d5;
- border-radius:12px;
- padding:0 15px;
- text-align:center;
- font-size:16px;
- outline:none;
-}
-
-.idInput:focus{
- border-color:#0866ff;
- box-shadow:0 0 0 2px #0866ff22;
-}
-
-.startBtn{
- width:100%;
- height:48px;
- margin-top:12px;
- border:0;
- border-radius:12px;
- background:#0866ff;
- color:#fff;
- font-size:16px;
- font-weight:bold;
- cursor:pointer;
-}
-
-/* الشات */
 
 .chat{
- flex:1;
- min-height:0;
- overflow-y:auto;
- padding:18px 15px 20px;
- background:#fff;
- scroll-behavior:smooth;
+
+  margin-top:15px;
+
 }
 
-.welcome{
- text-align:center;
- color:#65676b;
- font-size:13px;
- margin:5px auto 20px;
+
+.message{
+
+  background:#111827;
+
+  border:1px solid #1f2937;
+
+  border-radius:16px;
+
+  padding:16px;
+
+  margin-bottom:14px;
+
 }
 
-/* رسالة المستخدم */
 
-.userMessage{
- max-width:80%;
- margin:8px 0 8px auto;
- background:#0866ff;
- color:#fff;
- border-radius:18px 18px 5px 18px;
- padding:10px 14px;
- line-height:1.7;
- font-size:15px;
- word-break:break-word;
+.message-title{
+
+  font-size:19px;
+
+  font-weight:bold;
+
+  margin-bottom:6px;
+
 }
 
-/* رسالة السيرفر */
 
-.serverMessage{
- max-width:80%;
- margin:8px auto 8px 0;
- background:#e4e6eb;
- color:#1c1e21;
- border-radius:18px 18px 18px 5px;
- padding:10px 14px;
- line-height:1.7;
- font-size:15px;
- white-space:pre-wrap;
- word-break:break-word;
+.message-subtitle{
+
+  color:#9ca3af;
+
+  font-size:14px;
+
+  margin-bottom:15px;
+
 }
 
-/* الأزرار */
 
 .menu{
- width:100%;
- max-width:850px;
- margin:12px auto 18px;
- display:grid;
- grid-template-columns:repeat(2,minmax(0,1fr));
- gap:10px;
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:10px;
+
 }
 
-.menuButton{
- width:100%;
- border:1px solid #e0e3e7;
- background:#fff;
- border-radius:15px;
- padding:15px;
- text-align:right;
- cursor:pointer;
- box-shadow:0 2px 8px #0000000d;
- transition:.15s;
+
+.menu-button{
+
+  width:100%;
+
+  padding:15px;
+
+  background:#172033;
+
+  color:white;
+
+  border:1px solid #293548;
+
+  border-radius:12px;
+
+  cursor:pointer;
+
+  text-align:right;
+
 }
 
-.menuButton:hover{
- background:#f5f7fa;
- transform:translateY(-1px);
+
+.menu-button:hover{
+
+  background:#1e293b;
+
 }
 
-.menuButton:active{
- transform:scale(.98);
+
+.menu-title{
+
+  display:block;
+
+  font-size:16px;
+
+  font-weight:bold;
+
 }
 
-.menuIcon{
- font-size:23px;
- margin-bottom:7px;
+
+.menu-subtitle{
+
+  display:block;
+
+  color:#9ca3af;
+
+  font-size:13px;
+
+  margin-top:5px;
+
 }
 
-.menuButton b{
- display:block;
- font-size:15px;
+
+.back{
+
+  width:100%;
+
+  margin-top:12px;
+
+  padding:13px;
+
+  background:#374151;
+
+  border:0;
+
+  border-radius:10px;
+
+  color:white;
+
+  cursor:pointer;
+
 }
 
-.menuButton span{
- display:block;
- color:#65676b;
- font-size:12px;
- margin-top:5px;
- line-height:1.5;
+
+.data{
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:8px;
+
 }
 
-/* التحميل */
 
-.loading{
- text-align:center;
- color:#65676b;
- font-size:13px;
- padding:10px;
+.data-item{
+
+  background:#0b1220;
+
+  border-radius:10px;
+
+  padding:12px;
+
 }
 
-/* الخطأ */
+
+.data-key{
+
+  color:#9ca3af;
+
+  font-size:13px;
+
+  margin-bottom:5px;
+
+}
+
+
+.data-value{
+
+  color:#fff;
+
+  word-break:break-word;
+
+}
+
+
+.array-item{
+
+  background:#0b1220;
+
+  border:1px solid #1f2937;
+
+  border-radius:12px;
+
+  padding:12px;
+
+  margin-bottom:8px;
+
+}
+
 
 .error{
- max-width:80%;
- margin:8px auto 8px 0;
- background:#ffe5e8;
- color:#b4232d;
- border-radius:14px;
- padding:11px 14px;
- font-size:13px;
+
+  background:#3f1717;
+
+  border-color:#7f1d1d;
+
+  color:#fecaca;
+
 }
 
-/* الأسفل */
 
-.bottom{
- min-height:62px;
- flex-shrink:0;
- border-top:1px solid #ddd;
- background:#fff;
- padding:9px 12px;
- display:flex;
- align-items:center;
- gap:8px;
+.loading{
+
+  text-align:center;
+
+  padding:20px;
+
+  color:#9ca3af;
+
 }
 
-.bottomInput{
- flex:1;
- height:43px;
- border:1px solid #ccd0d5;
- border-radius:22px;
- padding:0 16px;
- outline:none;
- font-size:14px;
- background:#f0f2f5;
+
+pre{
+
+  direction:ltr;
+
+  text-align:left;
+
+  white-space:pre-wrap;
+
+  word-break:break-word;
+
+  color:#d1d5db;
+
 }
 
-.homeBtn{
- width:43px;
- height:43px;
- border:0;
- border-radius:50%;
- background:#0866ff;
- color:#fff;
- font-size:19px;
- cursor:pointer;
-}
-
-/* الشاشات الكبيرة */
-
-@media(min-width:900px){
- .app{
-  max-width:1100px;
-  box-shadow:0 0 25px #0002;
- }
-
- .chat{
-  padding-left:40px;
-  padding-right:40px;
- }
-
- .menu{
-  max-width:900px;
-  grid-template-columns:repeat(3,minmax(0,1fr));
- }
-}
-
-/* الموبايل */
-
-@media(max-width:600px){
- .menu{
-  grid-template-columns:1fr;
- }
-
- .serverMessage,
- .userMessage{
-  max-width:90%;
- }
-
- .chat{
-  padding:15px 10px;
- }
-}
 </style>
+
 </head>
+
 
 <body>
 
-<!-- تسجيل الدخول -->
 
-<div id="login" class="login">
+<div class="container">
 
- <div class="loginBox">
 
-  <div class="loginLogo">ب</div>
+  <div class="header">
 
-  <h2>أكاديمية البيان</h2>
+    <h1>أكاديمية البيان</h1>
 
-  <p>أدخل ID الطالب للبدء</p>
+    <p>واجهة اختبار مشروع الطلاب</p>
 
-  <input
-   id="studentId"
-   class="idInput"
-   type="text"
-   inputmode="numeric"
-   autocomplete="off"
-   placeholder="ID الطالب">
+  </div>
 
-  <button class="startBtn" onclick="startChat()">
-   ابدأ
-  </button>
 
- </div>
+  <div class="card">
+
+    <label>
+
+      ID المستخدم
+
+    </label>
+
+
+    <input
+      id="senderId"
+      type="text"
+      placeholder="اكتب ID المستخدم"
+      autocomplete="off"
+    >
+
+
+    <button
+      id="sendButton"
+      class="main-button"
+      onclick="start()"
+    >
+
+      إرسال
+
+    </button>
+
+
+    <div
+      id="status"
+      class="status"
+    ></div>
+
+  </div>
+
+
+  <div
+    id="chat"
+    class="chat"
+  ></div>
+
 
 </div>
 
-
-<!-- التطبيق -->
-
-<div class="app">
-
- <div class="header">
-
-  <div class="logo">ب</div>
-
-  <div class="headerText">
-   <b>أكاديمية البيان</b>
-   <span>المساعد الطلابي</span>
-  </div>
-
-  <div class="online"></div>
-
- </div>
-
-
- <!-- منطقة الشات -->
-
- <div id="chat" class="chat">
-
-  <div class="welcome">
-   أهلًا بك في أكاديمية البيان 👋
-  </div>
-
- </div>
-
-
- <!-- الشريط السفلي -->
-
- <div class="bottom">
-
-  <input
-   class="bottomInput"
-   id="statusInput"
-   value="اختر من القائمة..."
-   disabled>
-
-  <button
-   class="homeBtn"
-   onclick="sendPayload('MAIN_MENU')">
-   ⌂
-  </button>
-
- </div>
-
-</div>
 
 
 <script>
 
-/* =========================
-   إعداد الاتصال
-========================= */
+
+/* =====================================================
+   إعدادات
+===================================================== */
+
 
 const API_URL =
-'https://script.google.com/macros/s/AKfycbw9utjlPZyqeNic1edJmm-e0L86nlnDV1jNF8-37DqxFwt-j8uAyoqNN1BiGRaNeNC3/exec';
+  'https://script.google.com/macros/s/AKfycbw9utjlPZyqeNic1edJmm-e0L86nlnDV1jNF8-37DqxFwt-j8uAyoqNN1BiGRaNeNC3/exec';
 
 
-/* =========================
-   بيانات الجلسة
-========================= */
-
-let studentId='';
-let callbackNumber=0;
+const SECRET =
+  'CHANGE_THIS_SECRET';
 
 
-/* =========================
-   بدء الجلسة
-========================= */
 
-function startChat(){
+/* =====================================================
+   متغيرات
+===================================================== */
 
- const id=
- document.getElementById('studentId')
- .value
- .trim();
 
- if(!id){
+let currentSenderId = '';
 
-  alert('من فضلك أدخل ID الطالب');
+let requestNumber = 0;
 
-  return;
- }
 
- studentId=id;
 
- document.getElementById('login').style.display='none';
+/* =====================================================
+   بدء
+===================================================== */
 
- const chat=document.getElementById('chat');
 
- chat.innerHTML=
- '<div class="welcome">'+
- 'تم تسجيل الدخول بالـ ID: '+
- escapeHtml(id)+
- '</div>';
+function start(){
 
- /*
-  أول طلب:
-  نفس payload الذي ينتظره
-  Google Apps Script
- */
+  const id =
+    document
+      .getElementById('senderId')
+      .value
+      .trim();
 
- sendPayload('MAIN_MENU');
+
+  if(!id){
+
+    setStatus(
+      'من فضلك أدخل ID المستخدم',
+      true
+    );
+
+    return;
+
+  }
+
+
+  currentSenderId =
+    id;
+
+
+  document
+    .getElementById('chat')
+    .innerHTML = '';
+
+
+  request(
+    id,
+    ''
+  );
+
 }
 
 
-/* =========================
-   إرسال Payload
-========================= */
 
-function sendPayload(payload){
-
- if(!studentId)return;
+/* =====================================================
+   الطلب
+===================================================== */
 
 
- /*
-  إظهار اختيار المستخدم
- */
+function request(
+  senderId,
+  payload
+){
 
- const title=
- getPayloadTitle(payload);
-
- if(title){
-
-  addUserMessage(title);
-
- }
+  setLoading(true);
 
 
- /*
-  Loading
- */
-
- const loadingId=
- 'loading_'+Date.now();
-
- addLoading(loadingId);
+  const callback =
+    'response_' +
+    (++requestNumber);
 
 
- /*
-  JSONP Callback
- */
-
- const callback=
- 'callback_'+(++callbackNumber);
+  const params =
+    new URLSearchParams();
 
 
- window[callback]=function(data){
-
-  delete window[callback];
-
-  const script=
-  document.getElementById(callback);
-
-  if(script)
-   script.remove();
+  params.set(
+    'senderId',
+    senderId
+  );
 
 
-  removeLoading(loadingId);
+  params.set(
+    'secret',
+    SECRET
+  );
+
+
+  params.set(
+    'callback',
+    callback
+  );
+
+
+  if(payload){
+
+    params.set(
+      'payload',
+      payload
+    );
+
+  }
+
+
+  const url =
+    API_URL +
+    '?' +
+    params.toString();
 
 
   /*
-   استقبال رد Google Apps Script
-  */
+   * JSONP
+   *
+   * نستخدم script بدل fetch
+   * حتى لا تتعطل الصفحة بسبب CORS.
+   */
+
+
+  const script =
+    document.createElement('script');
+
+
+  script.src =
+    url;
+
+
+  script.async =
+    true;
+
+
+  window[callback] =
+    function(response){
+
+      try{
+
+        handleResponse(
+          response
+        );
+
+      }finally{
+
+        delete window[callback];
+
+        script.remove();
+
+        setLoading(false);
+
+      }
+
+    };
+
+
+  script.onerror =
+    function(){
+
+      delete window[callback];
+
+      script.remove();
+
+      setLoading(false);
+
+      showError(
+        'فشل الاتصال بمشروع Google Apps Script'
+      );
+
+    };
+
+
+  document
+    .body
+    .appendChild(script);
+
+}
+
+
+
+/* =====================================================
+   استقبال الرد
+===================================================== */
+
+
+function handleResponse(response){
+
+  console.log(
+    'SERVER:',
+    response
+  );
+
+
+  if(!response){
+
+    showError(
+      'لم يصل رد من السيرفر'
+    );
+
+    return;
+
+  }
+
+
+  if(!response.success){
+
+    showError(
+      response.error ||
+      'حدث خطأ'
+    );
+
+    return;
+
+  }
+
+
+  render(
+    response.data
+  );
+
+
+  setStatus(
+    'تم استلام الرد',
+    false
+  );
+
+}
+
+
+
+/* =====================================================
+   عرض أي رد
+===================================================== */
+
+
+function render(data){
 
   if(!data){
 
-   addError('لم يصل رد من الخادم');
-
-   return;
-  }
-
-
-  if(data.ok===false){
-
-   addError(
-    data.error||
-    'حدث خطأ في الخادم'
-   );
-
-   return;
-  }
-
-
-  /*
-   هنا يتم عرض النتيجة
-  */
-
-  renderResponse(data.result);
-
- };
-
-
- /*
-  إنشاء Script request
- */
-
- const script=
- document.createElement('script');
-
- script.id=callback;
-
- script.src=
- API_URL+
- '?studentId='+
- encodeURIComponent(studentId)+
- '&payload='+
- encodeURIComponent(payload)+
- '&callback='+
- encodeURIComponent(callback)+
- '&_='+
- Date.now();
-
-
- script.onerror=function(){
-
-  delete window[callback];
-
-  script.remove();
-
-  removeLoading(loadingId);
-
-  addError(
-   'تعذر الاتصال بـ Google Apps Script'
-  );
-
- };
-
-
- document.body.appendChild(script);
-}
-
-
-/* =========================
-   استقبال نتيجة السيرفر
-========================= */
-
-function renderResponse(data){
-
- if(!data)
-  return;
-
-
- /*
-  لو السيرفر أرسل قائمة أزرار
- */
-
- if(data.type==='menu'){
-
-  renderMenu(
-   data.elements||[]
-  );
-
-  return;
- }
-
-
- /*
-  لو السيرفر أرسل رسالة
- */
-
- if(data.type==='message'){
-
-  addServerMessage(
-   data.text||''
-  );
-
-  return;
- }
-
-
- /*
-  دعم أي رد يحتوي text
- */
-
- if(data.text){
-
-  addServerMessage(
-   data.text
-  );
-
-  return;
- }
-
-
- /*
-  دعم buttons
- */
-
- if(data.buttons){
-
-  renderMenu(
-   data.buttons
-  );
-
-  return;
- }
-
-
- /*
-  أي بيانات أخرى
- */
-
- addServerMessage(
-  JSON.stringify(
-   data,
-   null,
-   2
-  )
- );
-}
-
-
-/* =========================
-   عرض الأزرار
-========================= */
-
-function renderMenu(items){
-
- const chat=
- document.getElementById('chat');
-
-
- const menu=
- document.createElement('div');
-
- menu.className='menu';
-
-
- items.forEach(item=>{
-
-  const button=
-  document.createElement('button');
-
-  button.className='menuButton';
-
-
-  button.innerHTML=
-   '<div class="menuIcon">'+
-   getIcon(item.title||'')+
-   '</div>'+
-   '<b>'+
-   escapeHtml(item.title||'')+
-   '</b>'+
-   '<span>'+
-   escapeHtml(item.subtitle||'')+
-   '</span>';
-
-
-  /*
-   أهم نقطة:
-
-   الزر لا يحتوي منطق جديد.
-
-   يأخذ payload القادم من
-   Google Apps Script
-   ويرسله مرة أخرى كما هو.
-  */
-
-  if(item.payload){
-
-   button.onclick=function(){
-
-    sendPayload(
-     item.payload
+    showError(
+      'الرد فارغ'
     );
 
-   };
+    return;
 
   }
 
 
-  menu.appendChild(button);
+  if(data.type === 'menu'){
 
- });
+    renderMenu(data);
+
+    return;
+
+  }
 
 
- chat.appendChild(menu);
+  renderGeneric(
+    data
+  );
 
- scrollBottom();
 }
 
 
-/* =========================
-   رسالة المستخدم
-========================= */
 
-function addUserMessage(text){
+/* =====================================================
+   القائمة
+===================================================== */
 
- const chat=
- document.getElementById('chat');
 
- const div=
- document.createElement('div');
+function renderMenu(data){
 
- div.className=
- 'userMessage';
+  const box =
+    createMessage(
+      data.title ||
+      'القائمة الرئيسية'
+    );
 
- div.textContent=text;
 
- chat.appendChild(div);
+  if(data.subtitle){
 
- scrollBottom();
+    const subtitle =
+      document.createElement('div');
+
+    subtitle.className =
+      'message-subtitle';
+
+    subtitle.textContent =
+      data.subtitle;
+
+    box.appendChild(
+      subtitle
+    );
+
+  }
+
+
+  const menu =
+    document.createElement('div');
+
+  menu.className =
+    'menu';
+
+
+  const items =
+    Array.isArray(data.items)
+      ? data.items
+      : [];
+
+
+  items.forEach(
+    function(item){
+
+      const button =
+        document.createElement('button');
+
+
+      button.className =
+        'menu-button';
+
+
+      const title =
+        document.createElement('span');
+
+      title.className =
+        'menu-title';
+
+      title.textContent =
+        item.title || 'اختيار';
+
+
+      const subtitle =
+        document.createElement('span');
+
+      subtitle.className =
+        'menu-subtitle';
+
+      subtitle.textContent =
+        item.subtitle || '';
+
+
+      button.appendChild(
+        title
+      );
+
+      button.appendChild(
+        subtitle
+      );
+
+
+      button.onclick =
+        function(){
+
+          request(
+            currentSenderId,
+            item.payload
+          );
+
+        };
+
+
+      menu.appendChild(
+        button
+      );
+
+    }
+  );
+
+
+  box.appendChild(
+    menu
+  );
+
+
+  addToChat(
+    box
+  );
+
 }
 
 
-/* =========================
-   رسالة السيرفر
-========================= */
 
-function addServerMessage(text){
+/* =====================================================
+   عرض الردود والبيانات
+===================================================== */
 
- const chat=
- document.getElementById('chat');
 
- const div=
- document.createElement('div');
+function renderGeneric(data){
 
- div.className=
- 'serverMessage';
+  const box =
+    createMessage(
+      data.title ||
+      'النتيجة'
+    );
 
- div.textContent=text;
 
- chat.appendChild(div);
+  if(data.text){
 
- scrollBottom();
+    const text =
+      document.createElement('div');
+
+    text.textContent =
+      data.text;
+
+    box.appendChild(
+      text
+    );
+
+  }
+
+
+  /*
+   * data
+   */
+
+  if(data.data){
+
+    const dataBox =
+      document.createElement('div');
+
+    dataBox.className =
+      'data';
+
+
+    renderValue(
+      data.data,
+      dataBox
+    );
+
+
+    box.appendChild(
+      dataBox
+    );
+
+  }
+
+
+  /*
+   * لو الرد نفسه يحتوي بيانات
+   * بدون data
+   */
+
+  const ignored = [
+    'type',
+    'title',
+    'subtitle',
+    'text',
+    'data'
+  ];
+
+
+  const extra = {};
+
+
+  Object.keys(data)
+    .forEach(
+      function(key){
+
+        if(
+          !ignored.includes(key)
+        ){
+
+          extra[key] =
+            data[key];
+
+        }
+
+      }
+    );
+
+
+  if(
+    Object.keys(extra).length
+  ){
+
+    const extraBox =
+      document.createElement('div');
+
+    extraBox.className =
+      'data';
+
+
+    renderValue(
+      extra,
+      extraBox
+    );
+
+
+    box.appendChild(
+      extraBox
+    );
+
+  }
+
+
+  /*
+   * زر الرجوع
+   */
+
+  const back =
+    document.createElement('button');
+
+  back.className =
+    'back';
+
+  back.textContent =
+    '⬅ العودة للقائمة الرئيسية';
+
+
+  back.onclick =
+    function(){
+
+      request(
+        currentSenderId,
+        'MAIN_MENU'
+      );
+
+    };
+
+
+  box.appendChild(
+    back
+  );
+
+
+  addToChat(
+    box
+  );
+
 }
 
 
-/* =========================
-   Loading
-========================= */
 
-function addLoading(id){
+/* =====================================================
+   عرض Object / Array / String
+===================================================== */
 
- const chat=
- document.getElementById('chat');
 
- const div=
- document.createElement('div');
+function renderValue(
+  value,
+  parent
+){
 
- div.className='loading';
 
- div.id=id;
+  /*
+   * Array
+   */
 
- div.textContent=
- 'جاري التحميل...';
+  if(Array.isArray(value)){
 
- chat.appendChild(div);
+    value.forEach(
+      function(item, index){
 
- scrollBottom();
+        const itemBox =
+          document.createElement('div');
+
+        itemBox.className =
+          'array-item';
+
+
+        if(
+          typeof item === 'object' &&
+          item !== null
+        ){
+
+          renderValue(
+            item,
+            itemBox
+          );
+
+        }else{
+
+          itemBox.textContent =
+            String(item);
+
+        }
+
+
+        parent.appendChild(
+          itemBox
+        );
+
+      }
+    );
+
+    return;
+
+  }
+
+
+
+  /*
+   * Object
+   */
+
+  if(
+    typeof value === 'object' &&
+    value !== null
+  ){
+
+    Object.keys(value)
+      .forEach(
+        function(key){
+
+          const item =
+            document.createElement('div');
+
+          item.className =
+            'data-item';
+
+
+          const keyElement =
+            document.createElement('div');
+
+          keyElement.className =
+            'data-key';
+
+          keyElement.textContent =
+            key;
+
+
+          const valueElement =
+            document.createElement('div');
+
+          valueElement.className =
+            'data-value';
+
+
+          if(
+            typeof value[key] === 'object' &&
+            value[key] !== null
+          ){
+
+            renderValue(
+              value[key],
+              valueElement
+            );
+
+          }else{
+
+            valueElement.textContent =
+              String(
+                value[key] ?? ''
+              );
+
+          }
+
+
+          item.appendChild(
+            keyElement
+          );
+
+          item.appendChild(
+            valueElement
+          );
+
+
+          parent.appendChild(
+            item
+          );
+
+        }
+      );
+
+    return;
+
+  }
+
+
+
+  /*
+   * String / Number / Boolean
+   */
+
+  const item =
+    document.createElement('div');
+
+  item.className =
+    'data-item';
+
+  item.textContent =
+    String(value ?? '');
+
+
+  parent.appendChild(
+    item
+  );
+
 }
 
 
-function removeLoading(id){
 
- const element=
- document.getElementById(id);
+/* =====================================================
+   إنشاء رسالة
+===================================================== */
 
- if(element)
-  element.remove();
+
+function createMessage(title){
+
+  const box =
+    document.createElement('div');
+
+  box.className =
+    'message';
+
+
+  const titleElement =
+    document.createElement('div');
+
+  titleElement.className =
+    'message-title';
+
+  titleElement.textContent =
+    title;
+
+
+  box.appendChild(
+    titleElement
+  );
+
+
+  return box;
+
 }
 
 
-/* =========================
+
+/* =====================================================
+   إضافة للمحادثة
+===================================================== */
+
+
+function addToChat(element){
+
+  const chat =
+    document.getElementById(
+      'chat'
+    );
+
+
+  chat.appendChild(
+    element
+  );
+
+
+  setTimeout(
+    function(){
+
+      window.scrollTo({
+
+        top:
+          document.body.scrollHeight,
+
+        behavior:
+          'smooth'
+
+      });
+
+    },
+    50
+  );
+
+}
+
+
+
+/* =====================================================
    Error
-========================= */
+===================================================== */
 
-function addError(text){
 
- const chat=
- document.getElementById('chat');
+function showError(message){
 
- const div=
- document.createElement('div');
+  const box =
+    document.createElement('div');
 
- div.className='error';
+  box.className =
+    'message error';
 
- div.textContent=text;
+  box.textContent =
+    message;
 
- chat.appendChild(div);
 
- scrollBottom();
+  addToChat(
+    box
+  );
+
 }
 
 
-/* =========================
-   التمرير لآخر رسالة
-========================= */
 
-function scrollBottom(){
+/* =====================================================
+   Status
+===================================================== */
 
- const chat=
- document.getElementById('chat');
 
- setTimeout(()=>{
+function setStatus(
+  text,
+  error
+){
 
-  chat.scrollTop=
-  chat.scrollHeight;
+  const box =
+    document.getElementById(
+      'status'
+    );
 
- },20);
+
+  box.style.display =
+    'block';
+
+
+  box.textContent =
+    text;
+
+
+  box.style.color =
+    error
+      ? '#fecaca'
+      : '#9ca3af';
+
 }
 
 
-/* =========================
-   عنوان Payload
-========================= */
 
-function getPayloadTitle(payload){
+/* =====================================================
+   Loading
+===================================================== */
 
- const titles={
 
-  MAIN_MENU:'القائمة الرئيسية',
+function setLoading(
+  loading
+){
 
-  MAIN_ACCOUNT:'👤 حسابك',
+  const button =
+    document.getElementById(
+      'sendButton'
+    );
 
-  MAIN_HOMEWORK:'📝 الواجب',
 
-  MAIN_EXAMS:'📚 الاختبارات',
+  button.disabled =
+    loading;
 
-  MAIN_TEACHER_EVALUATION:'⭐ تقييم المعلم',
 
-  MAIN_EXAM_RESULTS:'🏆 نتيجة الاختبار',
+  button.textContent =
+    loading
+      ? 'جاري الاتصال...'
+      : 'إرسال';
 
-  MAIN_MEETINGS:'🎥 الميتنج',
-
-  MAIN_SUBSCRIPTIONS:'📅 الاشتراكات والمواعيد',
-
-  MAIN_INVOICE:'💰 الفاتورة'
-
- };
-
- return titles[payload]||'';
 }
-
-
-/* =========================
-   الأيقونات
-========================= */
-
-function getIcon(title){
-
- if(title.includes('حساب'))
-  return '👤';
-
- if(title.includes('واجب'))
-  return '📝';
-
- if(title.includes('اختبار'))
-  return '📚';
-
- if(title.includes('تقييم'))
-  return '⭐';
-
- if(title.includes('نتيجة'))
-  return '🏆';
-
- if(title.includes('ميتنج'))
-  return '🎥';
-
- if(title.includes('اشتراك'))
-  return '📅';
-
- if(title.includes('فاتورة'))
-  return '💰';
-
- return '📌';
-}
-
-
-/* =========================
-   حماية HTML
-========================= */
-
-function escapeHtml(value){
-
- return String(value)
- .replace(/[&<>"']/g,function(char){
-
-  return {
-
-   '&':'&amp;',
-   '<':'&lt;',
-   '>':'&gt;',
-   '"':'&quot;',
-   "'":'&#039;'
-
-  }[char];
-
- });
-}
-
-
-/* =========================
-   Enter
-========================= */
-
-document
-.getElementById('studentId')
-.addEventListener(
- 'keydown',
- function(e){
-
-  if(e.key==='Enter')
-   startChat();
-
- }
-);
 
 </script>
 
 </body>
+
 </html>
