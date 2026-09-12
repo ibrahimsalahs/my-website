@@ -1,20 +1,10 @@
-<!DOCTYPE html>
+<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
 
-<html lang="ar" dir="rtl">
+«»
 
-<head>
-
-<meta charset="UTF-8">
-
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
->
-
-<title>أكاديمية البيان</title>
-
-
-<style>
+<title>أكاديمية البيان</title><style>
 
 *{
   box-sizing:border-box;
@@ -402,73 +392,344 @@ pre{
 
 }
 
-</style>
 
-</head>
+/* =====================================================
+   EXAM OVERLAY
+===================================================== */
 
+#examOverlay{
 
-<body>
+  display:none;
 
+  position:fixed;
 
-<div class="container">
+  inset:0;
 
+  z-index:9999;
 
-  <div class="header">
+  background:#0b1220;
 
-    <h1>أكاديمية البيان</h1>
+  overflow-y:auto;
 
-    <p>واجهة اختبار مشروع الطلاب</p>
-
-  </div>
-
-
-  <div class="card">
-
-    <label>
-
-      ID المستخدم
-
-    </label>
+}
 
 
-    <input
-      id="senderId"
-      type="text"
-      placeholder="اكتب ID المستخدم"
-      autocomplete="off"
-    >
+#examBanner{
+
+  width:100%;
+
+  min-height:100vh;
+
+  padding:20px;
+
+}
 
 
-    <button
-      id="sendButton"
-      class="main-button"
-      onclick="start()"
-    >
+.exam-container{
 
-      إرسال
+  width:100%;
 
-    </button>
+  max-width:700px;
 
+  margin:auto;
 
-    <div
-      id="status"
-      class="status"
-    ></div>
-
-  </div>
+}
 
 
-  <div
+.exam-top{
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+
+  gap:12px;
+
+  margin-bottom:18px;
+
+}
+
+
+.exam-title{
+
+  font-size:22px;
+
+  font-weight:bold;
+
+}
+
+
+.exam-close{
+
+  width:42px;
+
+  height:42px;
+
+  border:0;
+
+  border-radius:12px;
+
+  background:#374151;
+
+  color:#fff;
+
+  font-size:24px;
+
+  cursor:pointer;
+
+}
+
+
+.exam-student{
+
+  background:#111827;
+
+  border:1px solid #1f2937;
+
+  border-radius:16px;
+
+  padding:16px;
+
+  margin-bottom:15px;
+
+}
+
+
+.exam-section{
+
+  background:#111827;
+
+  border:1px solid #1f2937;
+
+  border-radius:16px;
+
+  padding:16px;
+
+  margin-bottom:15px;
+
+}
+
+
+.exam-section-title{
+
+  font-size:18px;
+
+  font-weight:bold;
+
+  margin-bottom:15px;
+
+}
+
+
+.exam-question{
+
+  background:#0b1220;
+
+  border:1px solid #1f2937;
+
+  border-radius:12px;
+
+  padding:14px;
+
+  margin-bottom:12px;
+
+}
+
+
+.exam-question-text{
+
+  font-size:16px;
+
+  line-height:1.8;
+
+  margin-bottom:12px;
+
+}
+
+
+.exam-option{
+
+  display:block;
+
+  padding:10px;
+
+  margin-top:7px;
+
+  background:#172033;
+
+  border-radius:9px;
+
+  cursor:pointer;
+
+}
+
+
+.exam-option input{
+
+  width:auto;
+
+  margin-left:8px;
+
+}
+
+
+.exam-text-input{
+
+  width:100%;
+
+  background:#111827;
+
+  border:1px solid #374151;
+
+  color:#fff;
+
+  border-radius:10px;
+
+  padding:12px;
+
+  font-size:15px;
+
+  direction:rtl;
+
+  text-align:right;
+
+}
+
+
+.exam-submit{
+
+  width:100%;
+
+  padding:15px;
+
+  border:0;
+
+  border-radius:12px;
+
+  background:#2563eb;
+
+  color:#fff;
+
+  font-size:17px;
+
+  cursor:pointer;
+
+  margin-top:5px;
+
+}
+
+
+.exam-submit:disabled{
+
+  opacity:.5;
+
+}
+
+
+.exam-message{
+
+  padding:14px;
+
+  border-radius:12px;
+
+  margin-bottom:15px;
+
+  background:#0f172a;
+
+  color:#d1d5db;
+
+}
+
+
+.exam-success{
+
+  background:#12351f;
+
+  border:1px solid #166534;
+
+  color:#bbf7d0;
+
+}
+
+
+.exam-error{
+
+  background:#3f1717;
+
+  border:1px solid #7f1d1d;
+
+  color:#fecaca;
+
+}
+
+
+.exam-passage{
+
+  background:#172033;
+
+  border:1px solid #293548;
+
+  border-radius:12px;
+
+  padding:14px;
+
+  line-height:1.9;
+
+  margin-bottom:12px;
+
+}
+
+</style></head><body><div class="container">  <div class="header"><h1>أكاديمية البيان</h1>
+
+<p>واجهة اختبار مشروع الطلاب</p>
+
+  </div>  <div class="card"><label>
+
+  ID المستخدم
+
+</label>
+
+
+<input
+  id="senderId"
+  type="text"
+  placeholder="اكتب ID المستخدم"
+  autocomplete="off"
+>
+
+
+<button
+  id="sendButton"
+  class="main-button"
+  onclick="start()"
+>
+
+  إرسال
+
+</button>
+
+
+<div
+  id="status"
+  class="status"
+></div>
+
+  </div>  <div
     id="chat"
     class="chat"
-  ></div>
+  ></div></div><!-- =====================================================
+     EXAM OVERLAY
+===================================================== --><div
+  id="examOverlay"
+>  <div
+    id="examBanner"
+  ><!--
+  exam.js
+  سيضع محتوى الاختبار هنا
+-->
 
-
-</div>
-
-
-
-<script>
+  </div></div><script>
 
 
 /* =====================================================
@@ -477,7 +738,7 @@ pre{
 
 
 const API_URL =
-  'https://script.google.com/macros/s/AKfycbw9utjlPZyqeNic1edJmm-e0L86nlnDV1jNF8-37DqxFwt-j8uAyoqNN1BiGRaNeNC3/exec';
+  'https://script.google.com/macros/s/AKfycbxQB40ZlHt572KLH1CXgL9fkeJ7SbhYnQ4bAbE-jKRvC1APT4x-kT-vlJwu6R8Y9OYO/exec';
 
 
 const SECRET =
@@ -596,14 +857,6 @@ function request(
     params.toString();
 
 
-  /*
-   * JSONP
-   *
-   * نستخدم script بدل fetch
-   * حتى لا تتعطل الصفحة بسبب CORS.
-   */
-
-
   const script =
     document.createElement('script');
 
@@ -713,7 +966,7 @@ function handleResponse(response){
 
 
 /* =====================================================
-   عرض أي رد
+   عرض الرد
 ===================================================== */
 
 
@@ -729,6 +982,67 @@ function render(data){
 
   }
 
+
+  /* ===================================================
+     الاختبارات
+  =================================================== */
+
+  if(data.type === 'exams'){
+
+    if(
+      typeof renderExamResponse ===
+      'function'
+    ){
+
+      renderExamResponse(
+        data.data || {}
+      );
+
+    }else{
+
+      showError(
+        'ملف exam.js غير محمل'
+      );
+
+    }
+
+    return;
+
+  }
+
+
+  /* ===================================================
+     نتيجة إرسال الاختبار
+  =================================================== */
+
+  if(data.type === 'examSubmit'){
+
+    if(
+      typeof handleExamSubmitResponse ===
+      'function'
+    ){
+
+      handleExamSubmitResponse(
+        data
+      );
+
+    }else{
+
+      showError(
+        data.message ||
+        'تم استلام نتيجة الاختبار'
+      );
+
+    }
+
+    return;
+
+  }
+
+
+  /* ===================================================
+     القائمة الرئيسية
+  =================================================== */
 
   if(data.type === 'menu'){
 
@@ -893,10 +1207,6 @@ function renderGeneric(data){
   }
 
 
-  /*
-   * data
-   */
-
   if(data.data){
 
     const dataBox =
@@ -918,11 +1228,6 @@ function renderGeneric(data){
 
   }
 
-
-  /*
-   * لو الرد نفسه يحتوي بيانات
-   * بدون data
-   */
 
   const ignored = [
     'type',
@@ -977,10 +1282,6 @@ function renderGeneric(data){
   }
 
 
-  /*
-   * زر الرجوع
-   */
-
   const back =
     document.createElement('button');
 
@@ -1025,15 +1326,10 @@ function renderValue(
   parent
 ){
 
-
-  /*
-   * Array
-   */
-
   if(Array.isArray(value)){
 
     value.forEach(
-      function(item, index){
+      function(item){
 
         const itemBox =
           document.createElement('div');
@@ -1071,11 +1367,6 @@ function renderValue(
 
   }
 
-
-
-  /*
-   * Object
-   */
 
   if(
     typeof value === 'object' &&
@@ -1151,11 +1442,6 @@ function renderValue(
   }
 
 
-
-  /*
-   * String / Number / Boolean
-   */
-
   const item =
     document.createElement('div');
 
@@ -1168,6 +1454,7 @@ function renderValue(
 
   parent.appendChild(
     item
+
   );
 
 }
@@ -1332,8 +1619,6 @@ function setLoading(
 
 }
 
-</script>
-
-</body>
-
-</html>
+</script><!-- =====================================================
+     ملفات الاختبار
+===================================================== --><script src="exam.js"></script><script src="exam-submit.js"></script></body></html>
