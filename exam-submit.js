@@ -1,167 +1,361 @@
-/*
- * exam-submit.js
- * مسؤول عن جمع إجابات الطالب وإرسالها إلى Google Apps Script.
- */
+/* =====================================================
+إرسال الاختبار
+===================================================== */
 
-const SUBMIT_API_URL = 'https://script.google.com/macros/s/AKfycbwy0LYP84fqgl8-qUxcSIfnU4OQJFg2_dQkeIT-nCOgm45O7jWjfIVWTLbfQmAfX-x_0Q/exec';
+function submitExam(){
 
-document.addEventListener('DOMContentLoaded', ()=>{
-  document.getElementById('submitBtn').addEventListener('click', submitExam);
-});
+if(!EXAM_DATA){
 
-async function submitExam(){
+examSubmitError(
+  'لا توجد بيانات للاختبار.'
+);
 
-  if(!EXAM_DATA){
-    showSubmitStatus('بيانات الاختبار غير جاهزة.', false);
-    return;
-  }
+return;
 
-  if(SUBMIT_API_URL.includes('ضع_نفس_رابط')){
-    showSubmitStatus('ضع رابط Google Apps Script داخل SUBMIT_API_URL في ملف exam-submit.js', false);
-    return;
-  }
+}
 
-  const btn = document.getElementById('submitBtn');
-  btn.disabled = true;
-  btn.textContent = 'جاري إرسال الإجابات...';
+const answers = {
 
-  try{
+H: [],
 
-    const answers = collectAnswers();
+I: [],
 
-    const payload = {
-      action: 'submit',
-      userId: USER_ID,
+J: [],
 
-      // معرف الاختبار لو أضفناه لاحقًا
-      examId: EXAM_DATA.examId || '',
+K: [],
 
-      // الإجابات مجمعة حسب أعمدة H:L
-      answers: answers
-    };
+L: []
 
-    const response = await fetch(SUBMIT_API_URL,{
-      method:'POST',
-      headers:{
-        'Content-Type':'text/plain;charset=utf-8'
-      },
-      body:JSON.stringify(payload)
-    });
+};
 
-    const result = await response.json();
+/* ===================================================
+الاختيار من متعدد
+=================================================== */
 
-    if(result.success){
-      showSubmitStatus(
-        result.message || 'تم إرسال الاختبار بنجاح.',
-        true
-      );
+const choice =
+EXAM_DATA.sections &&
+Array.isArray(
+EXAM_DATA.sections.choice
+)
+? EXAM_DATA.sections.choice
+: [];
 
-      btn.textContent = 'تم إرسال الاختبار';
-      document.querySelectorAll('input,textarea').forEach(el=>{
-        el.disabled = true;
-      });
+choice.forEach(
+function(question){
 
-    }else{
-      throw new Error(result.message || 'تعذر حفظ الإجابات.');
-    }
-
-  }catch(error){
-    console.error(error);
-    showSubmitStatus(
-      error.message || 'حدث خطأ أثناء إرسال الاختبار.',
-      false
+  const selected =
+    document.querySelector(
+      'input[name="' +
+      question.id +
+      '"]:checked'
     );
 
-    btn.disabled = false;
-    btn.textContent = 'إرسال الاختبار';
-  }
-}
 
-function collectAnswers(){
+  answers.H.push({
 
-  const result = {
-    H: [], // اختيار من متعدد
-    I: [], // صح وخطأ
-    J: [], // أكمل
-    K: [], // أسئلة متنوعة
-    L: []  // استخرج
-  };
+    id:
+      question.id,
 
-  // H - اختيار من متعدد
-  if(EXAM_DATA.sections.choice){
-    EXAM_DATA.sections.choice.forEach(q=>{
-      const selected = document.querySelector(
-        `input[name="q_${CSS.escape(q.id)}"]:checked`
-      );
+    answer:
+      selected
+        ? selected.value
+        : ''
 
-      result.H.push(selected ? selected.value : '');
-    });
-  }
-
-  // I - صح وخطأ
-  if(EXAM_DATA.sections.trueFalse){
-    EXAM_DATA.sections.trueFalse.forEach(q=>{
-      const selected = document.querySelector(
-        `input[name="q_${CSS.escape(q.id)}"]:checked`
-      );
-
-      result.I.push(selected ? selected.value : '');
-    });
-  }
-
-  // J - أكمل
-  if(EXAM_DATA.sections.complete){
-    EXAM_DATA.sections.complete.forEach(q=>{
-      const el = document.querySelector(
-        `textarea[data-question-id="${CSS.escape(q.id)}"]`
-      );
-
-      result.J.push(el ? el.value.trim() : '');
-    });
-  }
-
-  // K - متنوعة
-  if(EXAM_DATA.sections.mixed){
-    EXAM_DATA.sections.mixed.forEach(group=>{
-      group.questions.forEach((q,i)=>{
-        const id = group.id + '_' + i;
-
-        const el = document.querySelector(
-          `textarea[data-question-id="${CSS.escape(id)}"]`
-        );
-
-        result.K.push(el ? el.value.trim() : '');
-      });
-    });
-  }
-
-  // L - استخرج
-  if(EXAM_DATA.sections.extract){
-    EXAM_DATA.sections.extract.forEach(group=>{
-      group.questions.forEach((q,i)=>{
-        const id = group.id + '_' + i;
-
-        const el = document.querySelector(
-          `textarea[data-question-id="${CSS.escape(id)}"]`
-        );
-
-        result.L.push(el ? el.value.trim() : '');
-      });
-    });
-  }
-
-  return result;
-}
-
-function showSubmitStatus(message,success){
-  const el = document.getElementById('status');
-
-  el.style.display = 'block';
-  el.className = 'status ' + (success ? 'success' : 'error');
-  el.textContent = message;
-
-  el.scrollIntoView({
-    behavior:'smooth',
-    block:'center'
   });
+
+}
+
+);
+
+/* ===================================================
+صح وخطأ
+=================================================== */
+
+const trueFalse =
+EXAM_DATA.sections &&
+Array.isArray(
+EXAM_DATA.sections.trueFalse
+)
+? EXAM_DATA.sections.trueFalse
+: [];
+
+trueFalse.forEach(
+function(question){
+
+  const selected =
+    document.querySelector(
+      'input[name="' +
+      question.id +
+      '"]:checked'
+    );
+
+
+  answers.I.push({
+
+    id:
+      question.id,
+
+    answer:
+      selected
+        ? selected.value
+        : ''
+
+  });
+
+}
+
+);
+
+/* ===================================================
+أكمل
+=================================================== */
+
+const complete =
+EXAM_DATA.sections &&
+Array.isArray(
+EXAM_DATA.sections.complete
+)
+? EXAM_DATA.sections.complete
+: [];
+
+complete.forEach(
+function(question){
+
+  const input =
+    document.getElementById(
+      question.id
+    );
+
+
+  answers.J.push({
+
+    id:
+      question.id,
+
+    answer:
+      input
+        ? input.value.trim()
+        : ''
+
+  });
+
+}
+
+);
+
+/* ===================================================
+الأسئلة المتنوعة
+=================================================== */
+
+const mixed =
+EXAM_DATA.sections &&
+Array.isArray(
+EXAM_DATA.sections.mixed
+)
+? EXAM_DATA.sections.mixed
+: [];
+
+mixed.forEach(
+function(group){
+
+  const questions =
+    Array.isArray(
+      group.questions
+    )
+      ? group.questions
+      : [];
+
+
+  questions.forEach(
+    function(question, index){
+
+      const input =
+        document.getElementById(
+          group.id +
+          '_' +
+          index
+        );
+
+
+      answers.K.push({
+
+        id:
+          group.id +
+          '_' +
+          index,
+
+        answer:
+          input
+            ? input.value.trim()
+            : ''
+
+      });
+
+    }
+  );
+
+}
+
+);
+
+/* ===================================================
+استخرج
+=================================================== */
+
+const extract =
+EXAM_DATA.sections &&
+Array.isArray(
+EXAM_DATA.sections.extract
+)
+? EXAM_DATA.sections.extract
+: [];
+
+extract.forEach(
+function(group){
+
+  const questions =
+    Array.isArray(
+      group.questions
+    )
+      ? group.questions
+      : [];
+
+
+  questions.forEach(
+    function(question, index){
+
+      const input =
+        document.getElementById(
+          group.id +
+          '_' +
+          index
+        );
+
+
+      answers.L.push({
+
+        id:
+          group.id +
+          '_' +
+          index,
+
+        answer:
+          input
+            ? input.value.trim()
+            : ''
+
+      });
+
+    }
+  );
+
+}
+
+);
+
+/* ===================================================
+تأكيد بسيط
+=================================================== */
+
+const confirmed =
+window.confirm(
+'هل أنت متأكد من إرسال الاختبار؟'
+);
+
+if(!confirmed){
+
+return;
+
+}
+
+const button =
+document.getElementById(
+'examSubmitButton'
+);
+
+if(button){
+
+button.disabled =
+  true;
+
+button.textContent =
+  'جاري إرسال الاختبار...';
+
+}
+
+/* ===================================================
+البيانات المرسلة
+=================================================== */
+
+const payload = {
+
+action:
+  'submitExam',
+
+userId:
+  currentSenderId,
+
+examId:
+  EXAM_DATA.examId || '',
+
+answers:
+  answers
+
+};
+
+/* ===================================================
+إرسال إلى Main.gs
+=================================================== */
+
+request(
+
+currentSenderId,
+
+'EXAM_SUBMIT:' +
+JSON.stringify(
+  payload
+)
+
+);
+
+}
+
+/* =====================================================
+استقبال نتيجة الإرسال
+===================================================== */
+
+function handleExamSubmitResponse(
+data
+){
+
+if(!data){
+
+examSubmitError(
+  'لم تصل نتيجة إرسال الاختبار.'
+);
+
+return;
+
+}
+
+if(data.success){
+
+examSubmitSuccess(
+
+  data.message ||
+  'تم إرسال الاختبار بنجاح ✅'
+
+);
+
+return;
+
+}
+
+examSubmitError(
+
+data.message ||
+'حدث خطأ أثناء إرسال الاختبار.'
+
+);
+
 }
