@@ -3,683 +3,423 @@ name="viewport"
 content="width=device-width, initial-scale=1.0"
 
 «»
-
-<title>أكاديمية البيان</title><style>
+<title>أكاديمية البيان</title>
+<style>
+:root{
+  --bg:#ffffff;
+  --bg-soft:#f8fafc;
+  --card:#ffffff;
+  --border:#e5e7eb;
+  --border-strong:#d1d5db;
+  --text:#0f172a;
+  --muted:#64748b;
+  --primary:#2563eb;
+  --primary-hover:#1d4ed8;
+}
 
 *{
   box-sizing:border-box;
 }
 
 body{
-
   margin:0;
-
-  background:#0b1220;
-
-  color:#fff;
-
-  font-family:
-    Tahoma,
-    Arial,
-    sans-serif;
-
+  background:var(--bg);
+  color:var(--text);
+  font-family: Tahoma, Arial, sans-serif;
+  line-height:1.7;
 }
 
-
+/* صغرت المحتوى عشان العرض يبان كبير و بروفيشنال */
 .container{
-
   width:100%;
-
-  max-width:700px;
-
+  max-width:520px;
   margin:auto;
-
-  padding:20px;
-
+  padding:32px 20px;
 }
-
 
 .header{
-
   text-align:center;
-
-  margin-bottom:20px;
-
+  margin-bottom:28px;
 }
-
 
 .header h1{
-
   margin:0;
-
-  font-size:25px;
-
+  font-size:26px;
+  font-weight:800;
+  color:var(--text);
+  letter-spacing:-.3px;
 }
-
 
 .header p{
-
-  color:#9ca3af;
-
+  color:var(--muted);
   margin-top:8px;
-
+  font-size:14px;
 }
-
 
 .card{
-
-  background:#111827;
-
-  border:1px solid #1f2937;
-
-  border-radius:16px;
-
-  padding:18px;
-
-  margin-bottom:15px;
-
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:20px;
+  margin-bottom:16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,.04);
 }
-
 
 label{
-
   display:block;
-
   margin-bottom:8px;
-
-  color:#d1d5db;
-
+  color:var(--text);
+  font-size:14px;
+  font-weight:600;
 }
-
 
 input{
-
   width:100%;
-
-  padding:14px;
-
-  border-radius:10px;
-
-  border:1px solid #374151;
-
-  background:#0b1220;
-
-  color:white;
-
-  font-size:16px;
-
+  padding:14px 14px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:var(--bg);
+  color:var(--text);
+  font-size:15px;
   direction:ltr;
-
   text-align:left;
-
   outline:none;
-
+  transition:.2s;
 }
-
 
 input:focus{
-
-  border-color:#3b82f6;
-
+  border-color:var(--primary);
+  box-shadow:0 0 0 4px rgba(37,99,235,.12);
 }
-
 
 .main-button{
-
   width:100%;
-
   padding:14px;
-
   margin-top:12px;
-
   border:0;
-
-  border-radius:10px;
-
-  background:#2563eb;
-
+  border-radius:12px;
+  background:var(--primary);
   color:white;
-
-  font-size:16px;
-
+  font-size:15px;
+  font-weight:700;
   cursor:pointer;
-
+  transition:.2s;
 }
 
+.main-button:hover{
+  background:var(--primary-hover);
+  transform:translateY(-1px);
+}
 
 .main-button:disabled{
-
   opacity:.5;
-
+  transform:none;
 }
-
 
 .status{
-
   display:none;
-
   margin-top:12px;
-
   padding:12px;
-
-  border-radius:10px;
-
-  background:#0f172a;
-
-  color:#9ca3af;
-
+  border-radius:12px;
+  background:var(--bg-soft);
+  color:var(--muted);
+  border:1px solid var(--border);
+  font-size:13px;
 }
-
 
 .chat{
-
-  margin-top:15px;
-
+  margin-top:16px;
 }
-
 
 .message{
-
-  background:#111827;
-
-  border:1px solid #1f2937;
-
-  border-radius:16px;
-
-  padding:16px;
-
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:18px;
   margin-bottom:14px;
-
+  box-shadow: 0 4px 20px rgba(0,0,0,.04);
 }
-
 
 .message-title{
-
-  font-size:19px;
-
-  font-weight:bold;
-
+  font-size:18px;
+  font-weight:800;
   margin-bottom:6px;
-
+  color:var(--text);
 }
-
 
 .message-subtitle{
-
-  color:#9ca3af;
-
-  font-size:14px;
-
-  margin-bottom:15px;
-
+  color:var(--muted);
+  font-size:13px;
+  margin-bottom:16px;
 }
-
 
 .menu{
-
   display:flex;
-
   flex-direction:column;
-
   gap:10px;
-
 }
-
 
 .menu-button{
-
   width:100%;
-
-  padding:15px;
-
-  background:#172033;
-
-  color:white;
-
-  border:1px solid #293548;
-
+  padding:14px 16px;
+  background:var(--bg-soft);
+  color:var(--text);
+  border:1px solid var(--border);
   border-radius:12px;
-
   cursor:pointer;
-
   text-align:right;
-
+  transition:.2s;
 }
-
 
 .menu-button:hover{
-
-  background:#1e293b;
-
+  background:#fff;
+  border-color:var(--border-strong);
+  box-shadow: 0 4px 12px rgba(0,0,0,.05);
 }
-
 
 .menu-title{
-
   display:block;
-
-  font-size:16px;
-
-  font-weight:bold;
-
+  font-size:15px;
+  font-weight:700;
 }
-
 
 .menu-subtitle{
-
   display:block;
-
-  color:#9ca3af;
-
-  font-size:13px;
-
-  margin-top:5px;
-
+  color:var(--muted);
+  font-size:12.5px;
+  margin-top:4px;
 }
-
 
 .back{
-
   width:100%;
-
   margin-top:12px;
-
-  padding:13px;
-
-  background:#374151;
-
-  border:0;
-
-  border-radius:10px;
-
-  color:white;
-
+  padding:12px;
+  background:var(--bg-soft);
+  border:1px solid var(--border);
+  border-radius:11px;
+  color:var(--text);
   cursor:pointer;
-
+  font-weight:600;
 }
-
 
 .data{
-
   display:flex;
-
   flex-direction:column;
-
   gap:8px;
-
 }
-
 
 .data-item{
-
-  background:#0b1220;
-
-  border-radius:10px;
-
+  background:var(--bg-soft);
+  border:1px solid var(--border);
+  border-radius:12px;
   padding:12px;
-
 }
-
 
 .data-key{
-
-  color:#9ca3af;
-
-  font-size:13px;
-
-  margin-bottom:5px;
-
+  color:var(--muted);
+  font-size:12px;
+  margin-bottom:4px;
+  font-weight:600;
 }
-
 
 .data-value{
-
-  color:#fff;
-
+  color:var(--text);
   word-break:break-word;
-
+  font-size:14px;
 }
-
 
 .array-item{
-
-  background:#0b1220;
-
-  border:1px solid #1f2937;
-
+  background:var(--bg-soft);
+  border:1px solid var(--border);
   border-radius:12px;
-
   padding:12px;
-
   margin-bottom:8px;
-
 }
-
 
 .error{
-
-  background:#3f1717;
-
-  border-color:#7f1d1d;
-
-  color:#fecaca;
-
+  background:#fef2f2;
+  border-color:#fecaca;
+  color:#991b1b;
 }
-
 
 .loading{
-
   text-align:center;
-
-  padding:20px;
-
-  color:#9ca3af;
-
+  padding:24px;
+  color:var(--muted);
 }
-
 
 pre{
-
   direction:ltr;
-
   text-align:left;
-
   white-space:pre-wrap;
-
   word-break:break-word;
-
-  color:#d1d5db;
-
+  color:#334155;
+  background:var(--bg-soft);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:12px;
 }
 
-
 /* =====================================================
-   EXAM OVERLAY
+   EXAM OVERLAY - نفس الـ ID
 ===================================================== */
 
 #examOverlay{
-
   display:none;
-
   position:fixed;
-
   inset:0;
-
   z-index:9999;
-
-  background:#0b1220;
-
+  background:rgba(248,250,252,.92);
+  backdrop-filter: blur(8px);
   overflow-y:auto;
-
 }
-
 
 #examBanner{
-
   width:100%;
-
   min-height:100vh;
-
-  padding:20px;
-
+  padding:28px 20px;
 }
-
 
 .exam-container{
-
   width:100%;
-
-  max-width:700px;
-
+  max-width:560px;
   margin:auto;
-
 }
-
 
 .exam-top{
-
   display:flex;
-
   align-items:center;
-
   justify-content:space-between;
-
   gap:12px;
-
-  margin-bottom:18px;
-
+  margin-bottom:20px;
 }
-
 
 .exam-title{
-
   font-size:22px;
-
-  font-weight:bold;
-
+  font-weight:800;
+  color:var(--text);
 }
-
 
 .exam-close{
-
-  width:42px;
-
-  height:42px;
-
-  border:0;
-
-  border-radius:12px;
-
-  background:#374151;
-
-  color:#fff;
-
-  font-size:24px;
-
+  width:40px;
+  height:40px;
+  border:1px solid var(--border);
+  border-radius:11px;
+  background:#fff;
+  color:var(--text);
+  font-size:20px;
   cursor:pointer;
-
 }
 
-
-.exam-student{
-
-  background:#111827;
-
-  border:1px solid #1f2937;
-
-  border-radius:16px;
-
-  padding:16px;
-
-  margin-bottom:15px;
-
-}
-
-
+.exam-student,
 .exam-section{
-
-  background:#111827;
-
-  border:1px solid #1f2937;
-
-  border-radius:16px;
-
-  padding:16px;
-
-  margin-bottom:15px;
-
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:18px;
+  margin-bottom:14px;
+  box-shadow: 0 4px 20px rgba(0,0,0,.04);
 }
-
 
 .exam-section-title{
-
-  font-size:18px;
-
-  font-weight:bold;
-
-  margin-bottom:15px;
-
+  font-size:16px;
+  font-weight:800;
+  margin-bottom:14px;
 }
-
 
 .exam-question{
-
-  background:#0b1220;
-
-  border:1px solid #1f2937;
-
+  background:var(--bg-soft);
+  border:1px solid var(--border);
   border-radius:12px;
-
   padding:14px;
-
-  margin-bottom:12px;
-
+  margin-bottom:10px;
 }
-
 
 .exam-question-text{
-
-  font-size:16px;
-
+  font-size:15px;
   line-height:1.8;
-
-  margin-bottom:12px;
-
+  margin-bottom:10px;
 }
-
 
 .exam-option{
-
   display:block;
-
-  padding:10px;
-
-  margin-top:7px;
-
-  background:#172033;
-
-  border-radius:9px;
-
+  padding:11px 12px;
+  margin-top:8px;
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:10px;
   cursor:pointer;
-
+  transition:.15s;
 }
 
+.exam-option:hover{
+  border-color:var(--primary);
+}
 
 .exam-option input{
-
   width:auto;
-
   margin-left:8px;
-
 }
-
 
 .exam-text-input{
-
   width:100%;
-
-  background:#111827;
-
-  border:1px solid #374151;
-
-  color:#fff;
-
-  border-radius:10px;
-
+  background:#fff;
+  border:1px solid var(--border);
+  color:var(--text);
+  border-radius:11px;
   padding:12px;
-
   font-size:15px;
-
   direction:rtl;
-
   text-align:right;
-
 }
-
 
 .exam-submit{
-
   width:100%;
-
-  padding:15px;
-
+  padding:14px;
   border:0;
-
   border-radius:12px;
-
-  background:#2563eb;
-
+  background:var(--primary);
   color:#fff;
-
-  font-size:17px;
-
+  font-size:16px;
+  font-weight:700;
   cursor:pointer;
-
-  margin-top:5px;
-
+  margin-top:8px;
 }
-
 
 .exam-submit:disabled{
-
   opacity:.5;
-
 }
-
 
 .exam-message{
-
   padding:14px;
-
   border-radius:12px;
-
-  margin-bottom:15px;
-
-  background:#0f172a;
-
-  color:#d1d5db;
-
+  margin-bottom:14px;
+  background:var(--bg-soft);
+  color:var(--text);
+  border:1px solid var(--border);
 }
-
 
 .exam-success{
-
-  background:#12351f;
-
-  border:1px solid #166534;
-
-  color:#bbf7d0;
-
+  background:#f0fdf4;
+  border-color:#bbf7d0;
+  color:#166534;
 }
-
 
 .exam-error{
-
-  background:#3f1717;
-
-  border:1px solid #7f1d1d;
-
-  color:#fecaca;
-
+  background:#fef2f2;
+  border-color:#fecaca;
+  color:#991b1b;
 }
-
 
 .exam-passage{
-
-  background:#172033;
-
-  border:1px solid #293548;
-
+  background:var(--bg-soft);
+  border:1px solid var(--border);
   border-radius:12px;
-
   padding:14px;
-
   line-height:1.9;
-
   margin-bottom:12px;
-
+  color:var(--text);
 }
-
 </style></head><body><div class="container">  <div class="header"><h1>أكاديمية البيان</h1>
 
 <p>واجهة اختبار مشروع الطلاب</p>
