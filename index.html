@@ -6,46 +6,105 @@ content="width=device-width, initial-scale=1.0"
 <title>أكاديمية البيان</title>
 <style>
 :root{
-  --bg:#f8fafc;
+  --bg:#ffffff;
+  --bg-soft:#f8fafc;
   --card:#ffffff;
   --border:#eef2f7;
-  --border-strong:#e2e8f0;
   --text:#0f172a;
-  --muted:#94a3b8;
+  --muted:#475569;
+  --muted-light:#94a3b8;
   --primary:#2563eb;
 }
 
 *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-
 body{
   margin:0;
   background:var(--bg);
   color:var(--text);
   font-family: Tahoma, Arial, sans-serif;
-  line-height:1.7;
 }
 
+/* عشان الشريط اللي فوق واللي تحت ثابتين */
 .container{
   width:100%;
-  max-width:440px;
+  max-width:460px;
   margin:0 auto;
-  padding:20px 16px 40px;
+  padding:72px 14px 92px;
 }
 
+/* ===== شريط فوق ثابت في النص ===== */
 .header{
+  position:fixed !important;
+  top:0; left:0; right:0;
+  height:58px;
+  background:rgba(255,255,255,.94);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  z-index:100;
+  display:flex !important;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:0 !important;
   text-align:center;
-  margin-bottom:22px;
 }
-.header h1{ margin:0; font-size:22px; font-weight:800; }
-.header p{ color:var(--muted); margin-top:6px; font-size:13px; }
+.header h1{
+  margin:0;
+  font-size:16px;
+  font-weight:900;
+  color:var(--text);
+  letter-spacing:-.2px;
+}
+.header p{ display:none; }
 
+/* ===== الكروت العادية ===== */
 .card{
   background:var(--card);
   border:1px solid var(--border);
   border-radius:18px;
-  padding:18px;
+  padding:16px;
   margin-bottom:14px;
   box-shadow:0 2px 12px rgba(15,23,42,.04);
+}
+
+/* ===== حقل الادخال ثابت اسفل الصفحة ===== */
+.card:has(input){
+  position:fixed;
+  bottom:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:100%;
+  max-width:460px;
+  background:#fff;
+  border:1px solid var(--border);
+  border-bottom:0;
+  border-radius:20px 20px 0 0;
+  padding:10px 12px 12px;
+  margin-bottom:0;
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  gap:10px;
+  box-shadow:0 -8px 30px rgba(15,23,42,.08);
+  z-index:100;
+}
+.card:has(input) label{ display:none; }
+.card:has(input) input{
+  flex:1;
+  background:var(--bg-soft);
+  border:1px solid var(--border);
+  border-radius:999px;
+  padding:12px 18px;
+  font-size:14px;
+}
+.card:has(input) .main-button{
+  width:auto;
+  margin-top:0;
+  padding:12px 20px;
+  border-radius:999px;
+  min-width:72px;
+  font-size:14px;
+  box-shadow:none;
 }
 
 label{ display:block; margin-bottom:8px; color:var(--text); font-size:13px; font-weight:700; }
@@ -57,119 +116,143 @@ input{
 input:focus{ border-color:var(--primary); box-shadow:0 0 0 3px rgba(37,99,235,.1); }
 
 .main-button{
-  width:100%; padding:14px; margin-top:12px; border:0; border-radius:12px;
-  background:var(--primary); color:#fff; font-size:15px; font-weight:700; cursor:pointer;
+  width:100%; padding:13px; margin-top:10px; border:0; border-radius:12px;
+  background:var(--primary); color:#fff; font-size:14px; font-weight:800; cursor:pointer;
 }
 .main-button:disabled{ opacity:.5; }
-
 .status{
   display:none; margin-top:12px; padding:12px; border-radius:12px;
   background:#fff; border:1px solid var(--border); color:var(--muted); font-size:13px;
 }
 
-.chat{ margin-top:16px; }
+.chat{ margin-top:10px; }
 .message{
   background:var(--card); border:1px solid var(--border); border-radius:18px;
-  padding:18px; margin-bottom:14px; box-shadow:0 2px 12px rgba(15,23,42,.04);
+  padding:16px; margin-bottom:14px; box-shadow:0 2px 12px rgba(15,23,42,.04);
 }
-.message-title{ font-size:17px; font-weight:800; margin-bottom:4px; }
-.message-subtitle{ color:var(--muted); font-size:13px; margin-bottom:14px; }
+.message-title{ font-size:16px; font-weight:900; margin-bottom:4px; color:var(--text); }
+.message-subtitle{ color:var(--muted); font-size:12px; margin-bottom:14px; }
 
-.menu{ display:flex; flex-direction:column; gap:12px; }
-.menu-button{
-  width:100%; padding:16px 18px; background:var(--card); color:var(--text);
-  border:1px solid var(--border); border-radius:18px; cursor:pointer; text-align:right;
-  box-shadow:0 2px 10px rgba(15,23,42,.03); transition:.2s;
+/* ===== الزراير كل 2 جنب بعض ستايل بنك ===== */
+.menu{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
 }
-.menu-button:hover{ border-color:var(--border-strong); transform:translateY(-1px); }
-.menu-button:nth-child(1){ border-right:3px solid #2563eb; }
-.menu-button:nth-child(2){ border-right:3px solid #f59e0b; }
-.menu-button:nth-child(3){ border-right:3px solid #8b5cf6; }
-.menu-button:nth-child(4){ border-right:3px solid #06b6d4; }
-.menu-button:nth-child(5){ border-right:3px solid #10b981; }
-.menu-button:nth-child(6){ border-right:3px solid #ef4444; }
-.menu-button:nth-child(7){ border-right:3px solid #6366f1; }
-.menu-title{ display:block; font-size:16px; font-weight:800; }
-.menu-subtitle{ display:block; color:var(--muted); font-size:12.5px; margin-top:5px; }
+.menu-button{
+  width:100%;
+  min-height:102px;
+  padding:16px 14px;
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:20px;
+  cursor:pointer;
+  text-align:right;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  box-shadow:0 4px 14px rgba(15,23,42,.04);
+  transition:.2s ease;
+}
+.menu-button:active{ transform:scale(.97); }
+.menu-title{
+  font-size:14.5px;
+  font-weight:900;
+  color:var(--text) !important;
+  line-height:1.3;
+}
+.menu-subtitle{
+  font-size:11.5px;
+  font-weight:600;
+  margin-top:8px;
+  line-height:1.4;
+  color:#334155 !important;
+  opacity:.9;
+}
+/* الوان بنك لكل زرار */
+.menu-button:nth-child(1){ background:#eff6ff; border-color:#dbeafe; }
+.menu-button:nth-child(2){ background:#fef3c7; border-color:#fde68a; }
+.menu-button:nth-child(3){ background:#f3e8ff; border-color:#e9d5ff; }
+.menu-button:nth-child(4){ background:#ecfeff; border-color:#a5f3fc; }
+.menu-button:nth-child(5){ background:#dcfce7; border-color:#bbf7d0; }
+.menu-button:nth-child(6){ background:#fff1f2; border-color:#fecdd3; }
+.menu-button:nth-child(7){ background:#e0e7ff; border-color:#c7d2fe; grid-column:1 / -1; min-height:88px; flex-direction:row; align-items:center; }
+.menu-button:nth-child(7) .menu-subtitle{ margin-top:0; margin-right:10px; }
 
 .back{
   width:100%; margin-top:12px; padding:13px; background:#fff;
-  border:1px solid var(--border); border-radius:12px; color:var(--text); cursor:pointer; font-weight:600;
+  border:1px solid var(--border); border-radius:12px; color:var(--text); cursor:pointer; font-weight:700;
 }
 
 .data{ display:flex; flex-direction:column; gap:8px; }
-.data-item{ background:#f8fafc; border:1px solid var(--border); border-radius:12px; padding:12px; }
-.data-key{ color:var(--muted); font-size:12px; margin-bottom:4px; font-weight:600; }
-.data-value{ color:var(--text); word-break:break-word; font-size:14px; }
+.data-item{
+  background:#fff; border:1px solid var(--border); border-radius:14px;
+  padding:14px; display:flex; justify-content:space-between; align-items:center;
+  box-shadow:0 1px 6px rgba(15,23,42,.03);
+}
+.data-key{ color:var(--muted-light); font-size:11px; font-weight:700; margin-bottom:2px; }
+.data-value{ color:var(--text); font-size:14px; font-weight:800; word-break:break-word; }
 
 .array-item{
-  background:#f8fafc; border:1px solid var(--border); border-radius:12px;
-  padding:12px; margin-bottom:8px;
+  background:#fff; border:1px solid var(--border); border-radius:14px;
+  padding:14px; margin-bottom:8px; box-shadow:0 1px 6px rgba(15,23,42,.03);
 }
 
-.error{
-  background:#fef2f2; border:1px solid #fecaca; color:#991b1b;
-  border-radius:12px; padding:12px;
-}
+.error{ background:#fef2f2; border:1px solid #fecaca; color:#991b1b; border-radius:12px; padding:12px; }
 .loading{ text-align:center; padding:20px; color:var(--muted); }
 pre{
   direction:ltr; text-align:left; white-space:pre-wrap; word-break:break-word;
-  color:#334155; background:#fff; border:1px solid var(--border); border-radius:12px; padding:12px;
+  color:#0f172a; background:var(--bg-soft); border:1px solid var(--border); border-radius:12px; padding:12px;
+  font-weight:600;
 }
 
-/* === EXAM OVERLAY - نفس الـ ID بالظبط === */
+/* ===== صفحة الامتحان - كل الـ ID موجودة ===== */
 #examOverlay{
   display:none; position:fixed; inset:0; z-index:9999;
-  background:var(--bg); overflow-y:auto;
+  background:#ffffff; overflow-y:auto;
 }
-#examBanner{ width:100%; min-height:100vh; padding:20px 16px; }
-.exam-container{ width:100%; max-width:440px; margin:auto; }
-.exam-top{
-  display:flex; align-items:center; justify-content:space-between;
-  gap:12px; margin-bottom:18px;
-}
-.exam-title{ font-size:20px; font-weight:800; }
+#examBanner{ width:100%; min-height:100vh; padding:72px 14px 20px; }
+.exam-container{ width:100%; max-width:460px; margin:auto; }
+.exam-top{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:18px; }
+.exam-title{ font-size:19px; font-weight:900; }
 .exam-close{
   width:40px; height:40px; border:1px solid var(--border); border-radius:12px;
   background:#fff; color:var(--text); font-size:20px; cursor:pointer;
 }
-.exam-student{
+.exam-student, .exam-section{
   background:#fff; border:1px solid var(--border); border-radius:18px;
   padding:16px; margin-bottom:14px; box-shadow:0 2px 12px rgba(15,23,42,.04);
 }
-.exam-section{
-  background:#fff; border:1px solid var(--border); border-radius:18px;
-  padding:16px; margin-bottom:14px; box-shadow:0 2px 12px rgba(15,23,42,.04);
-}
-.exam-section-title{ font-size:16px; font-weight:800; margin-bottom:14px; }
+.exam-section-title{ font-size:15px; font-weight:900; margin-bottom:12px; color:var(--text); }
 .exam-question{
-  background:#f8fafc; border:1px solid var(--border); border-radius:14px;
+  background:var(--bg-soft); border:1px solid var(--border); border-radius:14px;
   padding:14px; margin-bottom:10px;
 }
-.exam-question-text{ font-size:15px; line-height:1.8; margin-bottom:10px; }
+.exam-question-text{ font-size:14px; line-height:1.8; margin-bottom:10px; font-weight:700; color:var(--text); }
 .exam-option{
-  display:block; padding:11px 12px; margin-top:8px; background:#fff;
-  border:1px solid var(--border); border-radius:10px; cursor:pointer;
+  display:flex; align-items:center; gap:8px;
+  padding:11px 12px; margin-top:8px; background:#fff;
+  border:1px solid var(--border); border-radius:11px; cursor:pointer; font-weight:600;
 }
 .exam-option input{ width:auto; margin-left:8px; }
 .exam-text-input{
   width:100%; background:#fff; border:1px solid var(--border); color:var(--text);
-  border-radius:11px; padding:12px; font-size:15px; direction:rtl; text-align:right;
+  border-radius:11px; padding:12px; font-size:14px; direction:rtl; text-align:right;
 }
 .exam-submit{
   width:100%; padding:14px; border:0; border-radius:12px;
-  background:var(--primary); color:#fff; font-size:16px; font-weight:700; cursor:pointer; margin-top:8px;
+  background:var(--primary); color:#fff; font-size:15px; font-weight:800; cursor:pointer; margin-top:8px;
 }
 .exam-submit:disabled{ opacity:.5; }
 .exam-message{
   padding:14px; border-radius:12px; margin-bottom:14px;
-  background:#fff; border:1px solid var(--border); color:var(--text);
+  background:var(--bg-soft); border:1px solid var(--border); color:var(--text); font-weight:600;
 }
 .exam-success{ background:#f0fdf4; border:1px solid #bbf7d0; color:#166534; }
 .exam-error{ background:#fef2f2; border:1px solid #fecaca; color:#991b1b; }
 .exam-passage{
   background:#f8fafc; border:1px solid var(--border); border-radius:12px;
-  padding:14px; line-height:1.9; margin-bottom:12px;
+  padding:14px; line-height:1.9; margin-bottom:12px; color:var(--text); font-weight:600;
 }
 </style></head><body><div class="container">  <div class="header"><h1>أكاديمية البيان</h1>
 
