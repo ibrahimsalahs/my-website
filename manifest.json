@@ -1,23 +1,19 @@
 {
-  "name": "Ibrahim Salah - Portfolio",
-  "short_name": "Portfolio",
-  "description": "Frontend Developer Portfolio - Ibrahim Salah",
-  "start_url": "/my-website/index.html",
-  "scope": "/my-website/",
+  "name": "أكاديمية البيان",
+  "short_name": "البيان",
+  "description": "منصة أكاديمية البيان التعليمية",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#0f172a",
-  "theme_color": "#0f172a",
   "orientation": "portrait",
+  "background_color": "#0b1220",
+  "theme_color": "#0b1220",
   "icons": [
     {
-      "src": "/my-website/icons/icon-192.png",
+      "src": "file_000000004b1c822f832d57514330ad17.png",
       "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/my-website/icons/icon-512.png",
-      "sizes": "512x512", 
       "type": "image/png",
       "purpose": "any maskable"
     }
