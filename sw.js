@@ -13,6 +13,7 @@ self.addEventListener("install", function (event) {
         caches.open(CACHE_NAME)
             .then(function (cache) {
                 return cache.addAll(FILES_TO_CACHE);
+
             })
             .then(function () {
                 return self.skipWaiting();
