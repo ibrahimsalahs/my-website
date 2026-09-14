@@ -1,8 +1,12 @@
-<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta
-name="viewport"
-content="width=device-width, initial-scale=1.0"
-
-«»
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- PWA -->
+<link rel="manifest" href="/my-website/manifest.json">
+<meta name="theme-color" content="#0f172a">
+<link rel="apple-touch-icon" href="/my-website/icons/icon-192.png">
 <title>أكاديمية البيان</title>
 <style>
 :root{
@@ -1195,4 +1199,11 @@ function setLoading(
 
 </script><!-- =====================================================
      ملفات الاختبار
-===================================================== --><script src="exam.js"></script><script src="exam-submit.js"></script></body></html>
+===================================================== --><script src="exam.js"></script><script src="exam-submit.js"></script>
+<script>
+if('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/my-website/sw.js');
+}
+</script>
+
+</body></html>
