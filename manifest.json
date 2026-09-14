@@ -2,7 +2,7 @@
   "name": "Ibrahim Salah - Portfolio",
   "short_name": "Portfolio",
   "description": "Frontend Developer Portfolio - Ibrahim Salah",
-  "start_url": "/my-website/",
+  "start_url": "/my-website/index.html",
   "scope": "/my-website/",
   "display": "standalone",
   "background_color": "#0f172a",
