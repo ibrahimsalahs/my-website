@@ -1,13 +1,32 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- PWA -->
-<link rel="manifest" href="/my-website/manifest.json">
-<meta name="theme-color" content="#0f172a">
-<link rel="apple-touch-icon" href="/my-website/icons/icon-192.png">
-<title>أكاديمية البيان</title>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0,
+                   maximum-scale=1.0, user-scalable=no">
+
+    <meta name="theme-color" content="#0b1220">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="أكاديمية البيان">
+
+    <meta name="description"
+          content="منصة أكاديمية البيان التعليمية">
+
+    <link rel="manifest" href="manifest.json">
+
+    <link rel="icon"
+          type="image/png"
+          sizes="192x192"
+          href="file_000000004b1c822f832d57514330ad17.png">
+
+    <link rel="apple-touch-icon"
+          href="file_000000004b1c822f832d57514330ad17.png">
+
+    <title>أكاديمية البيان</title>
 <style>
 :root{
   --bg:#ffffff;
@@ -1201,9 +1220,18 @@ function setLoading(
      ملفات الاختبار
 ===================================================== --><script src="exam.js"></script><script src="exam-submit.js"></script>
 <script>
-if('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/my-website/sw.js');
-}
+    // تسجيل Service Worker
+    if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function () {
+            navigator.serviceWorker
+                .register("service-worker.js")
+                .then(function (registration) {
+                    console.log("Service Worker registered:", registration.scope);
+                })
+                .catch(function (error) {
+                    console.error("Service Worker registration failed:", error);
+                });
+        });
+    }
 </script>
-
 </body></html>
