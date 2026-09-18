@@ -1,0 +1,170 @@
+<!DOCTYPE html><html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AlBayan • Main API Tester</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Tahoma,sans-serif;background:#0b1020;color:#fff;min-height:100vh}
+.container{width:min(1100px,94%);margin:40px auto}
+.header{margin-bottom:25px}
+.logo{font-size:28px;font-weight:800}
+.logo span{color:#5eead4}
+.sub{color:#94a3b8;margin-top:7px}
+.card{background:#111827;border:1px solid #263244;border-radius:22px;padding:25px;margin-bottom:20px;box-shadow:0 20px 50px rgba(0,0,0,.25)}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.field{display:flex;flex-direction:column;gap:8px}
+label{font-size:14px;color:#cbd5e1}
+input,select{width:100%;padding:15px;border-radius:13px;border:1px solid #334155;background:#0f172a;color:#fff;font-size:15px;outline:none}
+input:focus,select:focus{border-color:#5eead4}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}
+button{border:0;border-radius:13px;padding:14px 22px;font-size:15px;font-weight:700;cursor:pointer}
+.send{background:#5eead4;color:#06201c}
+.clear{background:#1e293b;color:#cbd5e1}
+.status{display:flex;align-items:center;gap:10px;margin-bottom:15px}
+.dot{width:10px;height:10px;border-radius:50%;background:#64748b}
+.dot.ok{background:#22c55e}
+.dot.error{background:#ef4444}
+.response{background:#020617;border:1px solid #1e293b;border-radius:15px;padding:18px;min-height:180px;overflow:auto}
+pre{margin:0;white-space:pre-wrap;word-break:break-word;color:#cbd5e1;font-family:Consolas,monospace;font-size:13px;line-height:1.7}
+.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:15px}
+.quick button{background:#1e293b;color:#e2e8f0}
+.quick button:hover{background:#334155}
+@media(max-width:750px){.grid{grid-template-columns:1fr}.quick{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body><div class="container"><div class="header">
+<div class="logo">AlBayan <span>API Tester</span></div>
+<div class="sub">اختبار الاتصال بين الصفحة و Main Router</div>
+</div><div class="card"><div class="grid"><div class="field">
+<label>Sender ID</label>
+<input id="senderId" placeholder="مثال: 2010xxxxxxxxx">
+</div><div class="field">
+<label>Router Secret</label>
+<input id="secret" type="password" placeholder="ضع ROUTER_SECRET هنا">
+</div><div class="field">
+<label>اختر الطلب</label>
+<select id="payload">
+<option value="">القائمة الرئيسية</option>
+<option value="MAIN_ACCOUNT">👤 الحساب</option>
+<option value="MAIN_HOMEWORK">📝 الواجب</option>
+<option value="MAIN_EXAMS">📚 الاختبارات</option>
+<option value="MAIN_TEACHER_EVALUATION">⭐ تقييم المعلم</option>
+<option value="MAIN_EXAM_RESULTS">📊 نتائج الاختبارات</option>
+<option value="MAIN_MEETINGS">🎥 الاجتماعات</option>
+<option value="MAIN_SUBSCRIPTIONS">💳 الاشتراكات</option>
+<option value="MAIN_INVOICE">🧾 الفاتورة</option>
+<option value="MAIN_MENU">🏠 القائمة الرئيسية</option>
+</select>
+</div><div class="field">
+<label>Payload مخصص</label>
+<input id="customPayload" placeholder="اختياري — يعلو على الاختيار">
+</div></div><div class="actions">
+<button class="send" onclick="sendRequest()">إرسال إلى Main</button>
+<button class="clear" onclick="clearResponse()">مسح النتيجة</button>
+</div><div class="quick">
+<button onclick="setPayload('MAIN_ACCOUNT')">الحساب</button>
+<button onclick="setPayload('MAIN_HOMEWORK')">الواجب</button>
+<button onclick="setPayload('MAIN_EXAMS')">الاختبارات</button>
+<button onclick="setPayload('MAIN_EXAM_RESULTS')">النتائج</button>
+<button onclick="setPayload('MAIN_MEETINGS')">الاجتماعات</button>
+<button onclick="setPayload('MAIN_SUBSCRIPTIONS')">الاشتراكات</button>
+<button onclick="setPayload('MAIN_INVOICE')">الفاتورة</button>
+<button onclick="setPayload('MAIN_MENU')">الرئيسية</button>
+</div></div><div class="card"><div class="status">
+<div id="dot" class="dot"></div>
+<strong id="status">في انتظار الإرسال</strong>
+</div><div class="response">
+<pre id="result">لم يتم إرسال أي طلب حتى الآن.</pre>
+</div></div></div><script>
+
+const MAIN_URL='https://script.google.com/macros/s/AKfycbyurDCGEG97uPfYN7CZt5LpEwcySalDEZ-ia4zFwJF40ued4GHj5vuN-pZFKKx0TvUBVQ/exec';
+
+function setPayload(value){
+document.getElementById('payload').value=value;
+document.getElementById('customPayload').value='';
+}
+
+function clearResponse(){
+document.getElementById('result').textContent='لم يتم إرسال أي طلب حتى الآن.';
+document.getElementById('status').textContent='في انتظار الإرسال';
+document.getElementById('dot').className='dot';
+}
+
+function sendRequest(){
+
+const senderId=document.getElementById('senderId').value.trim();
+const secret=document.getElementById('secret').value.trim();
+const custom=document.getElementById('customPayload').value.trim();
+const payload=custom||document.getElementById('payload').value;
+
+if(!senderId){
+alert('اكتب Sender ID أولاً');
+return;
+}
+
+if(!secret){
+alert('اكتب Router Secret أولاً');
+return;
+}
+
+document.getElementById('status').textContent='جاري الاتصال بـ Main...';
+document.getElementById('dot').className='dot';
+document.getElementById('result').textContent='جاري إرسال الطلب...';
+
+const callback='mainCallback_'+Date.now();
+
+window[callback]=function(data){
+
+try{
+document.getElementById('result').textContent=
+JSON.stringify(data,null,2);
+
+if(data&&data.success){
+document.getElementById('status').textContent='تم الاستقبال بنجاح';
+document.getElementById('dot').className='dot ok';
+}else{
+document.getElementById('status').textContent='Main أعاد خطأ';
+document.getElementById('dot').className='dot error';
+}
+}catch(e){
+document.getElementById('status').textContent='خطأ في قراءة الرد';
+document.getElementById('dot').className='dot error';
+}
+
+delete window[callback];
+
+};
+
+const params=new URLSearchParams({
+secret:secret,
+senderId:senderId,
+payload:payload,
+callback:callback
+});
+
+const script=document.createElement('script');
+
+script.src=MAIN_URL+'?'+params.toString();
+
+script.onerror=function(){
+document.getElementById('status').textContent='فشل الاتصال بـ Main';
+document.getElementById('dot').className='dot error';
+document.getElementById('result').textContent='تعذر الوصول إلى Main.';
+delete window[callback];
+};
+
+document.body.appendChild(script);
+
+setTimeout(()=>{
+if(window[callback]){
+document.getElementById('status').textContent='انتهت مهلة الاتصال';
+document.getElementById('dot').className='dot error';
+delete window[callback];
+}
+},15000);
+
+}
+
+</script></body>
+</html>
