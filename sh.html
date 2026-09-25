@@ -1,133 +1,121 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<!DOCTYPE html><html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>أكاديمية البيان | تسجيل الحصص</title>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial,Tahoma,sans-serif;background:linear-gradient(135deg,#eef4ff,#f8fafc);color:#172033;min-height:100vh}.page{width:100%;max-width:760px;margin:auto;padding:12px}.box{background:#fff;border:1px solid #e4e9f1;border-radius:24px;overflow:hidden;box-shadow:0 15px 45px #14213d14}.head{padding:24px 18px;background:linear-gradient(135deg,#1769aa,#0b4f82);color:#fff;text-align:center}.logo{width:58px;height:58px;margin:auto;border-radius:18px;background:#ffffff20;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:900}.title{font-size:23px;font-weight:900;margin-top:10px}.subtitle{font-size:13px;opacity:.85;margin-top:6px}.content{padding:18px}.step{display:flex;align-items:center;gap:8px;margin-bottom:18px}.back{border:0;background:#eef4ff;color:#1769aa;width:42px;height:42px;border-radius:12px;font-size:23px;cursor:pointer;display:none}.stepText{font-size:15px;font-weight:800}.label{display:block;font-size:14px;font-weight:700;margin-bottom:8px}.search{display:flex;gap:8px}.input{height:50px;width:100%;border:1px solid #dce2eb;border-radius:13px;padding:0 14px;font-size:16px;outline:0;background:#fbfcfe}.input:focus{border-color:#1769aa;box-shadow:0 0 0 4px #1769aa12;background:#fff}.btn{height:50px;border:0;border-radius:13px;background:#1769aa;color:#fff;padding:0 20px;font-size:15px;font-weight:800;cursor:pointer;white-space:nowrap}.btn:disabled{opacity:.55;cursor:not-allowed}.student{margin-top:16px;background:#f7f9fc;border:1px solid #e5eaf1;border-radius:17px;padding:15px}.studentTop{display:flex;align-items:center;gap:12px}.avatar{width:48px;height:48px;border-radius:14px;background:#1769aa;color:#fff;display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:900}.name{font-size:18px;font-weight:900}.id{font-size:13px;color:#707b8e;margin-top:4px}.section{margin-top:20px}.sectionHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.sectionTitle{font-size:17px;font-weight:900}.count{font-size:12px;background:#edf4ff;color:#1769aa;padding:6px 10px;border-radius:20px}.cards{display:grid;gap:10px}.card{background:#fff;border:1px solid #e0e6ee;border-radius:16px;padding:15px;cursor:pointer;transition:.2s}.card:active{transform:scale(.99)}.card:hover{border-color:#1769aa;box-shadow:0 7px 20px #1769aa10}.card.active{border-color:#1769aa;background:#f5faff;box-shadow:0 0 0 2px #1769aa12}.cardTop{display:flex;align-items:center;justify-content:space-between;gap:10px}.cardTitle{font-weight:900;font-size:15px}.arrow{font-size:21px;color:#1769aa}.tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}.tag{font-size:12px;padding:6px 9px;border-radius:8px;background:#f1f4f8;color:#566174}.tag.main{background:#eaf3ff;color:#1769aa;font-weight:800}.empty{padding:22px;text-align:center;color:#7b8697;background:#f8fafc;border-radius:13px;border:1px dashed #dce2eb}.lessons{margin-top:20px;border:1px solid #e1e6ee;border-radius:18px;padding:15px;background:#fff}.lessonHead{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.lessonTitle{font-size:17px;font-weight:900}.lessonCount{font-size:12px;color:#737e90}.lessonList{display:grid;gap:8px}.lesson{display:flex;align-items:center;gap:10px;padding:10px 11px;background:#f8fafc;border:1px solid #edf0f4;border-radius:12px}.lessonNo{width:31px;height:31px;border-radius:9px;background:#eaf3ff;color:#1769aa;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;flex:none}.lessonName{font-size:14px;font-weight:800}.lessonDate{margin-right:auto;font-size:13px;color:#687386}.next{margin-top:15px;padding:15px;background:#f5faff;border:1px dashed #1769aa;border-radius:15px}.nextTitle{font-size:14px;font-weight:900;color:#1769aa;margin-bottom:10px}.dateRow{display:flex;gap:8px}.dateRow .input{flex:1}.send{min-width:115px}.msg{display:none;margin-top:14px;padding:11px 13px;border-radius:11px;text-align:center;font-size:14px;font-weight:800}.msg.show{display:block}.msg.ok{background:#e8f8ef;color:#18733d}.msg.err{background:#fff0f0;color:#b42318}.msg.info{background:#eef4ff;color:#1769aa}.loading{text-align:center;padding:22px;color:#687386}.hidden{display:none}.lock{position:fixed;inset:0;background:#172033dd;backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;padding:20px;z-index:50}.lock.show{display:flex}.lockBox{width:100%;max-width:390px;background:#fff;border-radius:24px;padding:28px;text-align:center;box-shadow:0 20px 60px #0005}.success{width:68px;height:68px;border-radius:50%;background:#e8f8ef;color:#198754;display:flex;align-items:center;justify-content:center;margin:auto;font-size:35px;font-weight:900}.lockBox h2{font-size:21px;margin:15px 0 8px}.lockBox p{font-size:14px;color:#687386;line-height:1.8;margin:0}.lockBox small{display:block;color:#9aa3b1;margin-top:13px}@media(max-width:500px){.page{padding:8px}.content{padding:14px}.search{display:grid}.search .btn{width:100%}.dateRow{display:grid}.send{width:100%}.title{font-size:21px}}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Tahoma,sans-serif;background:linear-gradient(135deg,#eef4ff,#f8fafc);color:#172033;min-height:100vh}.page{width:100%;max-width:760px;margin:auto;padding:12px}.box{background:#fff;border:1px solid #e4e9f1;border-radius:24px;overflow:hidden;box-shadow:0 15px 45px #14213d14}.head{padding:24px 18px;background:linear-gradient(135deg,#1769aa,#0b4f82);color:#fff;text-align:center}.logo{width:58px;height:58px;margin:auto;border-radius:18px;background:#ffffff20;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:900}.title{font-size:23px;font-weight:900;margin-top:10px}.subtitle{font-size:13px;opacity:.85;margin-top:6px}.content{padding:18px}.step{display:flex;align-items:center;gap:8px;margin-bottom:18px}.back{border:0;background:#eef4ff;color:#1769aa;width:42px;height:42px;border-radius:12px;font-size:23px;cursor:pointer;display:none}.stepText{font-size:15px;font-weight:800}.label{display:block;font-size:14px;font-weight:700;margin-bottom:8px}.search{display:flex;gap:8px}.input{height:50px;width:100%;border:1px solid #dce2eb;border-radius:13px;padding:0 14px;font-size:16px;outline:0;background:#fbfcfe}.input:focus{border-color:#1769aa;box-shadow:0 0 0 4px #1769aa12;background:#fff}.btn{height:50px;border:0;border-radius:13px;background:#1769aa;color:#fff;padding:0 20px;font-size:15px;font-weight:800;cursor:pointer;white-space:nowrap}.btn:disabled{opacity:.55;cursor:not-allowed}.fullBtn{width:100%;margin-top:12px}.student{margin-top:16px;background:#f7f9fc;border:1px solid #e5eaf1;border-radius:17px;padding:15px}.studentTop{display:flex;align-items:center;gap:12px}.avatar{width:48px;height:48px;border-radius:14px;background:#1769aa;color:#fff;display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:900}.name{font-size:18px;font-weight:900}.id{font-size:13px;color:#707b8e;margin-top:4px}.section{margin-top:20px}.sectionHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.sectionTitle{font-size:17px;font-weight:900}.count{font-size:12px;background:#edf4ff;color:#1769aa;padding:6px 10px;border-radius:20px}.cards{display:grid;gap:10px}.card{background:#fff;border:1px solid #e0e6ee;border-radius:16px;padding:15px;cursor:pointer;transition:.2s}.card:active{transform:scale(.99)}.card:hover{border-color:#1769aa;box-shadow:0 7px 20px #1769aa10}.card.active{border-color:#1769aa;background:#f5faff;box-shadow:0 0 0 2px #1769aa12}.cardTop{display:flex;align-items:center;justify-content:space-between;gap:10px}.cardTitle{font-weight:900;font-size:15px}.arrow{font-size:21px;color:#1769aa}.tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}.tag{font-size:12px;padding:6px 9px;border-radius:8px;background:#f1f4f8;color:#566174}.tag.main{background:#eaf3ff;color:#1769aa;font-weight:800}.empty{padding:22px;text-align:center;color:#7b8697;background:#f8fafc;border-radius:13px;border:1px dashed #dce2eb}.lessons{margin-top:20px;border:1px solid #e1e6ee;border-radius:18px;padding:15px;background:#fff}.lessonHead{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.lessonTitle{font-size:17px;font-weight:900}.lessonCount{font-size:12px;color:#737e90}.lessonList{display:grid;gap:8px}.lesson{display:flex;align-items:center;gap:10px;padding:10px 11px;background:#f8fafc;border:1px solid #edf0f4;border-radius:12px}.lessonNo{width:31px;height:31px;border-radius:9px;background:#eaf3ff;color:#1769aa;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;flex:none}.lessonName{font-size:14px;font-weight:800}.lessonDate{margin-right:auto;font-size:13px;color:#687386}.next{margin-top:15px;padding:15px;background:#f5faff;border:1px dashed #1769aa;border-radius:15px}.nextTitle{font-size:14px;font-weight:900;color:#1769aa;margin-bottom:10px}.dateRow{display:flex;gap:8px}.dateRow .input{flex:1}.send{min-width:115px}.msg{display:none;margin-top:14px;padding:11px 13px;border-radius:11px;text-align:center;font-size:14px;font-weight:800}.msg.show{display:block}.msg.ok{background:#e8f8ef;color:#18733d}.msg.err{background:#fff0f0;color:#b42318}.msg.info{background:#eef4ff;color:#1769aa}.loading{text-align:center;padding:22px;color:#687386}.hidden{display:none}.lock{position:fixed;inset:0;background:#172033dd;backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;padding:20px;z-index:50}.lock.show{display:flex}.lockBox{width:100%;max-width:390px;background:#fff;border-radius:24px;padding:28px;text-align:center;box-shadow:0 20px 60px #0005}.success{width:68px;height:68px;border-radius:50%;background:#e8f8ef;color:#198754;display:flex;align-items:center;justify-content:center;margin:auto;font-size:35px;font-weight:900}.lockBox h2{font-size:21px;margin:15px 0 8px}.lockBox p{font-size:14px;color:#687386;line-height:1.8;margin:0}.lockBox small{display:block;color:#9aa3b1;margin-top:13px}@media(max-width:500px){.page{padding:8px}.content{padding:14px}.search{display:grid}.search .btn{width:100%}.dateRow{display:grid}.send{width:100%}.title{font-size:21px}}
 </style>
 </head>
 <body>
-<div class="page">
-<div class="box">
-<div class="head">
-<div class="logo">ب</div>
-<div class="title">أكاديمية البيان</div>
-<div class="subtitle">نظام تسجيل الحصص</div>
-</div>
-<div class="content">
-<div class="step">
-<button id="backBtn" class="back" onclick="back()">‹</button>
-<div id="stepText" class="stepText">البحث عن المعلم</div>
-</div>
-<div id="teacherSearch">
-<label class="label">ID المعلم</label>
-<div class="search">
-<input id="teacherId" class="input" inputmode="numeric" autocomplete="off" placeholder="اكتب ID المعلم">
-<button id="teacherBtn" class="btn" onclick="searchTeacher()">بحث</button>
-</div>
-</div>
-<div id="teacher"></div>
-<div id="teacherSubs"></div>
-<div id="student"></div>
-<div id="studentSubs"></div>
-<div id="lessons"></div>
-<div id="msg" class="msg"></div>
-</div>
-</div>
-</div>
-<div id="lock" class="lock">
-<div class="lockBox">
-<div class="success">✓</div>
-<h2>تم تسجيل الحصة</h2>
-<p>تم تسجيل حصة واحدة بنجاح.<br>تم قفل الصفحة لمنع التسجيل مرة أخرى.</p>
-<small>لإضافة حصة جديدة افتح الصفحة من جديد.</small>
-</div>
-</div>
+<div class="page"><div class="box"><div class="head"><div class="logo">ب</div><div class="title">أكاديمية البيان</div><div class="subtitle">نظام تسجيل الحصص</div></div><div class="content"><div class="step"><button id="backBtn" class="back" onclick="back()">‹</button><div id="stepText" class="stepText">البحث عن المعلم</div></div><div id="teacherSearch"><label class="label">ID المعلم</label><div class="search"><input id="teacherId" class="input" inputmode="numeric" autocomplete="off" placeholder="اكتب ID المعلم"><button id="teacherBtn" class="btn" onclick="searchTeacher()">بحث</button></div></div><div id="teacher"></div><div id="teacherAction"></div><div id="teacherSubs"></div><div id="teacherSubsAction"></div><div id="student"></div><div id="studentAction"></div><div id="studentSubs"></div><div id="studentSubsAction"></div><div id="lessons"></div><div id="msg" class="msg"></div></div></div></div>
+<div id="lock" class="lock"><div class="lockBox"><div class="success">✓</div><h2>تم تسجيل الحصة</h2><p>تم تسجيل حصة واحدة بنجاح.<br>تم قفل الصفحة لمنع التسجيل مرة أخرى.</p><small>لإضافة حصة جديدة افتح الصفحة من جديد.</small></div></div>
 <script>
 const API_URL='https://script.google.com/macros/s/AKfycbwu1NJffPeMKu4LEGxI4j9H91p3U_lliEcUKNMF-UbZNGwnygk0RKIDhArG67wpzp6r/exec';
-let teacherId='',studentId='',teacherCode='',selectedStudent='',selectedSub=0,submitted=false,stage=0;
+let teacherId='',studentId='',teacherCode='',selectedStudent='',selectedSub=0,submitted=false,stage=0,teacherData=null,teacherSubsData=null,studentData=null,studentSubsData=null;
 const names=['الأولى','الثانية','الثالثة','الرابعة','الخامسة','السادسة','السابعة','الثامنة','التاسعة','العاشرة','الحادية عشرة','الثانية عشرة','الثالثة عشرة','الرابعة عشرة','الخامسة عشرة','السادسة عشرة','السابعة عشرة','الثامنة عشرة','التاسعة عشرة','العشرون','الحادية والعشرون','الثانية والعشرون','الثالثة والعشرون','الرابعة والعشرون','الخامسة والعشرون','السادسة والعشرون','السابعة والعشرون','الثامنة والعشرون','التاسعة والعشرون','الثلاثون'];
 async function api(action,data={}){
 const r=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action,...data})});
-if(!r.ok)throw Error();
-return await r.json()
+if(!r.ok)return null;
+try{return await r.json()}catch(e){return null}
+}
+function serverError(r){
+return r&&r.ok===false;
 }
 async function searchTeacher(){
 const id=document.getElementById('teacherId').value.trim();
 if(!id)return message('اكتب ID المعلم','err');
 busy('teacherBtn',true,'جاري البحث...');
-message('جاري البحث...','info');
-try{
+clearMessage();
 const r=await api('teachers',{id});
-if(!r.ok)return message(r.msg,'err');
-teacherId=r.id;
-teacherCode=r.id;
-stage=1;
-renderTeacher(r);
-await loadTeacherSubs(r.id)
-}catch(e){message('تعذر الاتصال بالسيرفر','err')}finally{busy('teacherBtn',false,'بحث')}
+busy('teacherBtn',false,'بحث');
+if(!r)return;
+if(serverError(r))return message(r.msg||'حدث خطأ','err');
+teacherId=r.id;teacherCode=r.id;teacherData=r;stage=1;renderTeacher(r);
 }
 function renderTeacher(r){
 document.getElementById('teacherSearch').classList.add('hidden');
-document.getElementById('teacher').innerHTML=`<div class="student"><div class="studentTop"><div class="avatar">${esc(r.name.charAt(0))}</div><div><div class="name">${esc(r.name)}</div><div class="id">ID المعلم: ${esc(r.id)}</div></div></div></div>`;
+document.getElementById('teacher').innerHTML=`<div class="student"><div class="studentTop"><div class="avatar">${esc((r.name||'م').charAt(0))}</div><div><div class="name">${esc(r.name)}</div><div class="id">ID المعلم: ${esc(r.id)}</div></div></div></div>`;
+document.getElementById('teacherAction').innerHTML='<button id="teacherSubsBtn" class="btn fullBtn" onclick="sendTeacherSubs()">إرسال</button>';
 document.getElementById('backBtn').style.display='block';
-document.getElementById('stepText').textContent='اشتراكات المعلم';
+document.getElementById('stepText').textContent='إرسال طلب اشتراكات المعلم';
 }
-async function loadTeacherSubs(code){
-document.getElementById('teacherSubs').innerHTML='<div class="loading">جاري تحميل اشتراكات المعلم...</div>';
-try{
-const r=await api('teacherSubs',{code});
-if(!r.ok)return message(r.msg,'err');
+async function sendTeacherSubs(){
+if(!teacherCode)return;
+busy('teacherSubsBtn',true,'جاري الإرسال...');
+clearMessage();
+const r=await api('teacherSubs',{code:teacherCode});
+busy('teacherSubsBtn',false,'إرسال');
+if(!r)return;
+if(serverError(r))return message(r.msg||'حدث خطأ','err');
+teacherSubsData=r;
+renderTeacherSubs(r);
+}
+function renderTeacherSubs(r){
+document.getElementById('teacherAction').classList.add('hidden');
 document.getElementById('teacherSubs').innerHTML=`<div class="section"><div class="sectionHead"><span class="sectionTitle">اشتراكات المعلم</span><span class="count">${r.subs.length}</span></div><div class="cards">${r.subs.length?r.subs.map(teacherCard).join(''):'<div class="empty">لا توجد اشتراكات لهذا المعلم</div>'}</div></div>`;
-}catch(e){message('تعذر تحميل الاشتراكات','err')}
+document.getElementById('teacherSubsAction').innerHTML='<button id="studentBtn" class="btn fullBtn" onclick="sendStudent()">إرسال</button>';
+document.getElementById('stepText').textContent='اختيار اشتراك المعلم';
 }
 function teacherCard(s){
-return `<div class="card" onclick="selectTeacherSub('${escAttr(s.code)}','${escAttr(s.name)}',${s.num})"><div class="cardTop"><span class="cardTitle">${esc(s.name||s.data||'')}</span><span class="arrow">‹</span></div><div class="tags"><span class="tag main">كود الطالب: ${esc(s.code||'-')}</span></div></div>`
+return `<div class="card ${selectedStudent===String(s.code)?'active':''}" onclick="chooseTeacherSub('${escAttr(s.code)}','${escAttr(s.name)}',${s.num})"><div class="cardTop"><span class="cardTitle">${esc(s.name||s.data||'')}</span><span class="arrow">‹</span></div><div class="tags"><span class="tag main">كود الطالب: ${esc(s.code||'-')}</span></div></div>`
 }
-async function selectTeacherSub(code,name,num){
+function chooseTeacherSub(code,name,num){
 if(!code)return message('لا يوجد كود طالب في هذا الاشتراك','err');
-selectedStudent=code;
-stage=2;
-document.getElementById('teacherSubs').classList.add('hidden');
-document.getElementById('student').innerHTML='<div class="loading">جاري البحث عن الطالب...</div>';
-try{
-const r=await api('student',{id:code});
-if(!r.ok){document.getElementById('student').innerHTML='';return message(r.msg,'err')}
-renderStudent(r);
-await loadStudentSubs(code)
-}catch(e){message('تعذر الاتصال بالسيرفر','err')}
+selectedStudent=String(code);
+document.querySelectorAll('#teacherSubs .card').forEach(x=>x.classList.remove('active'));
+event.currentTarget.classList.add('active');
+}
+async function sendStudent(){
+if(!selectedStudent)return message('اختر اشتراك الطالب أولاً','err');
+busy('studentBtn',true,'جاري الإرسال...');
+clearMessage();
+const r=await api('student',{id:selectedStudent});
+busy('studentBtn',false,'إرسال');
+if(!r)return;
+if(serverError(r))return message(r.msg||'حدث خطأ','err');
+studentData=r;studentId=r.id;stage=2;renderStudent(r);
 }
 function renderStudent(r){
-studentId=r.id;
-document.getElementById('student').innerHTML=`<div class="student"><div class="studentTop"><div class="avatar">${esc(r.name.charAt(0))}</div><div><div class="name">${esc(r.name)}</div><div class="id">ID الطالب: ${esc(r.id)}</div></div></div></div>`;
-document.getElementById('stepText').textContent='اشتراكات الطالب';
+document.getElementById('teacherSubs').classList.add('hidden');
+document.getElementById('teacherSubsAction').classList.add('hidden');
+document.getElementById('student').innerHTML=`<div class="student"><div class="studentTop"><div class="avatar">${esc((r.name||'ط').charAt(0))}</div><div><div class="name">${esc(r.name)}</div><div class="id">ID الطالب: ${esc(r.id)}</div></div></div></div>`;
+document.getElementById('studentAction').innerHTML='<button id="studentSubsBtn" class="btn fullBtn" onclick="sendStudentSubs()">إرسال</button>';
+document.getElementById('stepText').textContent='إرسال طلب اشتراكات الطالب';
 }
-async function loadStudentSubs(id){
-document.getElementById('studentSubs').innerHTML='<div class="loading">جاري تحميل اشتراكات الطالب...</div>';
-try{
-const r=await api('studentSubs',{id});
-if(!r.ok)return message(r.msg,'err');
+async function sendStudentSubs(){
+busy('studentSubsBtn',true,'جاري الإرسال...');
+clearMessage();
+const r=await api('studentSubs',{id:studentId});
+busy('studentSubsBtn',false,'إرسال');
+if(!r)return;
+if(serverError(r))return message(r.msg||'حدث خطأ','err');
+studentSubsData=r;renderStudentSubs(r);
+}
+function renderStudentSubs(r){
+document.getElementById('studentAction').classList.add('hidden');
 document.getElementById('studentSubs').innerHTML=`<div class="section"><div class="sectionHead"><span class="sectionTitle">اشتراكات الطالب</span><span class="count">${r.subs.length}</span></div><div class="cards">${r.subs.length?r.subs.map(studentCard).join(''):'<div class="empty">لا توجد اشتراكات لهذا الطالب</div>'}</div></div>`;
-}catch(e){message('تعذر تحميل اشتراكات الطالب','err')}
+document.getElementById('studentSubsAction').innerHTML='<button id="lessonsBtn" class="btn fullBtn" onclick="sendLessons()">إرسال</button>';
+document.getElementById('stepText').textContent='اختيار اشتراك الطالب';
 }
 function studentCard(s){
-return `<div class="card" id="studentSub${s.num}" onclick="selectStudentSub(${s.num})"><div class="cardTop"><span class="cardTitle">الاشتراك رقم ${s.num}</span><span class="arrow">‹</span></div>${s.name?`<div class="tags"><span class="tag">الاسم: ${esc(s.name)}</span><span class="tag">الكود: ${esc(s.code)}</span><span class="tag main">${esc(s.subject)}</span><span class="tag">${s.count} حصص</span>${s.price?`<span class="tag">${esc(s.price)}</span>`:''}</div>`:`<div class="tags"><span class="tag">${esc(s.data||'')}</span></div>`}</div>`
+return `<div class="card ${selectedSub===s.num?'active':''}" id="studentSub${s.num}" onclick="chooseStudentSub(${s.num})"><div class="cardTop"><span class="cardTitle">الاشتراك رقم ${s.num}</span><span class="arrow">‹</span></div>${s.name?`<div class="tags"><span class="tag">الاسم: ${esc(s.name)}</span><span class="tag">الكود: ${esc(s.code)}</span><span class="tag main">${esc(s.subject)}</span><span class="tag">${s.count} حصص</span>${s.price?`<span class="tag">${esc(s.price)}</span>`:''}</div>`:`<div class="tags"><span class="tag">${esc(s.data||'')}</span></div>`}</div>`
 }
-async function selectStudentSub(num){
+function chooseStudentSub(num){
 if(submitted)return;
 selectedSub=num;
-document.querySelectorAll('.card').forEach(x=>x.classList.remove('active'));
+document.querySelectorAll('#studentSubs .card').forEach(x=>x.classList.remove('active'));
 document.getElementById('studentSub'+num)?.classList.add('active');
-stage=3;
-document.getElementById('lessons').innerHTML='<div class="lessons"><div class="loading">جاري تحميل الحصص...</div></div>';
-document.getElementById('studentSubs').classList.add('hidden');
-try{
-const r=await api('lessons',{id:studentId,num});
-if(!r.ok)return message(r.msg,'err');
-renderLessons(r)
-}catch(e){message('تعذر تحميل الحصص','err')}
+}
+async function sendLessons(){
+if(!selectedSub)return message('اختر الاشتراك أولاً','err');
+busy('lessonsBtn',true,'جاري الإرسال...');
+clearMessage();
+const r=await api('lessons',{id:studentId,num:selectedSub});
+busy('lessonsBtn',false,'إرسال');
+if(!r)return;
+if(serverError(r))return message(r.msg||'حدث خطأ','err');
+stage=3;renderLessons(r);
 }
 function renderLessons(r){
 let h=`<div class="lessons"><div class="lessonHead"><span class="lessonTitle">الحصص المسجلة</span><span class="lessonCount">${r.lessons.length} من ${r.count}</span></div><div class="lessonList">`;
@@ -139,72 +127,69 @@ const n=names[r.lessons.length]||'الحصة '+(r.lessons.length+1);
 h+=`<div class="next"><div class="nextTitle">الحصة التالية: ${n}</div><div class="dateRow"><input id="date" class="input" autocomplete="off" placeholder="تاريخ الحصة مثل 30-9"><button id="sendBtn" class="btn send" onclick="addLesson()">تسجيل</button></div></div>`
 }else h+=`<div class="next"><div class="nextTitle">انتهى الاشتراك</div></div>`;
 h+='</div>';
+document.getElementById('studentSubs').classList.add('hidden');
+document.getElementById('studentSubsAction').classList.add('hidden');
 document.getElementById('lessons').innerHTML=h;
-message('','');
+document.getElementById('stepText').textContent='تسجيل الحصة';
+clearMessage();
 }
 async function addLesson(){
 if(submitted||!selectedSub)return;
 const date=document.getElementById('date')?.value.trim(),btn=document.getElementById('sendBtn');
 if(!date)return message('اكتب تاريخ الحصة','err');
 if(btn.disabled)return;
-btn.disabled=true;
-btn.textContent='جاري التسجيل...';
-try{
+btn.disabled=true;btn.textContent='جاري التسجيل...';
 const r=await api('addLesson',{id:studentId,num:selectedSub,date});
-if(r.ok){
+if(!r){
+btn.disabled=false;btn.textContent='تسجيل';
+return;
+}
+if(serverError(r)){
+btn.disabled=false;btn.textContent='تسجيل';
+return message(r.msg||'حدث خطأ','err');
+}
 submitted=true;
 document.querySelectorAll('button,input').forEach(x=>x.disabled=true);
-message(r.msg,'ok');
+message(r.msg||'تم تسجيل الحصة','ok');
 document.getElementById('lock').classList.add('show');
-}else{
-btn.disabled=false;
-btn.textContent='تسجيل';
-message(r.msg,'err')
-}
-}catch(e){
-btn.disabled=false;
-btn.textContent='تسجيل';
-message('تعذر الاتصال بالسيرفر','err')
-}
 }
 function back(){
 if(submitted)return;
-message('','');
+clearMessage();
 if(stage===3){
 stage=2;
 document.getElementById('lessons').innerHTML='';
 document.getElementById('studentSubs').classList.remove('hidden');
-document.getElementById('stepText').textContent='اشتراكات الطالب';
+document.getElementById('studentSubsAction').classList.remove('hidden');
+document.getElementById('stepText').textContent='اختيار اشتراك الطالب';
 return
 }
 if(stage===2){
 stage=1;
 document.getElementById('student').innerHTML='';
+document.getElementById('studentAction').innerHTML='';
 document.getElementById('studentSubs').innerHTML='';
+document.getElementById('studentSubsAction').innerHTML='';
 document.getElementById('studentSubs').classList.add('hidden');
 document.getElementById('teacherSubs').classList.remove('hidden');
-document.getElementById('stepText').textContent='اشتراكات المعلم';
+document.getElementById('teacherSubsAction').classList.remove('hidden');
+document.getElementById('stepText').textContent='اختيار اشتراك المعلم';
 return
 }
 if(stage===1){
 stage=0;
 document.getElementById('teacher').innerHTML='';
+document.getElementById('teacherAction').innerHTML='';
 document.getElementById('teacherSubs').innerHTML='';
+document.getElementById('teacherSubsAction').innerHTML='';
 document.getElementById('teacherSearch').classList.remove('hidden');
 document.getElementById('backBtn').style.display='none';
 document.getElementById('stepText').textContent='البحث عن المعلم';
 }
 }
-function busy(id,v,t){
-const b=document.getElementById(id);
-b.disabled=v;
-b.textContent=t
-}
-function message(t,type){
-const x=document.getElementById('msg');
-x.textContent=t;
-x.className='msg'+(t?' show ':' ')+(type||'')
-}
+function busy(id,v,t){const b=document.getElementById(id);if(!b)return;b.disabled=v;b.textContent=t}
+function message(t,type){const x=document.getElementById('msg');x.textContent=t;x.className='msg'+(t?' show ':' ')+(type||'')}
+function clearMessage(){message('','')}
 function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 function escAttr(v){return String(v??'').replace(/\\/g,'\\\\').replace(/'/g,"\\'")}
 document.getElementById('teacherId').addEventListener('keydown',e=>{if(e.key==='Enter')searchTeacher()});
