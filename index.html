@@ -1220,6 +1220,12 @@ function setLoading(
      ملفات الاختبار
 ===================================================== --><script src="exam.js"></script><script src="exam-submit.js"></script>
 <script>
-if("serviceWorker"in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("/my-website/service-worker.js",{scope:"/my-website/"}));
+if("serviceWorker" in navigator){
+  window.addEventListener("load", ()=>{
+    navigator.serviceWorker.register("./service-worker.js")
+      .then(r => console.log("SW OK", r.scope))
+      .catch(e => console.error("SW FAIL", e));
+  });
+}
 </script>
 </body></html>
