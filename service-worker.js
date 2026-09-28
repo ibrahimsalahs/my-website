@@ -1,5 +1,17 @@
-const CACHE_NAME="al-bayan-pwa-v1";
-const FILES_TO_CACHE=["./","./index.html","./manifest.json","./service-worker.js","./file_000000004b1c822f832d57514330ad17.png"];
-self.addEventListener("install",function(event){event.waitUntil(caches.open(CACHE_NAME).then(function(cache){return cache.addAll(FILES_TO_CACHE)}).then(function(){return self.skipWaiting()}))});
-self.addEventListener("activate",function(event){event.waitUntil(caches.keys().then(function(cacheNames){return Promise.all(cacheNames.filter(function(cacheName){return cacheName!==CACHE_NAME}).map(function(cacheName){return caches.delete(cacheName)}))}).then(function(){return self.clients.claim()}))});
-self.addEventListener("fetch",function(event){if(!event.request.url.startsWith(self.location.origin))return;event.respondWith(caches.match(event.request).then(function(cachedResponse){if(cachedResponse)return cachedResponse;return fetch(event.request).then(function(networkResponse){if(!networkResponse||networkResponse.status!==200||networkResponse.type!=="basic")return networkResponse;const responseClone=networkResponse.clone();caches.open(CACHE_NAME).then(function(cache){cache.put(event.request,responseClone)});return networkResponse})}))});
+const CACHE_NAME="al-bayan-pwa-v2";
+const BASE="/my-website/";
+const FILES_TO_CACHE=[BASE,BASE+"index.html",BASE+"manifest.json",BASE+"service-worker.js",BASE+"file_000000004b1c822f832d57514330ad17.png"];
+self.addEventListener("install",e=>{e.waitUntil(caches.open(CACHE_NAME).then(c=>c.addAll(FILES_TO_CACHE)).then(()=>self.skipWaiting()))});
+self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith("al-bayan-pwa-")&&k!==CACHE_NAME).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
+self.addEventListener("fetch",e=>{
+if(e.request.method!=="GET")return;
+const u=new URL(e.request.url);
+if(u.origin!==self.location.origin)return;
+if(!u.pathname.startsWith(BASE))return;
+e.respondWith(caches.match(e.request).then(cached=>cached||fetch(e.request).then(res=>{
+if(!res||res.status!==200||res.type!=="basic")return res;
+const copy=res.clone();
+caches.open(CACHE_NAME).then(c=>c.put(e.request,copy));
+return res;
+}).catch(()=>caches.match(BASE+"index.html"))));
+});
