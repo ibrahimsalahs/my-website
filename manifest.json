@@ -1,21 +1,14 @@
 {
-  "name":"أكاديمية البيان",
-  "short_name":"البيان",
-  "description":"منصة أكاديمية البيان التعليمية",
-  "lang":"ar",
-  "dir":"rtl",
-  "start_url":"./index.html",
-  "scope":"./",
-  "display":"standalone",
-  "orientation":"portrait",
-  "background_color":"#0b1220",
-  "theme_color":"#0b1220",
-  "icons":[
-    {
-      "src":"file_000000004b1c822f832d57514330ad17.png",
-      "sizes":"192x192",
-      "type":"image/png",
-      "purpose":"any maskable"
-    }
-  ]
+"name":"أكاديمية البيان",
+"short_name":"البيان",
+"description":"منصة أكاديمية البيان التعليمية",
+"lang":"ar",
+"dir":"rtl",
+"start_url":"/my-website/index.html",
+"scope":"/my-website/",
+"display":"standalone",
+"orientation":"portrait",
+"background_color":"#0b1220",
+"theme_color":"#0b1220",
+"icons":[{"src":"/my-website/file_000000004b1c822f832d57514330ad17.png","sizes":"192x192","type":"image/png","purpose":"any maskable"}]
 }
