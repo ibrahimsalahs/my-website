@@ -1,23 +1,21 @@
 {
-  "id": "./index.html",
   "name": "أكاديمية البيان",
   "short_name": "البيان",
-  "description": "منصة أكاديمية البيان التعليمية - نظام إدارة الامتحانات والواجبات",
-  "lang": "ar",
-  "dir": "rtl",
+  "description": "منصة أكاديمية البيان التعليمية",
+  "id": "./",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "display_override": [
-    "standalone",
-    "window-controls-overlay"
+    "standalone"
   ],
   "orientation": "any",
   "background_color": "#111827",
   "theme_color": "#111827",
+  "lang": "ar",
+  "dir": "rtl",
   "categories": [
-    "education",
-    "productivity"
+    "education"
   ],
   "icons": [
     {
@@ -45,9 +43,23 @@
       "purpose": "maskable"
     }
   ],
+  "screenshots": [
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
   "shortcuts": [
     {
-      "name": "القائمة الرئيسية",
+      "name": "الرئيسية",
       "url": "./index.html",
       "icons": [
         {
