@@ -4,18 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>موقعي</title>
-  <!-- ربط ملف المانيفست -->
-  <link rel="manifest" href="/manifest.json">
+  <!-- ربط ملف المانيفست بالمسار النسبي -->
+  <link rel="manifest" href="./manifest.json">
 </head>
 <body>
 
   <h1>مرحباً بك في تطبيقي!</h1>
 
-  <!-- كود تشغيل السيرفيس وركر -->
+  <!-- كود تشغيل السيرفيس وركر بالمسار النسبي -->
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
+        navigator.serviceWorker.register('./sw.js')
           .then(reg => console.log('تم تسجيل Service Worker بنجاح!', reg))
           .catch(err => console.log('فشل تسجيل Service Worker:', err));
       });
