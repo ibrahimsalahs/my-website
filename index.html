@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>منصة أكاديمية البيان التعليمية</title>
   
-  <!-- ربط ملف المانيفست بالمسار الرئيسي المطلق -->
-  <link rel="manifest" href="/manifest.json">
+  <!-- ربط المانيفست بالمسار الصحيح للـ GitHub Pages -->
+  <link rel="manifest" href="/my-website/manifest.json">
   
   <meta name="theme-color" content="#000000">
 
@@ -45,16 +45,15 @@
   <button id="installBtn">ثبّت التطبيق الآن</button>
 
   <script>
-    // 1. تسجيل السيرفيس وركر بالمسار الرئيسي المطلق
+    // تسجيل الـ Service Worker مع تحديد النطاق (Scope) الصحيح للمجلد
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
+        navigator.serviceWorker.register('/my-website/sw.js', { scope: '/my-website/' })
           .then(reg => console.log('تم تسجيل Service Worker بنجاح!', reg))
           .catch(err => console.log('فشل تسجيل Service Worker:', err));
       });
     }
 
-    // 2. كود التقاط حدث التثبيت النظيف
     let deferredPrompt;
     const installBtn = document.getElementById('installBtn');
 
