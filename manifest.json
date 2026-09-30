@@ -1,72 +1,21 @@
 {
-  "name": "أكاديمية البيان",
-  "short_name": "البيان",
-  "description": "منصة أكاديمية البيان التعليمية",
-  "id": "./",
-  "start_url": "./index.html",
-  "scope": "./",
-  "display": "standalone",
-  "display_override": [
-    "standalone"
-  ],
-  "orientation": "any",
-  "background_color": "#111827",
-  "theme_color": "#111827",
-  "lang": "ar",
-  "dir": "rtl",
-  "categories": [
-    "education"
-  ],
+  "short_name": "تطبيقي",
+  "name": "تطبيق الويب التقدمي الخاص بي",
   "icons": [
     {
-      "src": "./icon-192.png",
-      "sizes": "192x192",
+      "src": "icon-192.png",
       "type": "image/png",
-      "purpose": "any"
+      "sizes": "192x192"
     },
     {
-      "src": "./icon-512.png",
-      "sizes": "512x512",
+      "src": "icon-512.png",
       "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "./icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "./icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
+      "sizes": "512x512"
     }
   ],
-  "screenshots": [
-    {
-      "src": "./icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "form_factor": "narrow"
-    },
-    {
-      "src": "./icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "form_factor": "wide"
-    }
-  ],
-  "shortcuts": [
-    {
-      "name": "الرئيسية",
-      "url": "./index.html",
-      "icons": [
-        {
-          "src": "./icon-192.png",
-          "sizes": "192x192"
-        }
-      ]
-    }
-  ]
+  "start_url": "/index.html",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "orientation": "portrait"
 }
