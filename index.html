@@ -1209,7 +1209,49 @@ function setLoading(
 <script src="exam.js"></script>
 <script src="exam-submit.js"></script>
 <script>
-if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("./service-worker.js").then(r=>console.log("SW OK",r.scope)).catch(e=>console.error("SW FAIL",e)));
+(async()=>{
+let e=[],m=null;
+try{
+let r=await fetch("./manifest.json?x="+Date.now(),{cache:"no-store"});
+if(!r.ok)e.push("❌ manifest.json غير موجود أو السيرفر يرجع الحالة "+r.status);
+else{
+let t=r.headers.get("content-type")||"";
+if(!t.includes("json")&&!t.includes("manifest"))e.push("❌ نوع manifest.json غير صحيح: "+t);
+m=await r.json();
+if(!m.name)e.push("❌ manifest: لا يوجد name");
+if(!m.short_name)e.push("❌ manifest: لا يوجد short_name");
+if(!m.start_url)e.push("❌ manifest: لا يوجد start_url");
+if(!m.scope)e.push("❌ manifest: لا يوجد scope");
+if(m.display!=="standalone")e.push("❌ manifest: display ليس standalone");
+if(!Array.isArray(m.icons)||!m.icons.length)e.push("❌ manifest: لا توجد icons");
+else for(let i of m.icons){
+let r=await fetch(i.src+"?x="+Date.now(),{cache:"no-store"});
+if(!r.ok)e.push("❌ الأيقونة غير موجودة: "+i.src);
+else{
+let b=await r.blob();
+let u=URL.createObjectURL(b),im=new Image();
+await new Promise((ok,no)=>{im.onload=ok;im.onerror=no;im.src=u});
+if(im.naturalWidth!=parseInt(i.sizes)||im.naturalHeight!=parseInt(i.sizes))e.push("❌ مقاس الأيقونة غير مطابق: "+i.src+" = "+im.naturalWidth+"×"+im.naturalHeight);
+URL.revokeObjectURL(u);
+}
+}
+}
+}catch(x){e.push("❌ خطأ قراءة Manifest: "+x.message)}
+if(!("serviceWorker"in navigator))e.push("❌ المتصفح لا يدعم Service Worker");
+else try{
+let r=await navigator.serviceWorker.getRegistration("./");
+if(!r)e.push("❌ Service Worker غير مسجل");
+else{
+if(!r.active)e.push("❌ Service Worker مسجل لكنه غير نشط");
+else e.push("✅ Service Worker يعمل: "+r.scope);
+}
+}catch(x){e.push("❌ خطأ Service Worker: "+x.message)}
+if(location.protocol!=="https:"&&location.hostname!=="localhost")e.push("❌ الموقع ليس HTTPS");
+let box=document.createElement("pre");
+box.style="position:fixed;z-index:99999;inset:10px;background:#fff;color:#111;padding:15px;border:3px solid red;border-radius:12px;direction:rtl;text-align:right;white-space:pre-wrap;font:16px Arial;overflow:auto";
+box.textContent=e.length?"نتيجة الفحص:\\n\\n"+e.join("\\n"):"✅ لم يظهر أي خطأ في Manifest أو الأيقونات أو Service Worker";
+document.body.appendChild(box);
+})();
 </script>
 </body>
 </html>
