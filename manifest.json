@@ -1,19 +1,60 @@
 {
-  "id": "/my-website/",
+  "id": "./index.html",
   "name": "أكاديمية البيان",
   "short_name": "البيان",
-  "description": "منصة أكاديمية البيان التعليمية",
+  "description": "منصة أكاديمية البيان التعليمية - نظام إدارة الامتحانات والواجبات",
   "lang": "ar",
   "dir": "rtl",
-  "start_url": "/my-website/index.html",
-  "scope": "/my-website/",
+  "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#f4f7fb",
+  "display_override": [
+    "standalone",
+    "window-controls-overlay"
+  ],
+  "orientation": "any",
+  "background_color": "#111827",
   "theme_color": "#111827",
+  "categories": [
+    "education",
+    "productivity"
+  ],
   "icons": [
-    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
-    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "القائمة الرئيسية",
+      "url": "./index.html",
+      "icons": [
+        {
+          "src": "./icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
   ]
 }
