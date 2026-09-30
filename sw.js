@@ -1,10 +1,10 @@
-const CACHE_NAME = 'pwa-cache-v2';
+const CACHE_NAME = 'pwa-cache-v3';
 const ASSETS_TO_CACHE = [
-  './',
-  './index.html',
-  './manifest.json',
-  './icon-192.png',
-  './icon-512.png'
+  '/',
+  '/index.html',
+  '/manifest.json',
+  '/icon-192.png',
+  '/icon-512.png'
 ];
 
 // تثبيت عامل الخدمة وتخزين الملفات الأساسية مؤقتاً
@@ -16,7 +16,7 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// تفعيل عامل الخدمة وحذف الكاش القديم إن وجد
+// تفعيل عامل الخدمة وحذف الكاش القديم
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
@@ -31,7 +31,7 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// استدعاء الملفات المخبأة عند طلبها لتسريع التصفح والعمل دون إنترنت
+// جلب الملفات من الكاش عند انقطاع الشبكة
 self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request).then((response) => {
