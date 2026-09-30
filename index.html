@@ -313,7 +313,55 @@ pre{
   سيضع محتوى الاختبار هنا
 -->
 
-  </div></div><script>
+  </div></div>
+
+
+
+
+<div id="pwaTest" style="position:fixed;z-index:999999;top:10px;left:10px;right:10px;background:#fff;color:#000;padding:15px;border:3px solid red;border-radius:12px;direction:rtl;font:16px Arial;max-height:90vh;overflow:auto"><b>فحص PWA</b><br><br>جاري الفحص...</div>
+<script>
+(async()=>{
+const o=document.getElementById("pwaTest"),x=[];
+const add=s=>x.push(s);
+add("📱 المتصفح: "+navigator.userAgent);
+add("🌐 الرابط: "+location.href);
+add("🔒 HTTPS: "+(location.protocol==="https:"?"نعم":"لا"));
+try{
+const r=await fetch("./manifest.json?test="+Date.now(),{cache:"no-store"});
+add("📄 Manifest HTTP: "+r.status);
+add("📄 Manifest Type: "+(r.headers.get("content-type")||"غير معروف"));
+const m=await r.json();
+add("📄 Manifest تمت قراءته: نعم");
+add("🏷️ الاسم: "+(m.name||"❌ مفقود"));
+add("📱 الاسم المختصر: "+(m.short_name||"❌ مفقود"));
+add("🖥️ display: "+(m.display||"❌ مفقود"));
+add("🚀 start_url: "+(m.start_url||"❌ مفقود"));
+add("📦 scope: "+(m.scope||"❌ مفقود"));
+if(!m.icons?.length)add("❌ لا توجد أيقونات");
+else for(const i of m.icons){
+const q=await fetch(i.src+"?test="+Date.now(),{cache:"no-store"});
+add("🖼️ "+i.src+" → HTTP "+q.status);
+const b=await q.blob(),u=URL.createObjectURL(b),im=new Image();
+await new Promise((a,b)=>{im.onload=a;im.onerror=b;im.src=u});
+add("📐 "+i.src+" → "+im.naturalWidth+"×"+im.naturalHeight);
+URL.revokeObjectURL(u);
+}
+}catch(e){add("❌ خطأ Manifest: "+e.message)}
+if("serviceWorker"in navigator){
+try{
+const r=await navigator.serviceWorker.getRegistration("./");
+add(r?"✅ Service Worker مسجل":"❌ Service Worker غير مسجل");
+if(r)add("📍 Scope: "+r.scope);
+}catch(e){add("❌ خطأ Service Worker: "+e.message)}
+}else add("❌ المتصفح لا يدعم Service Worker");
+o.innerHTML="<b>نتيجة فحص PWA</b><br><br>"+x.join("<br>");
+})();
+</script>
+
+
+
+
+<script>
 
 
 /* =====================================================
