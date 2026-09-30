@@ -3,16 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>موقعي</title>
-  <!-- ربط ملف المانيفست بالمسار النسبي -->
+  <title>منصة أكاديمية البيان التعليمية</title>
+  
+  <!-- ربط ملف المانيفست بالمسار النسبي لتوافق GitHub Pages -->
   <link rel="manifest" href="./manifest.json">
+  
+  <!-- تخصيص لون شريط المتصفح علوياً للهواتف -->
+  <meta name="theme-color" content="#000000">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 50px 20px;
+      background-color: #f9f9f9;
+    }
+    h1 {
+      color: #333;
+    }
+    /* تنسيق زر التثبيت النظيف */
+    #installBtn {
+      display: none; /* مخفي افتراضياً ويظهر برمجياً فقط */
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      border-radius: 25px;
+      cursor: pointer;
+      margin-top: 20px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    #installBtn:hover {
+      background-color: #0056b3;
+    }
+  </style>
 </head>
 <body>
 
   <h1>مرحباً بك في تطبيقي!</h1>
+  <p>منصة أكاديمية البيان التعليمية</p>
 
-  <!-- كود تشغيل السيرفيس وركر بالمسار النسبي -->
+  <!-- زر التثبيت النظيف للتطبيق -->
+  <button id="installBtn">ثبّت التطبيق الآن</button>
+
   <script>
+    // 1. تسجيل السيرفيس وركر (Service Worker)
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js')
@@ -20,6 +56,44 @@
           .catch(err => console.log('فشل تسجيل Service Worker:', err));
       });
     }
+
+    // 2. كود التقاط حدث التثبيت الرسمي (WebAPK) لمنع ظهور شارة كروم
+    let deferredPrompt;
+    const installBtn = document.getElementById('installBtn');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      // منع المتصفح من إظهار نافذة أندرويد المصغرة التلقائية
+      e.preventDefault();
+      // حفظ الحدث لاستدعائه عند ضغط الزر
+      deferredPrompt = e;
+      // إظهار زر التثبيت الخاص بنا للمستخدم
+      installBtn.style.display = 'inline-block';
+    });
+
+    installBtn.addEventListener('click', () => {
+      if (deferredPrompt) {
+        // إظهار نافذة التثبيت الرسمية النظيفة لمتصفح كروم
+        deferredPrompt.prompt();
+        
+        // معرفة خيار المستخدم (تثبيت أم إلغاء)
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('وافق المستخدم على التثبيت النظيف للموقع كـ WebAPK');
+          } else {
+            console.log('رفض المستخدم التثبيت');
+          }
+          deferredPrompt = null;
+          // إخفاء الزر بعد اتخاذ القرار
+          installBtn.style.display = 'none';
+        });
+      }
+    });
+
+    // إخفاء الزر تلقائياً بمجرد إتمام التثبيت بنجاح
+    window.addEventListener('appinstalled', () => {
+      console.log('تم تثبيت التطبيق بنجاح واختفاء زر التثبيت');
+      installBtn.style.display = 'none';
+    });
   </script>
 </body>
 </html>
