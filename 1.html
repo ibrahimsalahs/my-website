@@ -1,0 +1,229 @@
+<!DOCTYPE html><html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<title>اختبار أكاديمية البيان</title>
+<style>*{box-sizing:border-box;margin:0;padding:0;font-family:Tahoma,Arial,sans-serif}
+body{min-height:100vh;background:#080b18;color:#fff;overflow-x:hidden}
+.container{width:100%;max-width:760px;margin:auto;padding:17px}
+.card,.section,.loading{position:relative;overflow:hidden;background:linear-gradient(145deg,#171d34,#101528);border:1px solid #ffffff0d;border-radius:24px;padding:20px;margin-bottom:18px;box-shadow:0 12px 30px #00000030}
+.logo{font-size:28px;font-weight:800;text-align:center;margin-bottom:8px;color:#fff}
+.subtitle{text-align:center;color:#aeb6ce;line-height:1.9}
+.input{width:100%;border:1px solid #ffffff18;border-radius:16px;padding:15px;background:#11172a;color:#fff;font:inherit;font-size:17px;outline:none;margin:10px 0}
+.input:focus{border-color:#6c52ff80;box-shadow:0 0 0 3px #6c52ff18}
+.btn{width:100%;border:0;border-radius:17px;padding:16px;font:inherit;font-size:17px;font-weight:800;cursor:pointer}
+.primary{background:linear-gradient(135deg,#6745ff,#a05cff);color:#fff;box-shadow:0 10px 25px #00000030}
+.primary:disabled{opacity:.6;cursor:not-allowed}
+.header-info{line-height:2;font-size:16px}
+.info-item{padding:8px 0;border-bottom:1px solid #ffffff09}
+.info-item:last-child{border-bottom:0}
+.label{color:#788199}
+.section-title{font-size:22px;font-weight:800;margin:2px 4px 18px}
+.question{border:1px solid #ffffff0d;border-radius:20px;padding:18px;margin:14px 0;background:linear-gradient(145deg,#11172a,#151b30)}
+.question-title{font-size:18px;font-weight:700;line-height:1.8;margin-bottom:14px}
+.option{display:flex;align-items:center;gap:10px;background:#171d34;border:1px solid #ffffff0d;border-radius:14px;padding:13px;margin:9px 0;cursor:pointer;transition:.25s}
+.option:has(input:checked){border-color:#6c52ff80;background:#6c52ff18}
+.option input{width:19px;height:19px;flex:none}
+.answer-input{width:100%;min-height:110px;resize:vertical;border:1px solid #ffffff18;border-radius:16px;padding:15px;background:#11172a;color:#fff;font:inherit;font-size:16px;outline:none}
+.answer-input:focus{border-color:#6c52ff80;box-shadow:0 0 0 3px #6c52ff18}
+.extract-passage{background:#11172a;border-right:4px solid #6c52ff;border-radius:12px;padding:15px;line-height:2;margin-bottom:16px;color:#d9deeb}
+.status{display:none;text-align:center;padding:15px;border-radius:15px;margin-top:15px;font-weight:700}
+.error{color:#ff718b;background:#ff477512;border:1px solid #ff477525}
+.success{color:#20d6a1;background:#20d6a112;border:1px solid #20d6a125}
+.loading{text-align:center;padding:35px;color:#a99cff}
+.badge{display:inline-block;background:#6c52ff18;color:#a99cff;padding:5px 10px;border-radius:30px;font-size:13px;margin-bottom:10px;border:1px solid #6c52ff25}
+.hidden{display:none!important}
+@media(min-width:700px){
+.container{max-width:850px;padding:30px}
+.card,.section,.loading{padding:27px;border-radius:27px}
+.logo{font-size:34px}
+.subtitle{font-size:14px}
+.input{padding:17px}
+.btn{padding:17px}
+.question{padding:22px}
+.question-title{font-size:20px}
+}
+@media(min-width:1100px){
+.container{max-width:1000px;padding:35px}
+.card,.section,.loading{padding:32px}
+                                                                                     }</style>
+</head>
+<body>
+<div class="container">
+<div id="searchCard" class="card">
+<div class="logo">أكاديمية البيان</div>
+<div class="subtitle">أدخل رقم الاختبار لبدء الاختبار</div>
+<input id="examNumber" class="input" type="text" inputmode="numeric" placeholder="رقم الاختبار">
+<button id="loadBtn" class="btn primary">عرض الاختبار</button>
+<div id="searchStatus" class="status"></div>
+</div>
+<div id="loading" class="loading hidden">جاري تحميل الاختبار...</div>
+<div id="app" class="hidden">
+<div class="card">
+<div class="logo">أكاديمية البيان</div>
+<div id="examInfo" class="header-info"></div>
+</div>
+<div class="card">
+<div class="section-title">بيانات الطالب</div>
+<input id="studentName" class="input" type="text" placeholder="اكتب اسم الطالب">
+</div>
+<form id="examForm"></form>
+<div class="card">
+<button id="submitBtn" class="btn primary" type="button">إرسال الاختبار</button>
+<div id="submitStatus" class="status"></div>
+</div>
+</div>
+</div>
+<script>
+const API_URL='https://script.google.com/macros/s/AKfycbyM0l9EyFN5wqaa304r3aqiI3kt_mxQ57_LJXFGiCmT2aL7eaYLT6l0CnsyRH5carH2IQ/exec';
+let EXAM_DATA=null;
+document.getElementById('loadBtn').addEventListener('click',loadExam);
+document.getElementById('examNumber').addEventListener('keydown',e=>{if(e.key==='Enter')loadExam()});
+document.getElementById('submitBtn').addEventListener('click',collectExam);
+async function loadExam(){
+const examNumber=document.getElementById('examNumber').value.trim();
+const status=document.getElementById('searchStatus');
+if(!examNumber){showStatus(status,'أدخل رقم الاختبار.','error');return}
+document.getElementById('loadBtn').disabled=true;
+document.getElementById('loading').classList.remove('hidden');
+status.style.display='none';
+try{
+const url=API_URL+'?action=getExam&examNumber='+encodeURIComponent(examNumber);
+const response=await fetch(url);
+const data=await response.json();
+if(!data.success){showStatus(status,data.message||'رقم الاختبار غير موجود.','error');return}
+if(!data.exam){showStatus(status,'لم تصل بيانات الاختبار.','error');return}
+EXAM_DATA=data.exam;
+renderExam(data.exam);
+}catch(error){
+console.error(error);
+showStatus(status,'حدث خطأ أثناء الاتصال بالخادم.','error');
+}finally{
+document.getElementById('loading').classList.add('hidden');
+document.getElementById('loadBtn').disabled=false;
+}
+}
+function renderExam(exam){
+document.getElementById('searchCard').classList.add('hidden');
+document.getElementById('app').classList.remove('hidden');
+document.getElementById('examInfo').innerHTML='<div class="badge">اختبار</div><div class="info-item"><span class="label">المعلم:</span> <b>'+escapeHtml(exam.A)+'</b></div><div class="info-item"><span class="label">المادة:</span> <b>'+escapeHtml(exam.B)+'</b></div><div class="info-item"><span class="label">رقم الاختبار:</span> <b>'+escapeHtml(exam.C)+'</b></div><div class="info-item"><span class="label">المدة:</span> <b>'+escapeHtml(exam.D)+'</b></div><div class="info-item"><span class="label">اسم الاختبار:</span> <b>'+escapeHtml(exam.E)+'</b></div>';
+const form=document.getElementById('examForm');
+form.innerHTML='';
+const sections=exam.sections||{};
+renderChoiceSection(form,'أولًا: أسئلة الاختيار من متعدد',sections.choice);
+renderTrueFalseSection(form,'ثانيًا: صح وخطأ',sections.trueFalse);
+renderOpenSection(form,'ثالثًا: أكمل',sections.complete);
+renderMixedSection(form,'رابعًا: أسئلة متنوعة',sections.mixed);
+renderExtractSection(form,'خامسًا: استخرج من الفقرة السابقة',sections.extract);
+}
+function renderChoiceSection(parent,title,questions){
+if(!Array.isArray(questions)||!questions.length)return;
+const section=createSection(title);
+questions.forEach((q,i)=>{
+const box=document.createElement('div');
+box.className='question';
+let options='';
+(q.options||[]).forEach(option=>{
+options+='<label class="option"><input type="radio" name="q_'+escapeAttr(q.id||i)+'" value="'+escapeAttr(option)+'"><span>'+escapeHtml(option)+'</span></label>';
+});
+box.innerHTML='<div class="question-title">'+(i+1)+'. '+escapeHtml(q.question||'')+'</div>'+options;
+section.appendChild(box);
+});
+parent.appendChild(section);
+}
+function renderTrueFalseSection(parent,title,questions){
+if(!Array.isArray(questions)||!questions.length)return;
+const section=createSection(title);
+questions.forEach((q,i)=>{
+const id=q.id||i;
+const box=document.createElement('div');
+box.className='question';
+box.innerHTML='<div class="question-title">'+(i+1)+'. '+escapeHtml(q.question||'')+'</div><label class="option"><input type="radio" name="q_'+escapeAttr(id)+'" value="صح"><span>صح</span></label><label class="option"><input type="radio" name="q_'+escapeAttr(id)+'" value="خطأ"><span>خطأ</span></label>';
+section.appendChild(box);
+});
+parent.appendChild(section);
+}
+function renderOpenSection(parent,title,questions){
+if(!Array.isArray(questions)||!questions.length)return;
+const section=createSection(title);
+questions.forEach((q,i)=>{
+const id=q.id||i;
+const box=document.createElement('div');
+box.className='question';
+box.innerHTML='<div class="question-title">'+(i+1)+'. '+escapeHtml(q.question||'')+'</div><textarea class="answer-input" data-question-id="'+escapeAttr(id)+'" placeholder="اكتب الإجابة هنا"></textarea>';
+section.appendChild(box);
+});
+parent.appendChild(section);
+}
+function renderMixedSection(parent,title,groups){
+if(!Array.isArray(groups)||!groups.length)return;
+const section=createSection(title);
+groups.forEach((group,groupIndex)=>{
+const groupBox=document.createElement('div');
+groupBox.className='question';
+groupBox.innerHTML='<div class="question-title">نوع السؤال: '+escapeHtml(group.type||'')+'</div>';
+(group.questions||[]).forEach((q,i)=>{
+const inner=document.createElement('div');
+inner.className='question';
+inner.innerHTML='<div class="question-title">'+(i+1)+'. '+escapeHtml(q)+'</div><textarea class="answer-input" data-question-id="'+escapeAttr((group.id||groupIndex)+'_'+i)+'" placeholder="اكتب الإجابة هنا"></textarea>';
+groupBox.appendChild(inner);
+});
+section.appendChild(groupBox);
+});
+parent.appendChild(section);
+}
+function renderExtractSection(parent,title,groups){
+if(!Array.isArray(groups)||!groups.length)return;
+const section=createSection(title);
+groups.forEach((group,groupIndex)=>{
+const groupBox=document.createElement('div');
+groupBox.className='question';
+groupBox.innerHTML='<div class="extract-passage">'+escapeHtml(group.passage||'')+'</div>';
+(group.questions||[]).forEach((q,i)=>{
+const inner=document.createElement('div');
+inner.className='question';
+inner.innerHTML='<div class="question-title">'+(i+1)+'. '+escapeHtml(q)+'</div><textarea class="answer-input" data-question-id="'+escapeAttr((group.id||groupIndex)+'_'+i)+'" placeholder="اكتب الإجابة هنا"></textarea>';
+groupBox.appendChild(inner);
+});
+section.appendChild(groupBox);
+});
+parent.appendChild(section);
+}
+function createSection(title){
+const section=document.createElement('section');
+section.className='section';
+const h=document.createElement('div');
+h.className='section-title';
+h.textContent=title;
+section.appendChild(h);
+return section;
+}
+function collectExam(){
+if(!EXAM_DATA)return;
+const studentName=document.getElementById('studentName').value.trim();
+const status=document.getElementById('submitStatus');
+if(!studentName){showStatus(status,'اكتب اسم الطالب أولًا.','error');return}
+const answers=[];
+document.querySelectorAll('#examForm input[type="radio"]:checked').forEach(input=>{
+answers.push({questionId:input.name.replace('q_',''),answer:input.value});
+});
+document.querySelectorAll('#examForm textarea[data-question-id]').forEach(input=>{
+answers.push({questionId:input.dataset.questionId,answer:input.value.trim()});
+});
+const result={examNumber:EXAM_DATA.C,studentName:studentName,answers:answers};
+console.log(result);
+showStatus(status,'تم تجميع بيانات الاختبار بنجاح.','success');
+}
+function showStatus(element,message,type){
+element.textContent=message;
+element.className='status '+type;
+element.style.display='block';
+}
+function escapeHtml(value){
+return String(value??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+}
+function escapeAttr(value){return escapeHtml(value)}
+</script>
+  <script src="auth.js"></script>
+</body>
+</html>
