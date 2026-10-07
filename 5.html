@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <script src="auth.js"></script>
+<title>الكورسات</title>
+<style>*{box-sizing:border-box;margin:0;padding:0;font-family:Tahoma,Arial,sans-serif}
+html,body{min-height:100vh;background:#080b18;color:#fff}
+body{overflow-x:hidden}
+.container{width:100%;max-width:600px;margin:auto;padding:17px}
+.card{position:relative;overflow:hidden;background:linear-gradient(145deg,#171d34,#101528);border:1px solid #ffffff0d;border-radius:23px;padding:20px;box-shadow:0 12px 30px #00000030}
+h1,h2{margin:0 0 18px;text-align:center;color:#fff}
+input{width:100%;padding:14px;border:1px solid #ffffff18;border-radius:16px;background:#11172a;color:#fff;font-size:16px;outline:none;margin-bottom:10px}
+input:focus{border-color:#6c52ff80;box-shadow:0 0 0 3px #6c52ff18}
+button{width:100%;padding:14px;border:0;border-radius:17px;background:linear-gradient(135deg,#6745ff,#a05cff);color:#fff;font-size:16px;font-weight:bold;cursor:pointer;box-shadow:0 10px 25px #00000030}
+button:active{transform:scale(.97)}
+.item{position:relative;overflow:hidden;padding:17px;border:1px solid #ffffff0d;border-radius:20px;margin-bottom:10px;cursor:pointer;background:linear-gradient(145deg,#171d34,#101528);box-shadow:0 10px 25px #00000025}
+.item:hover{background:linear-gradient(145deg,#1b2240,#131a31);border-color:#6c52ff40}
+.item strong{display:block;margin-bottom:7px;color:#fff}
+.item span{color:#788199;font-size:14px}
+.hidden{display:none}
+.message{text-align:center;padding:15px;color:#788199}
+.error{color:#ff718b;text-align:center;padding:10px}
+.back{background:linear-gradient(135deg,#475569,#64748b);margin-bottom:15px}
+@media(min-width:700px){
+.container{max-width:750px;padding:30px}
+.card{padding:27px;border-radius:27px}
+h1{font-size:32px}
+h2{font-size:25px}
+input{padding:16px;font-size:17px}
+button{padding:16px;font-size:17px}
+.item{padding:20px;border-radius:22px}
+}
+@media(min-width:1100px){
+.container{max-width:900px;padding:35px}
+.card{padding:32px}
+           }</style>
+</head>
+<body>
+<div id="loginScreen" class="container">
+<div class="card">
+<h1>دخول الطالب</h1>
+<input id="code" type="text" inputmode="numeric" placeholder="أدخل كود الطالب">
+<button id="loginBtn">إرسال</button>
+<div id="loginMessage"></div>
+</div>
+</div>
+<div id="subscriptionsScreen" class="container hidden">
+<div class="card">
+<h2>الاشتراكات</h2>
+<div id="subscriptions"></div>
+</div>
+</div>
+<div id="meetingsScreen" class="container hidden">
+<div class="card">
+<button class="back" id="backSubscriptions">العودة للاشتراكات</button>
+<h2 id="meetingsTitle">الميتنجات</h2>
+<div id="meetings"></div>
+</div>
+</div>
+<script>
+const API='https://script.google.com/macros/s/AKfycbyt0BH4s5GGkTJoynunyuujVS-wtbyyDhj-dEuRY79pbV-m63v423X5Q_6h5kje-PSJ/exec';
+const loginScreen=document.getElementById('loginScreen');
+const subscriptionsScreen=document.getElementById('subscriptionsScreen');
+const meetingsScreen=document.getElementById('meetingsScreen');
+const codeInput=document.getElementById('code');
+const loginBtn=document.getElementById('loginBtn');
+const loginMessage=document.getElementById('loginMessage');
+const subscriptions=document.getElementById('subscriptions');
+const meetings=document.getElementById('meetings');
+const meetingsTitle=document.getElementById('meetingsTitle');
+const backSubscriptions=document.getElementById('backSubscriptions');
+let studentCode='';
+loginBtn.addEventListener('click',loadSubscriptions);
+codeInput.addEventListener('keydown',e=>{
+if(e.key==='Enter')loadSubscriptions();
+});
+async function loadSubscriptions(){
+const code=codeInput.value.trim();
+if(!code){
+loginMessage.innerHTML='<div class="error">أدخل كود الطالب</div>';
+return;
+}
+loginBtn.disabled=true;
+loginMessage.innerHTML='<div class="message">جاري التحقق...</div>';
+try{
+const response=await fetch(API+'?action=subscriptions&code='+encodeURIComponent(code));
+if(!response.ok)throw new Error('فشل الاتصال بالخادم');
+const data=await response.json();
+if(data.error)throw new Error(data.error);
+if(!data.subscriptions||!data.subscriptions.length)throw new Error('لا توجد اشتراكات للطالب');
+studentCode=code;
+renderSubscriptions(data.subscriptions);
+loginScreen.classList.add('hidden');
+subscriptionsScreen.classList.remove('hidden');
+}catch(e){
+loginMessage.innerHTML='<div class="error">'+e.message+'</div>';
+}finally{
+loginBtn.disabled=false;
+}
+}
+function renderSubscriptions(list){
+subscriptions.innerHTML='';
+list.forEach(item=>{
+const div=document.createElement('div');
+div.className='item';
+div.innerHTML='<strong>الاشتراك '+item.subscription+'</strong><span>المعلم: '+escapeHtml(item.teacher)+'</span><br><span>المادة: '+escapeHtml(item.subject)+'</span>';
+div.addEventListener('click',()=>loadMeetings(item));
+subscriptions.appendChild(div);
+});
+}
+async function loadMeetings(item){
+subscriptionsScreen.classList.add('hidden');
+meetingsScreen.classList.remove('hidden');
+meetings.innerHTML='<div class="message">جاري تحميل الميتنجات...</div>';
+meetingsTitle.textContent=item.teacher+' - '+item.subject;
+try{
+const url=API+'?action=meetings&code='+encodeURIComponent(studentCode)+'&subscription='+encodeURIComponent(item.subscription)+'&column='+encodeURIComponent(item.column)+'&teacher='+encodeURIComponent(item.teacher)+'&subject='+encodeURIComponent(item.subject);
+const response=await fetch(url);
+if(!response.ok)throw new Error('فشل الاتصال بالخادم');
+const data=await response.json();
+if(data.error)throw new Error(data.error);
+renderMeetings(data.meetings||[]);
+}catch(e){
+meetings.innerHTML='<div class="error">'+e.message+'</div>';
+}
+}
+function renderMeetings(list){
+meetings.innerHTML='';
+if(!list.length){
+meetings.innerHTML='<div class="message">لا توجد ميتنجات لهذا الاشتراك</div>';
+return;
+}
+list.forEach(meeting=>{
+const div=document.createElement('div');
+div.className='item';
+div.innerHTML='<strong>'+escapeHtml(meeting.name)+'</strong>';
+div.addEventListener('click',()=>openMeeting(meeting.target));
+meetings.appendChild(div);
+});
+}
+function openMeeting(target){
+let url=target.trim();
+if(!/^https?:\/\//i.test(url))url='https://drive.google.com/file/d/'+encodeURIComponent(target)+'/view';
+window.open(url,'_blank');
+}
+backSubscriptions.addEventListener('click',()=>{
+meetingsScreen.classList.add('hidden');
+subscriptionsScreen.classList.remove('hidden');
+});
+function escapeHtml(value){
+return String(value).replace(/[&<>"']/g,function(char){
+return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[char];
+});
+}
+</script>
+  <script src="auth.js"></script>
+</body>
+</html>
