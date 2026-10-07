@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <script src="auth.js"></script>
+<title>الكورسات</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<style>*{box-sizing:border-box;margin:0;padding:0;font-family:Tahoma,Arial,sans-serif}
+html,body{min-height:100vh;background:#080b18;color:#fff}
+body{overflow-x:hidden}
+.container{width:100%;max-width:600px;margin:auto;padding:17px}
+.card{position:relative;overflow:hidden;background:linear-gradient(145deg,#171d34,#101528);border:1px solid #ffffff0d;border-radius:23px;padding:20px;box-shadow:0 12px 30px #00000030;margin-bottom:15px}
+h1,h2{margin:0 0 18px;text-align:center;color:#fff}
+input{width:100%;padding:14px;border:1px solid #ffffff18;border-radius:16px;background:#11172a;color:#fff;font-size:16px;outline:none;margin-bottom:10px}
+input:focus{border-color:#6c52ff80;box-shadow:0 0 0 3px #6c52ff18}
+button{width:100%;padding:14px;border:0;border-radius:17px;background:linear-gradient(135deg,#6745ff,#a05cff);color:#fff;font-size:16px;font-weight:bold;cursor:pointer;box-shadow:0 10px 25px #00000030}
+button:active{transform:scale(.97)}
+button:disabled{opacity:.5;cursor:not-allowed}
+.item{position:relative;overflow:hidden;padding:17px;border:1px solid #ffffff0d;border-radius:20px;margin-bottom:10px;cursor:pointer;background:linear-gradient(145deg,#171d34,#101528);box-shadow:0 10px 25px #00000025}
+.item:hover{border-color:#6c52ff40}
+.item strong{display:block;margin-bottom:7px;color:#fff}
+.item span{color:#788199;font-size:14px}
+.hidden{display:none}
+.message{text-align:center;padding:15px;color:#788199}
+.error{color:#ff718b;text-align:center;padding:10px}
+.back{background:linear-gradient(135deg,#475569,#64748b);margin-bottom:15px}
+#pdfScreen{position:fixed;inset:0;background:#080b18;overflow:auto;z-index:20}
+#pdfTop{position:sticky;top:0;background:#11172aee;border-bottom:1px solid #ffffff0d;padding:9px;z-index:30;backdrop-filter:blur(15px)}
+#pdfTop button{max-width:120px;background:linear-gradient(135deg,#6745ff,#a05cff)}
+#loading{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font:18px Tahoma,Arial,sans-serif;background:#080b18;z-index:99}
+#error{display:none;position:fixed;inset:0;align-items:center;justify-content:center;color:#fff;font:18px Tahoma,Arial,sans-serif;text-align:center;padding:20px;background:#080b18;z-index:99}
+#pages{width:100%;padding:8px;direction:ltr}
+.page{display:block;margin:0 auto 10px;background:#fff;max-width:100%;height:auto;box-shadow:0 8px 25px #0008;border-radius:4px}
+@media(min-width:700px){
+.container{max-width:750px;padding:30px}
+.card{padding:27px;border-radius:27px}
+h1{font-size:32px}
+h2{font-size:25px}
+input{padding:16px;font-size:17px}
+button{padding:16px;font-size:17px}
+.item{padding:20px;border-radius:22px}
+}
+@media(min-width:1100px){
+.container{max-width:950px;padding:35px}
+.card{padding:32px}
+}</style>
+</head>
+<body>
+<div id="app">
+<div id="loginScreen" class="container">
+<div class="card">
+<h1>دخول الطالب</h1>
+<input id="code" type="text" inputmode="numeric" placeholder="أدخل كود الطالب">
+<button id="loginBtn">إرسال</button>
+<div id="loginMessage"></div>
+</div>
+</div>
+<div id="subscriptionsScreen" class="container hidden">
+<div class="card">
+<h2>الاشتراكات</h2>
+<div id="subscriptions"></div>
+</div>
+</div>
+<div id="booksScreen" class="container hidden">
+<div class="card">
+<button class="back" id="backSubscriptions">العودة للاشتراكات</button>
+<h2 id="booksTitle">الكتب</h2>
+<div id="books"></div>
+</div>
+</div>
+</div>
+<div id="pdfScreen" class="hidden">
+<div id="pdfTop">
+<button id="closePdf">إغلاق</button>
+</div>
+<div id="loading">جاري تحميل الملف...</div>
+<div id="error"></div>
+<div id="pages"></div>
+</div>
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+const API='https://script.google.com/macros/s/AKfycby2GmdfL3Hmnx7lpiyLaNvFa4xqXYK_XVfx6jeyIzoKFHc6nUpBbAwJGPr96xlr-Bc6/exec';
+const CMAP_URL='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/';
+const FONT_URL='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/standard_fonts/';
+const loginScreen=document.getElementById('loginScreen');
+const subscriptionsScreen=document.getElementById('subscriptionsScreen');
+const booksScreen=document.getElementById('booksScreen');
+const pdfScreen=document.getElementById('pdfScreen');
+const codeInput=document.getElementById('code');
+const loginBtn=document.getElementById('loginBtn');
+const loginMessage=document.getElementById('loginMessage');
+const subscriptions=document.getElementById('subscriptions');
+const books=document.getElementById('books');
+const booksTitle=document.getElementById('booksTitle');
+const backSubscriptions=document.getElementById('backSubscriptions');
+const closePdf=document.getElementById('closePdf');
+const loading=document.getElementById('loading');
+const error=document.getElementById('error');
+const pages=document.getElementById('pages');
+let studentCode='';
+let selectedSubscription=null;
+loginBtn.addEventListener('click',loadSubscriptions);
+codeInput.addEventListener('keydown',e=>{
+if(e.key==='Enter')loadSubscriptions();
+});
+async function loadSubscriptions(){
+const code=codeInput.value.trim();
+if(!code){
+loginMessage.innerHTML='<div class="error">أدخل كود الطالب</div>';
+return;
+}
+loginBtn.disabled=true;
+loginMessage.innerHTML='<div class="message">جاري التحقق...</div>';
+try{
+const response=await fetch(API+'?action=subscriptions&code='+encodeURIComponent(code));
+if(!response.ok)throw new Error('فشل الاتصال بالخادم');
+const data=await response.json();
+if(data.error)throw new Error(data.error);
+if(!data.subscriptions||!data.subscriptions.length)throw new Error('لا توجد اشتراكات للطالب');
+studentCode=code;
+renderSubscriptions(data.subscriptions);
+loginScreen.classList.add('hidden');
+subscriptionsScreen.classList.remove('hidden');
+}catch(e){
+loginMessage.innerHTML='<div class="error">'+e.message+'</div>';
+}finally{
+loginBtn.disabled=false;
+}
+}
+function renderSubscriptions(list){
+subscriptions.innerHTML='';
+list.forEach(item=>{
+const div=document.createElement('div');
+div.className='item';
+div.innerHTML='<strong>الاشتراك '+item.subscription+'</strong><span>المعلم: '+escapeHtml(item.teacher)+'</span><br><span>المادة: '+escapeHtml(item.subject)+'</span>';
+div.addEventListener('click',()=>loadBooks(item));
+subscriptions.appendChild(div);
+});
+}
+async function loadBooks(item){
+selectedSubscription=item;
+subscriptionsScreen.classList.add('hidden');
+booksScreen.classList.remove('hidden');
+books.innerHTML='<div class="message">جاري تحميل الكتب...</div>';
+booksTitle.textContent=item.teacher+' - '+item.subject;
+try{
+const url=API+'?action=books&code='+encodeURIComponent(studentCode)+'&subscription='+encodeURIComponent(item.subscription)+'&column='+encodeURIComponent(item.column)+'&teacher='+encodeURIComponent(item.teacher)+'&subject='+encodeURIComponent(item.subject);
+const response=await fetch(url);
+if(!response.ok)throw new Error('فشل الاتصال بالخادم');
+const data=await response.json();
+if(data.error)throw new Error(data.error);
+renderBooks(data.books||[]);
+}catch(e){
+books.innerHTML='<div class="error">'+e.message+'</div>';
+}
+}
+function renderBooks(list){
+books.innerHTML='';
+if(!list.length){
+books.innerHTML='<div class="message">لا توجد كتب لهذا الاشتراك</div>';
+return;
+}
+list.forEach(book=>{
+const div=document.createElement('div');
+div.className='item';
+div.innerHTML='<strong>'+escapeHtml(book.name)+'</strong>';
+div.addEventListener('click',()=>loadPDF(book.id));
+books.appendChild(div);
+});
+}
+backSubscriptions.addEventListener('click',()=>{
+booksScreen.classList.add('hidden');
+subscriptionsScreen.classList.remove('hidden');
+});
+closePdf.addEventListener('click',()=>{
+pdfScreen.classList.add('hidden');
+document.body.style.overflow='';
+pages.innerHTML='';
+error.style.display='none';
+loading.style.display='flex';
+});
+async function loadPDF(id){
+pdfScreen.classList.remove('hidden');
+document.body.style.overflow='hidden';
+pages.innerHTML='';
+error.style.display='none';
+loading.style.display='flex';
+try{
+const response=await fetch(API+'?action=pdf&id='+encodeURIComponent(id));
+if(!response.ok)throw new Error('فشل الاتصال بالخادم');
+const data=await response.json();
+if(data.error)throw new Error(data.error);
+if(!data.pdf)throw new Error('ملف PDF غير موجود');
+const base64=data.pdf.substring(data.pdf.indexOf(',')+1);
+const binary=atob(base64);
+const bytes=new Uint8Array(binary.length);
+for(let i=0;i<binary.length;i++)bytes[i]=binary.charCodeAt(i);
+const pdf=await pdfjsLib.getDocument({
+data:bytes,
+cMapUrl:CMAP_URL,
+cMapPacked:true,
+standardFontDataUrl:FONT_URL,
+isEvalSupported:false
+}).promise;
+const quality=Math.min(window.devicePixelRatio*1.8,3);
+const cssAvailableWidth=pages.clientWidth;
+for(let number=1;number<=pdf.numPages;number++){
+const page=await pdf.getPage(number);
+const originalViewport=page.getViewport({scale:1});
+const cssScale=cssAvailableWidth/originalViewport.width;
+const cssViewport=page.getViewport({scale:cssScale});
+const renderViewport=page.getViewport({scale:cssScale*quality});
+const canvas=document.createElement('canvas');
+canvas.className='page';
+canvas.width=renderViewport.width;
+canvas.height=renderViewport.height;
+canvas.style.width=cssViewport.width+'px';
+canvas.style.height=cssViewport.height+'px';
+pages.appendChild(canvas);
+const ctx=canvas.getContext('2d');
+await page.render({
+canvasContext:ctx,
+viewport:renderViewport
+}).promise;
+}
+loading.style.display='none';
+}catch(e){
+loading.style.display='none';
+error.textContent='حدث خطأ: '+e.message;
+error.style.display='flex';
+}
+}
+function escapeHtml(value){
+return String(value).replace(/[&<>"']/g,function(char){
+return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[char];
+});
+}
+</script>
+  <script src="auth.js"></script>
+</body>
+</html>
