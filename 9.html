@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl"> 
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>دخول الطالب</title>
+<style>*{box-sizing:border-box;margin:0;padding:0;font-family:Tahoma,Arial,sans-serif}
+body{min-height:100vh;background:#080b18;color:#fff;display:flex;align-items:center;justify-content:center;overflow-x:hidden}
+.container{width:100%;max-width:450px;padding:17px}
+.card{position:relative;overflow:hidden;background:linear-gradient(145deg,#171d34,#101528);border:1px solid #ffffff0d;border-radius:23px;padding:25px;box-shadow:0 12px 30px #00000030;text-align:center}
+h1{margin-top:0;color:#fff}
+.input{width:100%;padding:14px;border:1px solid #ffffff18;border-radius:16px;background:#11172a;color:#fff;font-size:16px;margin:15px 0;outline:none}
+.input:focus{border-color:#6c52ff80;box-shadow:0 0 0 3px #6c52ff18}
+.btn{width:100%;padding:14px;border:0;border-radius:17px;background:linear-gradient(135deg,#6745ff,#a05cff);color:#fff;font-size:16px;font-weight:bold;cursor:pointer;box-shadow:0 10px 25px #00000030}
+.btn:active{transform:scale(.97)}
+.btn:disabled{opacity:.6;cursor:not-allowed}
+.message{margin-top:15px;min-height:20px;color:#aeb6ce}
+.student{display:none;margin-top:20px;padding:17px;background:linear-gradient(145deg,#171d34,#101528);border:1px solid #ffffff0d;border-radius:20px;text-align:right;box-shadow:0 10px 25px #00000025}
+.row{padding:10px 0;border-bottom:1px solid #ffffff09}
+.row:last-child{border-bottom:0}
+.label{font-weight:bold;color:#a99cff}
+@media(min-width:700px){
+.container{max-width:550px;padding:30px}
+.card{padding:30px;border-radius:27px}
+h1{font-size:32px}
+.input{padding:16px;font-size:17px}
+.btn{padding:16px;font-size:17px}
+.student{padding:22px}
+     }</style>
+</head>
+<body>
+<div class="container">
+<div class="card">
+<h1>دخول الطالب</h1>
+<input id="whatsapp" class="input" type="tel" inputmode="numeric" placeholder="أدخل رقم الواتساب">
+<button id="sendBtn" class="btn">إرسال</button>
+<div id="message" class="message"></div>
+<div id="student" class="student">
+<div class="row"><span class="label">الاسم:</span> <span id="studentName"></span></div>
+<div class="row"><span class="label">الكود:</span> <span id="studentCode"></span></div>
+<div class="row"><span class="label">رقم الواتساب:</span> <span id="studentWhatsapp"></span></div>
+</div>
+</div>
+</div>
+<script>
+const API_URL="https://script.google.com/macros/s/AKfycbziqvFVwbBILy6QdeiWL-JumuVep9plkB9uL7fsdzgZb9UouHXsQm-uFEKGy0qf-_y1/exec";
+const whatsappInput=document.getElementById("whatsapp");
+const sendBtn=document.getElementById("sendBtn");
+const message=document.getElementById("message");
+const student=document.getElementById("student");
+const studentName=document.getElementById("studentName");
+const studentCode=document.getElementById("studentCode");
+const studentWhatsapp=document.getElementById("studentWhatsapp");
+
+function showMessage(text){message.textContent=text}
+
+async function searchStudent(){
+const whatsapp=whatsappInput.value.trim();
+if(!whatsapp){showMessage("أدخل رقم الواتساب");return}
+sendBtn.disabled=true;
+showMessage("جاري البحث...");
+student.style.display="none";
+try{
+const response=await fetch(API_URL+"?whatsapp="+encodeURIComponent(whatsapp),{method:"GET",redirect:"follow"});
+if(!response.ok)throw new Error("HTTP "+response.status);
+const data=await response.json();
+if(!data.success){
+showMessage(data.message||"لم يتم العثور على الطالب");
+sendBtn.disabled=false;
+return;
+}
+localStorage.setItem("studentName",data.name);
+localStorage.setItem("studentCode",data.code);
+localStorage.setItem("studentWhatsapp",data.whatsapp);
+studentName.textContent=data.name;
+studentCode.textContent=data.code;
+studentWhatsapp.textContent=data.whatsapp;
+student.style.display="block";
+showMessage("تم العثور على بيانات الطالب وحفظها");
+}catch(error){
+console.error(error);
+showMessage("حدث خطأ في الاتصال بجوجل");
+}
+sendBtn.disabled=false;
+}
+
+sendBtn.addEventListener("click",searchStudent);
+whatsappInput.addEventListener("keydown",e=>{if(e.key==="Enter")searchStudent()});
+
+const savedName=localStorage.getItem("studentName");
+const savedCode=localStorage.getItem("studentCode");
+const savedWhatsapp=localStorage.getItem("studentWhatsapp");
+
+if(savedName&&savedCode&&savedWhatsapp){
+whatsappInput.value=savedWhatsapp;
+studentName.textContent=savedName;
+studentCode.textContent=savedCode;
+studentWhatsapp.textContent=savedWhatsapp;
+student.style.display="block";
+showMessage("بيانات الطالب محفوظة");
+}
+</script>
+</body>
+</html>
