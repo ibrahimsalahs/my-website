@@ -1,14 +1,1 @@
-{
-"short_name":"البيان",
-"name":"منصة أكاديمية البيان التعليمية",
-"icons":[
-{"src":"/my-website/icon-192.png","type":"image/png","sizes":"192x192","purpose":"any maskable"},
-{"src":"/my-website/icon-512.png","type":"image/png","sizes":"512x512","purpose":"any maskable"}
-],
-"start_url":"/my-website/index.html",
-"scope":"/my-website/",
-"background_color":"#ffffff",
-"display":"standalone",
-"theme_color":"#000000",
-"orientation":"portrait"
-}
+{"name":"EduSpace - المنصة التعليمية","short_name":"EduSpace","description":"منصة تعليمية أونلاين للتعلم والتطوير","start_url":"./","display":"standalone","orientation":"portrait-primary","background_color":"#080b18","theme_color":"#080b18","lang":"ar","dir":"rtl","icons":[{"src":"icon-192.png","sizes":"192x192","type":"image/png","purpose":"any maskable"},{"src":"icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}]}
