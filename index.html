@@ -1,1 +1,294 @@
-<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><meta name="theme-color" content="#080b18"><meta name="description" content="منصة تعليمية أونلاين للتعلم والتطوير"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="EduSpace"><link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-192.png"><title>EduSpace</title><style>*{box-sizing:border-box;margin:0;padding:0;font-family:Tahoma,Arial,sans-serif}body{min-height:100vh;background:#080b18;color:#fff;overflow-x:hidden}.bg{position:fixed;inset:0;z-index:-3;background:radial-gradient(circle at 90% 5%,#673cff45 0,transparent 28%),radial-gradient(circle at 5% 80%,#00d9b535 0,transparent 30%),linear-gradient(145deg,#080b18,#10152a 55%,#090d1d)}.orb{position:fixed;border-radius:50%;filter:blur(60px);opacity:.35;z-index:-2}.orb1{width:180px;height:180px;background:#6c4cff;top:-80px;right:-50px}.orb2{width:160px;height:160px;background:#00d6b0;bottom:30px;left:-70px}.app{width:100%;max-width:480px;margin:auto;padding:17px}.install{display:none;width:100%;margin-bottom:14px;border:0;border-radius:18px;padding:13px;background:linear-gradient(135deg,#6745ff,#a05cff);color:#fff;font-size:12px;font-weight:bold;cursor:pointer;box-shadow:0 10px 25px #0004}.slider{position:relative;height:190px;border-radius:30px;overflow:hidden;box-shadow:0 20px 45px #00000045;margin-bottom:22px}.slide{position:absolute;inset:0;padding:24px;display:flex;align-items:center;transition:opacity .5s,transform .5s;opacity:0;transform:scale(1.04);pointer-events:none}.slide.active{opacity:1;transform:scale(1);pointer-events:auto}.slide1{background:linear-gradient(135deg,#6745ff,#a05cff)}.slide2{background:linear-gradient(135deg,#008f86,#19cda7)}.slide3{background:linear-gradient(135deg,#e75b70,#ff9b55)}.slide4{background:linear-gradient(135deg,#2872d9,#54b8ff)}.slideContent{max-width:70%;z-index:2}.slide small{font-size:10px;opacity:.8}.slide h1{font-size:23px;margin:9px 0;line-height:1.4}.slide p{font-size:11px;line-height:1.7;opacity:.85}.slide button{margin-top:13px;border:0;background:#fff;color:#30206d;border-radius:20px;padding:8px 15px;font-size:10px;font-weight:bold}.slideIcon{position:absolute;left:22px;font-size:72px;filter:drop-shadow(0 12px 15px #0003);transform:rotate(-8deg)}.circle{position:absolute;border-radius:50%;background:#ffffff15}.circle1{width:180px;height:180px;left:-70px;bottom:-100px}.circle2{width:100px;height:100px;right:-35px;top:-40px}.dots{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:5}.dot{width:6px;height:6px;border:0;border-radius:10px;background:#ffffff55;padding:0;transition:.3s}.dot.active{width:20px;background:#fff}.title{display:flex;align-items:center;justify-content:space-between;margin:20px 3px 12px}.title h2{font-size:18px}.title span{font-size:10px;color:#a9a0ff}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.card{position:relative;overflow:hidden;height:130px;border-radius:21px;padding:12px 5px;background:linear-gradient(145deg,#171d34,#101528);border:1px solid #ffffff0d;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;text-align:center;box-shadow:0 10px 25px #00000025;cursor:pointer;transition:.25s}.card:before{content:"";position:absolute;width:65px;height:65px;border-radius:50%;background:var(--c);filter:blur(35px);opacity:.25;top:-20px;right:-15px}.card:active{transform:scale(.91)}.icon{position:relative;width:56px;height:56px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:28px;background:linear-gradient(145deg,var(--bg),#ffffff08);border:1px solid var(--border)}.card h3{position:relative;font-size:12px}.c1{--c:#ff4f81;--bg:#ff477522;--border:#ff477540}.c2{--c:#ffb52e;--bg:#ffb52e22;--border:#ffb52e40}.c3{--c:#4e8cff;--bg:#4e8cff22;--border:#4e8cff40}.c4{--c:#20d6a1;--bg:#20d6a122;--border:#20d6a140}.c5{--c:#9c6cff;--bg:#9c6cff22;--border:#9c6cff40}.c6{--c:#20c9df;--bg:#20c9df22;--border:#20c9df40}.c7{--c:#ff8b38;--bg:#ff8b3822;--border:#ff8b3840}.c8{--c:#d95cff;--bg:#d95cff22;--border:#d95cff40}.course{position:relative;overflow:hidden;margin-top:14px;padding:17px;border-radius:23px;background:linear-gradient(110deg,#21184a,#161c38 55%,#103e42);border:1px solid #ffffff12;display:flex;align-items:center;gap:13px;box-shadow:0 12px 30px #00000030;cursor:pointer}.courseIcon{width:55px;height:55px;flex-shrink:0;border-radius:18px;background:linear-gradient(145deg,#8c62ff,#4e35c8);display:flex;align-items:center;justify-content:center;font-size:27px}.course h3{font-size:15px;margin-bottom:5px}.course p{font-size:10px;color:#aeb6ce;line-height:1.7}.arrow{margin-right:auto;color:#a99cff;font-size:20px}.schedule{background:#11172a;border:1px solid #ffffff0c;border-radius:22px;padding:7px 15px;box-shadow:0 10px 25px #00000025}.item{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid #ffffff09}.item:last-child{border:0}.date{width:43px;height:43px;flex-shrink:0;border-radius:14px;background:#6c52ff18;border:1px solid #6c52ff25;color:#a99cff;text-align:center;display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:bold}.item h4{font-size:11px;margin-bottom:4px}.item p{font-size:9px;color:#788199}.nav{margin-top:17px;background:#11172aee;border:1px solid #ffffff0d;border-radius:24px;padding:9px 3px;display:flex;justify-content:space-around;box-shadow:0 12px 30px #00000035;backdrop-filter:blur(15px)}.nav button{border:0;background:none;color:#69738c;font-size:9px;border-radius:17px;padding:6px 11px;cursor:pointer}.nav button b{display:block;font-size:20px;margin-bottom:3px}.nav button.active{color:#a99cff;background:#6c52ff18}.message{position:fixed;bottom:90px;left:50%;transform:translate(-50%,20px);background:#f7f7ff;color:#151a2b;padding:12px 22px;border-radius:30px;font-size:12px;font-weight:bold;box-shadow:0 10px 30px #0005;opacity:0;pointer-events:none;transition:.3s;z-index:20;white-space:nowrap}.message.show{opacity:1;transform:translate(-50%,0)}@media(max-width:350px){.app{padding:12px}.slider{height:175px}.slide h1{font-size:20px}.slideIcon{font-size:60px}.grid{gap:6px}.card{height:115px}.icon{width:49px;height:49px;font-size:25px}.card h3{font-size:10px}}@media(min-width:700px){.app{max-width:1100px;padding:30px}.slider{height:280px;border-radius:34px}.slide{padding:42px}.slide h1{font-size:34px}.slide p{font-size:14px}.slide small{font-size:13px}.slide button{font-size:13px;padding:11px 20px}.slideIcon{font-size:110px;left:70px}.title{margin-top:30px}.title h2{font-size:22px}.title span{font-size:12px}.grid{gap:14px}.card{height:170px;border-radius:25px}.icon{width:70px;height:70px;font-size:35px;border-radius:21px}.card h3{font-size:15px}.course{margin-top:18px;padding:23px;border-radius:27px}.courseIcon{width:68px;height:68px;font-size:33px}.course h3{font-size:18px}.course p{font-size:12px}.schedule{padding:10px 22px}.item{padding:15px 0}.date{width:52px;height:52px;font-size:22px}.item h4{font-size:13px}.item p{font-size:11px}.nav{margin-top:22px;padding:12px}.nav button{font-size:11px;padding:8px 25px}.nav button b{font-size:24px}}@media(min-width:1100px){.app{max-width:1400px;padding:35px 45px}.slider{height:320px}.slide{padding:50px}.slide h1{font-size:40px}.slideIcon{font-size:130px;left:10%}.grid{grid-template-columns:repeat(8,1fr)}.card{height:180px}.course{margin-top:20px}.schedule{display:grid;grid-template-columns:repeat(2,1fr);column-gap:35px;padding:12px 25px}.item{padding:17px 5px}.nav{max-width:700px;margin:25px auto 0}}@media(min-width:1600px){.app{max-width:1550px}.slider{height:350px}.slide h1{font-size:44px}.card{height:190px}}</style></head><body><div class="bg"></div><div class="orb orb1"></div><div class="orb orb2"></div><main class="app"><button class="install" id="installBtn">📲 تثبيت المنصة على جهازك</button><section class="slider"><div class="slide slide1 active"><div class="circle circle1"></div><div class="circle circle2"></div><div class="slideContent"><small>🚀 ابدأ الآن</small><h1>طوّر مهاراتك<br>وابنِ مستقبلك</h1><p>استمر في التعلم وحقق أهدافك التعليمية.</p><button onclick="showMessage('تم فتح المحتوى')">ابدأ التعلم ←</button></div><div class="slideIcon">🎓</div></div><div class="slide slide2"><div class="circle circle1"></div><div class="circle circle2"></div><div class="slideContent"><small>🔥 تقدمك رائع</small><h1>استمر في التعلم<br>وطوّر مستواك</h1><p>كل خطوة جديدة تقربك أكثر من هدفك.</p><button onclick="showMessage('استمر في التقدم')">تابع تقدمك ←</button></div><div class="slideIcon">🏆</div></div><div class="slide slide3"><div class="circle circle1"></div><div class="circle circle2"></div><div class="slideContent"><small>⚡ تعلم بذكاء</small><h1>اختبر معلوماتك<br>وطوّر مهاراتك</h1><p>استخدم الاختبارات لقياس فهمك وتقدمك.</p><button onclick="showMessage('تم فتح الاختبارات')">ابدأ الاختبار ←</button></div><div class="slideIcon">📝</div></div><div class="slide slide4"><div class="circle circle1"></div><div class="circle circle2"></div><div class="slideContent"><small>✨ تعلم مستمر</small><h1>اكتشف محتوى<br>تعليمي جديد</h1><p>محاضرات وكتب ومصادر تساعدك على التطور.</p><button onclick="showMessage('تم فتح المحتوى')">اكتشف الآن ←</button></div><div class="slideIcon">📚</div></div><div class="dots"><button class="dot active" onclick="goSlide(0)"></button><button class="dot" onclick="goSlide(1)"></button><button class="dot" onclick="goSlide(2)"></button><button class="dot" onclick="goSlide(3)"></button></div></section><div class="title"><h2>ماذا تريد أن تفعل؟</h2><span>كل الخدمات</span></div><section class="grid"><div class="card c1" onclick="openItem('الاختبار')"><div class="icon">📝</div><h3>الاختبار</h3></div><div class="card c2" onclick="openItem('الواجب')"><div class="icon">✏️</div><h3>الواجب</h3></div><div class="card c3" onclick="openItem('الكتب')"><div class="icon">📚</div><h3>الكتب</h3></div><div class="card c4" onclick="openItem('المواعيد')"><div class="icon">📅</div><h3>المواعيد</h3></div><div class="card c5" onclick="openItem('الاجتماع')"><div class="icon">👥</div><h3>الاجتماع</h3></div><div class="card c6" onclick="openItem('المستوى')"><div class="icon">🏆</div><h3>المستوى</h3></div><div class="card c7" onclick="openItem('الكورس')"><div class="icon">🎓</div><h3>الكورس</h3></div><div class="card c8" onclick="openItem('المحاضرات')"><div class="icon">🎧</div><h3>المحاضرات</h3></div></section><div class="course" onclick="openItem('التعلم الحالي')"><div class="courseIcon">🚀</div><div><h3>أكمل تعلمك</h3><p>واصل رحلتك التعليمية واستفد من المحتوى المتاح على المنصة.</p></div><div class="arrow">←</div></div><div class="title"><h2>مميزات المنصة</h2><span>تعلم بشكل أفضل</span></div><section class="schedule"><div class="item"><div class="date">🎯</div><div><h4>تعلم منظم</h4><p>محتوى مرتب يساعدك على التعلم بسهولة</p></div></div><div class="item"><div class="date">📚</div><div><h4>مصادر تعليمية</h4><p>كتب ومحاضرات ومواد تعليمية متنوعة</p></div></div><div class="item"><div class="date">🧠</div><div><h4>اختبارات وتقييم</h4><p>اختبر معلوماتك وتابع مستوى تقدمك</p></div></div><div class="item"><div class="date">🏆</div><div><h4>تطوير مستمر</h4><p>طوّر مهاراتك وحقق أهدافك التعليمية</p></div></div></section><nav class="nav"><button class="active" onclick="nav(this,'الرئيسية')"><b>⌂</b>الرئيسية</button><button onclick="nav(this,'الجدول')"><b>▣</b>الجدول</button><button onclick="nav(this,'الإشعارات')"><b>♧</b>الإشعارات</button><button onclick="nav(this,'حسابي')"><b>◉</b>حسابي</button></nav></main><div class="message" id="message"></div><script>let current=0,installPrompt;const slides=document.querySelectorAll('.slide'),dots=document.querySelectorAll('.dot'),installBtn=document.getElementById('installBtn');function goSlide(n){current=n;slides.forEach((s,i)=>s.classList.toggle('active',i===n));dots.forEach((d,i)=>d.classList.toggle('active',i===n))}setInterval(()=>goSlide((current+1)%slides.length),4500);function showMessage(text){const m=document.getElementById('message');m.textContent=text;m.classList.add('show');setTimeout(()=>m.classList.remove('show'),1700)}function openItem(name){showMessage('تم فتح '+name)}function nav(button,name){document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));button.classList.add('active');showMessage(name)}window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;installBtn.style.display='block'});installBtn.addEventListener('click',async()=>{if(!installPrompt)return;installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;installBtn.style.display='none'});window.addEventListener('appinstalled',()=>{installBtn.style.display='none';showMessage('تم تثبيت المنصة بنجاح')});if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('service-worker.js'));</script></body></html>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#080b18">
+<meta name="description" content="منصة تعليمية أونلاين للتعلم والتطوير">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="EduSpace">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>EduSpace</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Tahoma,Arial,sans-serif}
+body{min-height:100vh;background:#080b18;color:#fff;overflow-x:hidden}
+.bg{position:fixed;inset:0;z-index:-3;background:radial-gradient(circle at 90% 5%,#673cff45 0,transparent 28%),radial-gradient(circle at 5% 80%,#00d9b535 0,transparent 30%),linear-gradient(145deg,#080b18,#10152a 55%,#090d1d)}
+.orb{position:fixed;border-radius:50%;filter:blur(60px);opacity:.35;z-index:-2}
+.orb1{width:180px;height:180px;background:#6c4cff;top:-80px;right:-50px}
+.orb2{width:160px;height:160px;background:#00d6b0;bottom:30px;left:-70px}
+.app{width:100%;max-width:480px;margin:auto;padding:17px}
+.install{display:none;width:100%;margin-bottom:14px;border:0;border-radius:18px;padding:13px;background:linear-gradient(135deg,#6745ff,#a05cff);color:#fff;font-size:12px;font-weight:bold;cursor:pointer;box-shadow:0 10px 25px #0004}
+.slider{position:relative;height:190px;border-radius:30px;overflow:hidden;box-shadow:0 20px 45px #00000045;margin-bottom:22px}
+.slide{position:absolute;inset:0;padding:24px;display:flex;align-items:center;transition:opacity .5s,transform .5s;opacity:0;transform:scale(1.04);pointer-events:none}
+.slide.active{opacity:1;transform:scale(1);pointer-events:auto}
+.slide1{background:linear-gradient(135deg,#6745ff,#a05cff)}
+.slide2{background:linear-gradient(135deg,#008f86,#19cda7)}
+.slide3{background:linear-gradient(135deg,#e75b70,#ff9b55)}
+.slide4{background:linear-gradient(135deg,#2872d9,#54b8ff)}
+.slideContent{max-width:70%;z-index:2}
+.slide small{font-size:10px;opacity:.8}
+.slide h1{font-size:23px;margin:9px 0;line-height:1.4}
+.slide p{font-size:11px;line-height:1.7;opacity:.85}
+.slide button{margin-top:13px;border:0;background:#fff;color:#30206d;border-radius:20px;padding:8px 15px;font-size:10px;font-weight:bold;cursor:pointer}
+.slideIcon{position:absolute;left:22px;font-size:72px;filter:drop-shadow(0 12px 15px #0003);transform:rotate(-8deg)}
+.circle{position:absolute;border-radius:50%;background:#ffffff15}
+.circle1{width:180px;height:180px;left:-70px;bottom:-100px}
+.circle2{width:100px;height:100px;right:-35px;top:-40px}
+.dots{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:5}
+.dot{width:6px;height:6px;border:0;border-radius:10px;background:#ffffff55;padding:0;transition:.3s;cursor:pointer}
+.dot.active{width:20px;background:#fff}
+.title{display:flex;align-items:center;justify-content:space-between;margin:20px 3px 12px}
+.title h2{font-size:18px}
+.title span{font-size:10px;color:#a9a0ff}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.card{position:relative;overflow:hidden;height:130px;border-radius:21px;padding:12px 5px;background:linear-gradient(145deg,#171d34,#101528);border:1px solid #ffffff0d;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;text-align:center;box-shadow:0 10px 25px #00000025;cursor:pointer;transition:.25s}
+.card:before{content:"";position:absolute;width:65px;height:65px;border-radius:50%;background:var(--c);filter:blur(35px);opacity:.25;top:-20px;right:-15px}
+.card:active{transform:scale(.91)}
+.icon{position:relative;width:56px;height:56px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:28px;background:linear-gradient(145deg,var(--bg),#ffffff08);border:1px solid var(--border)}
+.card h3{position:relative;font-size:12px}
+.c1{--c:#ff4f81;--bg:#ff477522;--border:#ff477540}
+.c2{--c:#ffb52e;--bg:#ffb52e22;--border:#ffb52e40}
+.c3{--c:#4e8cff;--bg:#4e8cff22;--border:#4e8cff40}
+.c4{--c:#20d6a1;--bg:#20d6a122;--border:#20d6a140}
+.c5{--c:#9c6cff;--bg:#9c6cff22;--border:#9c6cff40}
+.c6{--c:#20c9df;--bg:#20c9df22;--border:#20c9df40}
+.c7{--c:#ff8b38;--bg:#ff8b3822;--border:#ff8b3840}
+.c8{--c:#d95cff;--bg:#d95cff22;--border:#d95cff40}
+.course{position:relative;overflow:hidden;margin-top:14px;padding:17px;border-radius:23px;background:linear-gradient(110deg,#21184a,#161c38 55%,#103e42);border:1px solid #ffffff12;display:flex;align-items:center;gap:13px;box-shadow:0 12px 30px #00000030;cursor:pointer}
+.courseIcon{width:55px;height:55px;flex-shrink:0;border-radius:18px;background:linear-gradient(145deg,#8c62ff,#4e35c8);display:flex;align-items:center;justify-content:center;font-size:27px}
+.course h3{font-size:15px;margin-bottom:5px}
+.course p{font-size:10px;color:#aeb6ce;line-height:1.7}
+.arrow{margin-right:auto;color:#a99cff;font-size:20px}
+.schedule{background:#11172a;border:1px solid #ffffff0c;border-radius:22px;padding:7px 15px;box-shadow:0 10px 25px #00000025}
+.item{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid #ffffff09}
+.item:last-child{border:0}
+.date{width:43px;height:43px;flex-shrink:0;border-radius:14px;background:#6c52ff18;border:1px solid #6c52ff25;color:#a99cff;text-align:center;display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:bold}
+.item h4{font-size:11px;margin-bottom:4px}
+.item p{font-size:9px;color:#788199}
+.nav{margin-top:17px;background:#11172aee;border:1px solid #ffffff0d;border-radius:24px;padding:9px 3px;display:flex;justify-content:space-around;box-shadow:0 12px 30px #00000035;backdrop-filter:blur(15px)}
+.nav button{border:0;background:none;color:#69738c;font-size:9px;border-radius:17px;padding:6px 11px;cursor:pointer}
+.nav button b{display:block;font-size:20px;margin-bottom:3px}
+.nav button.active{color:#a99cff;background:#6c52ff18}
+.message{position:fixed;bottom:90px;left:50%;transform:translate(-50%,20px);background:#f7f7ff;color:#151a2b;padding:12px 22px;border-radius:30px;font-size:12px;font-weight:bold;box-shadow:0 10px 30px #0005;opacity:0;pointer-events:none;transition:.3s;z-index:20;white-space:nowrap}
+.message.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:350px){
+.app{padding:12px}
+.slider{height:175px}
+.slide h1{font-size:20px}
+.slideIcon{font-size:60px}
+.grid{gap:6px}
+.card{height:115px}
+.icon{width:49px;height:49px;font-size:25px}
+.card h3{font-size:10px}
+}
+@media(min-width:700px){
+.app{max-width:1100px;padding:30px}
+.slider{height:280px;border-radius:34px}
+.slide{padding:42px}
+.slide h1{font-size:34px}
+.slide p{font-size:14px}
+.slide small{font-size:13px}
+.slide button{font-size:13px;padding:11px 20px}
+.slideIcon{font-size:110px;left:70px}
+.title{margin-top:30px}
+.title h2{font-size:22px}
+.title span{font-size:12px}
+.grid{gap:14px}
+.card{height:170px;border-radius:25px}
+.icon{width:70px;height:70px;font-size:35px;border-radius:21px}
+.card h3{font-size:15px}
+.course{margin-top:18px;padding:23px;border-radius:27px}
+.courseIcon{width:68px;height:68px;font-size:33px}
+.course h3{font-size:18px}
+.course p{font-size:12px}
+.schedule{padding:10px 22px}
+.item{padding:15px 0}
+.date{width:52px;height:52px;font-size:22px}
+.item h4{font-size:13px}
+.item p{font-size:11px}
+.nav{margin-top:22px;padding:12px}
+.nav button{font-size:11px;padding:8px 25px}
+.nav button b{font-size:24px}
+}
+@media(min-width:1100px){
+.app{max-width:1400px;padding:35px 45px}
+.slider{height:320px}
+.slide{padding:50px}
+.slide h1{font-size:40px}
+.slideIcon{font-size:130px;left:10%}
+.grid{grid-template-columns:repeat(8,1fr)}
+.card{height:180px}
+.course{margin-top:20px}
+.schedule{display:grid;grid-template-columns:repeat(2,1fr);column-gap:35px;padding:12px 25px}
+.item{padding:17px 5px}
+.nav{max-width:700px;margin:25px auto 0}
+}
+@media(min-width:1600px){
+.app{max-width:1550px}
+.slider{height:350px}
+.slide h1{font-size:44px}
+.card{height:190px}
+}
+</style>
+</head>
+<body>
+<div class="bg"></div>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<main class="app">
+<button class="install" id="installBtn">📲 تثبيت المنصة على جهازك</button>
+<section class="slider">
+<div class="slide slide1 active">
+<div class="circle circle1"></div>
+<div class="circle circle2"></div>
+<div class="slideContent">
+<small>🚀 ابدأ الآن</small>
+<h1>طوّر مهاراتك<br>وابنِ مستقبلك</h1>
+<p>استمر في التعلم وحقق أهدافك التعليمية.</p>
+<button>ابدأ التعلم ←</button>
+</div>
+<div class="slideIcon">🎓</div>
+</div>
+<div class="slide slide2">
+<div class="circle circle1"></div>
+<div class="circle circle2"></div>
+<div class="slideContent">
+<small>🔥 تعلم أفضل</small>
+<h1>استمر في التعلم<br>وطوّر مستواك</h1>
+<p>كل خطوة جديدة تقربك أكثر من هدفك.</p>
+<button>تابع تعلمك ←</button>
+</div>
+<div class="slideIcon">🏆</div>
+</div>
+<div class="slide slide3">
+<div class="circle circle1"></div>
+<div class="circle circle2"></div>
+<div class="slideContent">
+<small>⚡ تعلم بذكاء</small>
+<h1>اختبر معلوماتك<br>وطوّر مهاراتك</h1>
+<p>استخدم الاختبارات لقياس فهمك وتقدمك.</p>
+<button>ابدأ الاختبار ←</button>
+</div>
+<div class="slideIcon">📝</div>
+</div>
+<div class="slide slide4">
+<div class="circle circle1"></div>
+<div class="circle circle2"></div>
+<div class="slideContent">
+<small>✨ تعلم مستمر</small>
+<h1>اكتشف محتوى<br>تعليمي جديد</h1>
+<p>محاضرات وكتب ومصادر تساعدك على التطور.</p>
+<button>اكتشف الآن ←</button>
+</div>
+<div class="slideIcon">📚</div>
+</div>
+<div class="dots">
+<button class="dot active" onclick="goSlide(0)"></button>
+<button class="dot" onclick="goSlide(1)"></button>
+<button class="dot" onclick="goSlide(2)"></button>
+<button class="dot" onclick="goSlide(3)"></button>
+</div>
+</section>
+<div class="title">
+<h2>ماذا تريد أن تفعل؟</h2>
+<span>كل الخدمات</span>
+</div>
+<section class="grid">
+<div class="card c1" onclick="location.href='1.html'">
+<div class="icon">📝</div>
+<h3>الاختبار</h3>
+</div>
+<div class="card c2" onclick="location.href='2.html'">
+<div class="icon">✏️</div>
+<h3>الواجب</h3>
+</div>
+<div class="card c3" onclick="location.href='3.html'">
+<div class="icon">📚</div>
+<h3>الكتب</h3>
+</div>
+<div class="card c4" onclick="location.href='4.html'">
+<div class="icon">📅</div>
+<h3>المواعيد</h3>
+</div>
+<div class="card c5" onclick="location.href='5.html'">
+<div class="icon">👥</div>
+<h3>الاجتماع</h3>
+</div>
+<div class="card c6" onclick="location.href='6.html'">
+<div class="icon">🎓</div>
+<h3>المستوى</h3>
+</div>
+<div class="card c7" onclick="location.href='7.html'">
+<div class="icon">🪪</div>
+<h3>الـID</h3>
+</div>
+<div class="card c8" onclick="location.href='8.html'">
+<div class="icon">🎧</div>
+<h3>الكورس</h3>
+</div>
+</section>
+<div class="course" onclick="location.href='9.html'">
+<div class="courseIcon">🪪</div>
+<div>
+<h3>الـID الخاص بك</h3>
+<p>اعرض بياناتك التعليمية والرقم التعريفي الخاص بك.</p>
+</div>
+<div class="arrow">←</div>
+</div>
+<div class="title">
+<h2>مميزات المنصة</h2>
+<span>تعلم بشكل أفضل</span>
+</div>
+<section class="schedule">
+<div class="item">
+<div class="date">🎯</div>
+<div>
+<h4>تعلم منظم</h4>
+<p>محتوى مرتب يساعدك على التعلم بسهولة</p>
+</div>
+</div>
+<div class="item">
+<div class="date">📚</div>
+<div>
+<h4>مصادر تعليمية</h4>
+<p>كتب ومحاضرات ومواد تعليمية متنوعة</p>
+</div>
+</div>
+<div class="item">
+<div class="date">🧠</div>
+<div>
+<h4>اختبارات وتقييم</h4>
+<p>اختبر معلوماتك وتابع مستوى تقدمك</p>
+</div>
+</div>
+<div class="item">
+<div class="date">🏆</div>
+<div>
+<h4>تطوير مستمر</h4>
+<p>طوّر مهاراتك وحقق أهدافك التعليمية</p>
+</div>
+</div>
+</section>
+<nav class="nav">
+<button class="active" onclick="location.href='index.html'"><b>⌂</b>الرئيسية</button>
+<button onclick="location.href='4.html'"><b>▣</b>الجدول</button>
+<button onclick="location.href='5.html'"><b>👥</b>الاجتماع</button>
+<button onclick="location.href='9.html'"><b>◉</b>ضبط</button>
+</nav>
+</main>
+<div class="message" id="message"></div>
+<script>
+let current=0,installPrompt;
+const slides=document.querySelectorAll('.slide'),dots=document.querySelectorAll('.dot'),installBtn=document.getElementById('installBtn');
+function goSlide(n){current=n;slides.forEach((s,i)=>s.classList.toggle('active',i===n));dots.forEach((d,i)=>d.classList.toggle('active',i===n))}
+setInterval(()=>goSlide((current+1)%slides.length),4500);
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;installBtn.style.display='block'});
+installBtn.addEventListener('click',async()=>{if(!installPrompt)return;installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;installBtn.style.display='none'});
+window.addEventListener('appinstalled',()=>{installBtn.style.display='none'});
+if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('service-worker.js'));
+</script>
+</body>
+</html>
