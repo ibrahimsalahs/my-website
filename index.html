@@ -3,18 +3,51 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<meta name="theme-color" content="#000000">
-<link rel="manifest" href="/my-website/manifest.json">
-<link rel="stylesheet" href="/my-website/css/style.css">
+<meta name="theme-color" content="#10284c">
+<link rel="manifest" href="manifest.json">
 <title>منصة أكاديمية البيان التعليمية</title>
 <style>
-#desktopGate{display:none;position:fixed;inset:0;background:#f5f7fa;z-index:999999;align-items:center;justify-content:center;padding:20px}
-#desktopGate .gate-box{width:100%;max-width:500px;background:#fff;border-radius:25px;padding:35px;text-align:center;box-shadow:0 15px 50px rgba(0,0,0,.12)}
-#desktopGate .gate-icon{font-size:65px;margin-bottom:20px}
-#desktopGate h1{font-size:27px;color:#10284c;margin-bottom:15px}
-#desktopGate p{font-size:17px;line-height:1.9;color:#65748b;margin-bottom:20px}
-#desktopGate .steps{background:#f3f6fa;border-radius:17px;padding:18px;text-align:right;line-height:2;font-size:15px;color:#243957}
-#desktopGate .reload{margin-top:20px;border:0;background:#10284c;color:#fff;padding:12px 25px;border-radius:12px;font-size:16px;cursor:pointer}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;min-height:100%;font-family:Arial,Tahoma,sans-serif;background:#f4f7fb;color:#172b4d}
+body{overflow-x:hidden}
+#desktopGate{display:none;position:fixed;inset:0;z-index:99999;background:#f4f7fb;align-items:center;justify-content:center;padding:20px}
+.gate-box{width:min(500px,100%);background:#fff;border-radius:25px;padding:35px;text-align:center;box-shadow:0 15px 45px rgba(0,0,0,.12)}
+.gate-icon{font-size:65px;margin-bottom:15px}
+.gate-box h1{font-size:27px;margin-bottom:15px}
+.gate-box p{color:#687890;line-height:1.9;margin-bottom:18px}
+.steps{background:#f1f5fa;border-radius:15px;padding:18px;text-align:right;line-height:2;color:#334766}
+.reload{margin-top:20px;border:0;background:#10284c;color:#fff;border-radius:12px;padding:13px 25px;font-size:16px;cursor:pointer}
+#app{display:none;min-height:100vh}
+.page{width:1200px;min-height:100vh;margin:auto;background:#f4f7fb}
+.topbar{height:75px;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 30px;border-bottom:1px solid #e8edf4}
+.logo{font-size:23px;font-weight:bold;color:#10284c}
+.logo span{color:#2d74da}
+.user{display:flex;align-items:center;gap:12px}
+.avatar{width:42px;height:42px;border-radius:50%;background:#10284c;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:bold}
+.layout{display:grid;grid-template-columns:240px 1fr;direction:ltr}
+.sidebar{direction:rtl;background:#10284c;min-height:calc(100vh - 75px);padding:25px 15px;color:#fff}
+.side-title{font-size:14px;color:#aebdd2;margin:10px 15px 15px}
+.nav{display:block;padding:13px 15px;margin:5px 0;border-radius:10px;color:#dce5f1;text-decoration:none;font-size:15px}
+.nav.active,.nav:hover{background:#21466f;color:#fff}
+.content{direction:rtl;padding:30px}
+.hero{background:linear-gradient(135deg,#10284c,#285d91);color:#fff;border-radius:22px;padding:35px;margin-bottom:25px}
+.hero h1{font-size:32px;margin-bottom:12px}
+.hero p{color:#dce8f5;line-height:1.8}
+.section-title{font-size:21px;margin:25px 0 15px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{background:#fff;border-radius:18px;padding:23px;box-shadow:0 5px 20px rgba(20,45,80,.06)}
+.card-icon{font-size:32px;margin-bottom:15px}
+.card h3{font-size:18px;margin-bottom:8px}
+.card p{font-size:14px;color:#718096;line-height:1.7}
+.course{background:#fff;border-radius:18px;padding:20px;margin-bottom:15px;display:flex;align-items:center;gap:20px;box-shadow:0 5px 20px rgba(20,45,80,.06)}
+.course-icon{width:60px;height:60px;border-radius:15px;background:#eaf2ff;display:flex;align-items:center;justify-content:center;font-size:28px}
+.course-info{flex:1}
+.course-info h3{margin-bottom:7px}
+.course-info p{font-size:14px;color:#718096}
+.open{background:#10284c;color:#fff;border:0;border-radius:10px;padding:11px 20px;cursor:pointer}
+@media(max-width:899px){
+.page{transform-origin:top center}
+}
 </style>
 </head>
 <body>
@@ -22,55 +55,110 @@
 <div class="gate-box">
 <div class="gate-icon">🖥️</div>
 <h1>يجب تفعيل وضع سطح المكتب</h1>
-<p>هذه المنصة تعمل بوضع سطح المكتب. فعّل وضع سطح المكتب مرة واحدة ثم أعد تحميل الصفحة.</p>
+<p>المنصة مصممة للعمل بوضع سطح المكتب. فعّل الخيار مرة واحدة ثم أعد تحميل الصفحة.</p>
 <div class="steps">
-<b>في Google Chrome:</b><br>
-1. اضغط على ⋮ أعلى المتصفح.<br>
+<b>طريقة التفعيل:</b><br>
+1. اضغط على ⋮ في متصفح Chrome.<br>
 2. فعّل <b>موقع سطح المكتب</b>.<br>
-3. اضغط على زر إعادة التحميل.
+3. اضغط على إعادة تحميل الصفحة.
 </div>
-<button class="reload" onclick="location.reload()">إعادة تحميل الصفحة</button>
+<button class="reload" onclick="location.reload()">إعادة تحميل</button>
 </div>
 </div>
 <div id="app">
-<!-- محتوى موقعك الحالي يوضع هنا -->
+<div class="page">
+<header class="topbar">
+<div class="logo">أكاديمية <span>البيان</span></div>
+<div class="user">
+<span>مرحباً بك 👋</span>
+<div class="avatar">ط</div>
+</div>
+</header>
+<div class="layout">
+<aside class="sidebar">
+<div class="side-title">القائمة الرئيسية</div>
+<a class="nav active" href="#">🏠 الرئيسية</a>
+<a class="nav" href="#">📚 المواد الدراسية</a>
+<a class="nav" href="#">🎓 الدروس</a>
+<a class="nav" href="#">📝 الاختبارات</a>
+<a class="nav" href="#">📄 الملفات</a>
+<div class="side-title">الحساب</div>
+<a class="nav" href="#">👤 الملف الشخصي</a>
+<a class="nav" href="#">⚙️ الإعدادات</a>
+</aside>
+<main class="content">
+<section class="hero">
+<h1>منصة أكاديمية البيان التعليمية</h1>
+<p>مرحباً بك في منصتك التعليمية. اختر المادة أو الدرس الذي تريد البدء فيه.</p>
+</section>
+<h2 class="section-title">الوصول السريع</h2>
+<div class="cards">
+<div class="card">
+<div class="card-icon">📚</div>
+<h3>المواد الدراسية</h3>
+<p>تصفح جميع المواد والدروس المتاحة لك.</p>
+</div>
+<div class="card">
+<div class="card-icon">📝</div>
+<h3>الاختبارات</h3>
+<p>ابدأ الاختبارات والتدريبات الخاصة بك.</p>
+</div>
+<div class="card">
+<div class="card-icon">🎓</div>
+<h3>الدروس</h3>
+<p>تابع الدروس التعليمية من مكان واحد.</p>
+</div>
+</div>
+<h2 class="section-title">المواد المتاحة</h2>
+<div class="course">
+<div class="course-icon">📐</div>
+<div class="course-info">
+<h3>الرياضيات</h3>
+<p>الدروس والاختبارات والتدريبات الخاصة بالرياضيات.</p>
+</div>
+<button class="open">فتح المادة</button>
+</div>
+<div class="course">
+<div class="course-icon">🔬</div>
+<div class="course-info">
+<h3>العلوم</h3>
+<p>المحتوى التعليمي والأنشطة الخاصة بمادة العلوم.</p>
+</div>
+<button class="open">فتح المادة</button>
+</div>
+<div class="course">
+<div class="course-icon">📖</div>
+<div class="course-info">
+<h3>اللغة العربية</h3>
+<p>دروس اللغة العربية والقراءة والقواعد.</p>
+</div>
+<button class="open">فتح المادة</button>
+</div>
+</main>
+</div>
+</div>
 </div>
 <script>
 (function(){
-const APPROVAL_KEY='desktop_approved_v1';
+const KEY='desktop_approved_v1';
 const gate=document.getElementById('desktopGate');
 const app=document.getElementById('app');
 function isDesktop(){
 const ua=navigator.userAgent.toLowerCase();
 const mobile=/android|iphone|ipad|ipod|mobile|tablet/i.test(ua);
 const desktop=/windows nt|macintosh|linux x86_64|cros/i.test(ua);
-const width=window.innerWidth;
-const touch=navigator.maxTouchPoints||0;
-return !mobile||desktop||(width>=900&&touch===0);
+return !mobile||desktop||(window.innerWidth>=900&&navigator.maxTouchPoints===0);
 }
-function checkDesktop(){
-if(localStorage.getItem(APPROVAL_KEY)==='1'){
-app.style.display='';
-gate.style.display='none';
-return;
-}
-if(isDesktop()){
-localStorage.setItem(APPROVAL_KEY,'1');
-app.style.display='';
+if(localStorage.getItem(KEY)==='1'||isDesktop()){
+localStorage.setItem(KEY,'1');
+app.style.display='block';
 gate.style.display='none';
 }else{
 app.style.display='none';
 gate.style.display='flex';
 }
-}
-checkDesktop();
-if('serviceWorker'in navigator){
-window.addEventListener('load',function(){
-navigator.serviceWorker.register('/my-website/sw.js',{scope:'/my-website/'}).catch(function(){});
-});
-}
+if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
 })();
 </script>
-<script src="/my-website/js/main.js"></script>
 </body>
 </html>
