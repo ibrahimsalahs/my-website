@@ -2,52 +2,39 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Desktop First</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>يتطلب وضع سطح المكتب</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{width:100%;min-height:100%;overflow-x:hidden}
-body{font-family:Arial,sans-serif;background:#f5f8fc;color:#102c5d}
-.app{width:1200px;min-height:800px;margin:auto;transform-origin:top center}
-.sidebar{width:290px;position:absolute;right:0;top:0;bottom:0;background:#10284c;color:#fff;padding:25px}
-.content{width:910px;margin-right:290px;padding:25px}
-.hero{height:260px;border-radius:28px;background:linear-gradient(110deg,#d9f5ed,#a9d9ff);padding:40px}
-.hero h1{font-size:42px}
-.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:25px}
-.quick-card{height:150px;border-radius:20px;background:#fff;display:grid;place-items:center;text-align:center;padding:15px}
-.courses{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:25px}
-.course{background:#fff;border-radius:18px;overflow:hidden}
-.course-head{height:110px;display:grid;place-items:center;font-size:50px;background:#dcecff}
-.course-body{text-align:center;padding:18px}
-button{border:0;border-radius:20px;padding:10px 25px;background:#287be8;color:#fff;cursor:pointer}
-@media(max-width:1200px){
-.app{--scale:calc(100vw / 1200);transform:scale(var(--scale));transform-origin:top right}
-body{min-height:calc(800px * (100vw / 1200))}
-}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,Tahoma,sans-serif;background:#f5f8fc;color:#10284c;min-height:100vh}.gate{min-height:100vh;display:none;align-items:center;justify-content:center;padding:25px}.card{width:100%;max-width:520px;background:#fff;border-radius:25px;padding:35px;text-align:center;box-shadow:0 15px 45px #10284c18}.icon{font-size:70px;margin-bottom:20px}.card h1{font-size:28px;margin-bottom:15px}.card p{font-size:17px;line-height:1.8;color:#60718d;margin-bottom:25px}.steps{text-align:right;background:#f5f8fc;border-radius:18px;padding:20px;line-height:2;font-size:16px}.site{display:none}.open{display:flex}
 </style>
 </head>
 <body>
-<div class="app">
-<aside class="sidebar">
-<h2>🎓 منصة التعلم</h2>
-</aside>
-<main class="content">
-<section class="hero">
-<h1>مرحباً بك</h1>
-<p>رحلتك التعليمية تبدأ من هنا</p>
-</section>
-<section class="quick">
-<div class="quick-card">📚<b>مقرراتي</b></div>
-<div class="quick-card">📖<b>المكتبة</b></div>
-<div class="quick-card">🎓<b>المواد الدراسية</b></div>
-<div class="quick-card">📝<b>الاختبارات</b></div>
-</section>
-<section class="courses">
-<div class="course"><div class="course-head">📐</div><div class="course-body"><h3>الرياضيات</h3><button>دخول المقرر</button></div></div>
-<div class="course"><div class="course-head">⚛️</div><div class="course-body"><h3>الفيزياء</h3><button>دخول المقرر</button></div></div>
-<div class="course"><div class="course-head">⚗️</div><div class="course-body"><h3>الكيمياء</h3><button>دخول المقرر</button></div></div>
-</section>
-</main>
+<div class="gate" id="gate">
+<div class="card">
+<div class="icon">🖥️</div>
+<h1>يجب تفعيل وضع سطح المكتب</h1>
+<p>هذا الموقع مصمم للعمل بوضع سطح المكتب. قم بتفعيل وضع سطح المكتب من إعدادات المتصفح ثم أعد تحميل الصفحة.</p>
+<div class="steps">
+<b>في Google Chrome:</b><br>
+1. اضغط على ⋮ أعلى المتصفح.<br>
+2. فعّل <b>موقع سطح المكتب</b>.<br>
+3. أعد تحميل الصفحة.
 </div>
+</div>
+</div>
+<div class="site" id="site">
+<!-- ضع موقعك هنا -->
+<h1>موقعك يعمل الآن بوضع سطح المكتب</h1>
+</div>
+<script>
+(function(){
+const ua=navigator.userAgent.toLowerCase();
+const mobile=/android|iphone|ipad|ipod|mobile|tablet/i.test(ua);
+const desktopSite=/windows nt|macintosh|linux x86_64|cros/i.test(ua);
+const width=window.innerWidth;
+const isDesktop=!mobile||desktopSite||(width>=900&&!('ontouchstart'in window&&navigator.maxTouchPoints>0));
+document.getElementById(isDesktop?'site':'gate').classList.add('open');
+})();
+</script>
 </body>
 </html>
