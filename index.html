@@ -2,139 +2,75 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#10284c">
-<link rel="manifest" href="manifest.json">
-<title>منصة التعلم</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#000000">
+<link rel="manifest" href="/my-website/manifest.json">
+<link rel="stylesheet" href="/my-website/css/style.css">
+<title>منصة أكاديمية البيان التعليمية</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{width:100%;min-height:100%;font-family:Arial,Tahoma,sans-serif;background:#f5f8fc;color:#10284c}
-button{font:inherit}
-#desktopGate{display:none;min-height:100vh;align-items:center;justify-content:center;padding:25px}
-.gate{width:100%;max-width:520px;background:#fff;border-radius:25px;padding:35px;text-align:center;box-shadow:0 15px 45px #10284c18}
-.gate-icon{font-size:70px;margin-bottom:20px}
-.gate h1{font-size:28px;margin-bottom:15px}
-.gate p{font-size:17px;line-height:1.8;color:#60718d;margin-bottom:25px}
-.steps{text-align:right;background:#f5f8fc;border-radius:18px;padding:20px;line-height:2;font-size:16px}
-#app{display:none}
-.app{width:1200px;min-height:100vh;margin:auto;background:#f5f8fc}
-.sidebar{width:290px;min-height:100vh;position:fixed;right:0;top:0;background:#10284c;color:#fff;padding:28px 15px}
-.logo{font-size:27px;font-weight:800;padding:15px;margin-bottom:25px}
-.nav{display:grid;gap:10px}
-.nav button{height:60px;border:0;border-radius:15px;background:transparent;color:#fff;text-align:right;padding:0 20px;font-size:17px;cursor:pointer}
-.nav button.active,.nav button:hover{background:#287be8}
-.content{width:910px;margin-right:290px;padding:25px}
-.topbar{height:75px;display:flex;align-items:center;justify-content:space-between}
-.profile{font-weight:bold;font-size:18px}
-.avatar{display:inline-grid;place-items:center;width:48px;height:48px;border-radius:50%;background:#bce5fa;margin-right:10px}
-.hero{height:260px;border-radius:28px;background:linear-gradient(110deg,#d9f5ed,#a9d9ff);padding:40px;display:flex;align-items:center}
-.hero h1{font-size:42px;margin-bottom:12px}
-.hero p{font-size:20px}
-.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:25px}
-.quick-card{height:150px;border-radius:20px;background:#fff;display:grid;place-items:center;text-align:center;padding:15px;box-shadow:0 5px 20px #10284c10}
-.courses{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:25px}
-.course{background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 5px 20px #10284c10}
-.course-head{height:110px;background:#dcecff;display:grid;place-items:center;font-size:50px}
-.course-body{text-align:center;padding:20px}
-.course-body h3{margin-bottom:15px}
-.course-body button{border:0;border-radius:20px;padding:10px 25px;background:#287be8;color:#fff;cursor:pointer}
-#status{position:fixed;bottom:20px;left:20px;background:#10284c;color:#fff;padding:12px 18px;border-radius:12px;display:none}
+#desktopGate{display:none;position:fixed;inset:0;background:#f5f7fa;z-index:999999;align-items:center;justify-content:center;padding:20px}
+#desktopGate .gate-box{width:100%;max-width:500px;background:#fff;border-radius:25px;padding:35px;text-align:center;box-shadow:0 15px 50px rgba(0,0,0,.12)}
+#desktopGate .gate-icon{font-size:65px;margin-bottom:20px}
+#desktopGate h1{font-size:27px;color:#10284c;margin-bottom:15px}
+#desktopGate p{font-size:17px;line-height:1.9;color:#65748b;margin-bottom:20px}
+#desktopGate .steps{background:#f3f6fa;border-radius:17px;padding:18px;text-align:right;line-height:2;font-size:15px;color:#243957}
+#desktopGate .reload{margin-top:20px;border:0;background:#10284c;color:#fff;padding:12px 25px;border-radius:12px;font-size:16px;cursor:pointer}
 </style>
 </head>
 <body>
-<section id="desktopGate">
-<div class="gate">
+<div id="desktopGate">
+<div class="gate-box">
 <div class="gate-icon">🖥️</div>
-<h1>يتطلب وضع سطح المكتب</h1>
-<p>هذه المنصة تحتاج إلى فتحها مرة واحدة بوضع سطح المكتب لاعتماد هذا الجهاز.</p>
+<h1>يجب تفعيل وضع سطح المكتب</h1>
+<p>هذه المنصة تعمل بوضع سطح المكتب. فعّل وضع سطح المكتب مرة واحدة ثم أعد تحميل الصفحة.</p>
 <div class="steps">
 <b>في Google Chrome:</b><br>
-1. اضغط على ⋮<br>
-2. فعّل <b>موقع سطح المكتب</b><br>
-3. أعد تحميل الصفحة
+1. اضغط على ⋮ أعلى المتصفح.<br>
+2. فعّل <b>موقع سطح المكتب</b>.<br>
+3. اضغط على زر إعادة التحميل.
+</div>
+<button class="reload" onclick="location.reload()">إعادة تحميل الصفحة</button>
 </div>
 </div>
-</section>
-<section id="app">
-<div class="app">
-<aside class="sidebar">
-<div class="logo">🎓 منصة التعلم</div>
-<nav class="nav">
-<button class="active">⌂ الرئيسية</button>
-<button>📚 مقرراتي</button>
-<button>📖 المكتبة</button>
-<button>▣ المواد الدراسية</button>
-<button>👤 الملف الشخصي</button>
-<button>⚙ الإعدادات</button>
-</nav>
-</aside>
-<main class="content">
-<header class="topbar">
-<div>👨🏻‍🎓 هيما</div>
-<div>🔔</div>
-</header>
-<section class="hero">
-<div>
-<h1>مرحباً بك يا هيما</h1>
-<p>رحلتك التعليمية تبدأ من هنا</p>
+<div id="app">
+<!-- محتوى موقعك الحالي يوضع هنا -->
 </div>
-</section>
-<section class="quick">
-<div class="quick-card">📖<b>مقرراتي الدراسية</b></div>
-<div class="quick-card">📚<b>المكتبة</b></div>
-<div class="quick-card">▶<b>المواد الدراسية</b></div>
-<div class="quick-card">☷<b>الاختبارات</b></div>
-</section>
-<h2 style="margin-top:35px">مقرراتي الدراسية</h2>
-<section class="courses">
-<div class="course"><div class="course-head">📐</div><div class="course-body"><h3>الرياضيات</h3><button>دخول المقرر</button></div></div>
-<div class="course"><div class="course-head">⚛️</div><div class="course-body"><h3>الفيزياء</h3><button>دخول المقرر</button></div></div>
-<div class="course"><div class="course-head">⚗️</div><div class="course-body"><h3>الكيمياء</h3><button>دخول المقرر</button></div></div>
-</section>
-</main>
-</div>
-</section>
-<div id="status"></div>
 <script>
-const APPROVAL_KEY="desktop_approved_v1";
-const gate=document.getElementById("desktopGate");
-const app=document.getElementById("app");
+(function(){
+const APPROVAL_KEY='desktop_approved_v1';
+const gate=document.getElementById('desktopGate');
+const app=document.getElementById('app');
 function isDesktop(){
 const ua=navigator.userAgent.toLowerCase();
 const mobile=/android|iphone|ipad|ipod|mobile|tablet/i.test(ua);
 const desktop=/windows nt|macintosh|linux x86_64|cros/i.test(ua);
 const width=window.innerWidth;
-return !mobile||desktop||(width>=900&&navigator.maxTouchPoints===0);
+const touch=navigator.maxTouchPoints||0;
+return !mobile||desktop||(width>=900&&touch===0);
 }
-function approved(){
-return localStorage.getItem(APPROVAL_KEY)==="1";
-}
-function openApp(){
-gate.style.display="none";
-app.style.display="block";
-}
-function openGate(){
-gate.style.display="flex";
-app.style.display="none";
-}
-function initialize(){
-if(approved()){
-openApp();
+function checkDesktop(){
+if(localStorage.getItem(APPROVAL_KEY)==='1'){
+app.style.display='';
+gate.style.display='none';
 return;
 }
 if(isDesktop()){
-localStorage.setItem(APPROVAL_KEY,"1");
-openApp();
+localStorage.setItem(APPROVAL_KEY,'1');
+app.style.display='';
+gate.style.display='none';
 }else{
-openGate();
+app.style.display='none';
+gate.style.display='flex';
 }
 }
-if("serviceWorker"in navigator){
-window.addEventListener("load",()=>{
-navigator.serviceWorker.register("./sw.js").catch(()=>{});
+checkDesktop();
+if('serviceWorker'in navigator){
+window.addEventListener('load',function(){
+navigator.serviceWorker.register('/my-website/sw.js',{scope:'/my-website/'}).catch(function(){});
 });
 }
-initialize();
+})();
 </script>
+<script src="/my-website/js/main.js"></script>
 </body>
 </html>
