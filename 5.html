@@ -5,20 +5,27 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <script src="auth.js"></script>
 <title>الأجتماع</title>
-<style>*{box-sizing:border-box;margin:0;padding:0;font-family:Tahoma,Arial,sans-serif}html,body{min-height:100vh;background:#080b18;color:#fff}body{overflow-x:hidden}.container{width:100%;max-width:600px;margin:auto;padding:17px}.card{position:relative;overflow:hidden;background:linear-gradient(145deg,#171d34,#101528);border:1px solid #ffffff0d;border-radius:23px;padding:20px;box-shadow:0 12px 30px #00000030}h1,h2{margin:0 0 18px;text-align:center;color:#fff}input{width:100%;padding:14px;border:1px solid #ffffff18;border-radius:16px;background:#11172a;color:#fff;font-size:16px;outline:none;margin-bottom:10px}input:focus{border-color:#6c52ff80;box-shadow:0 0 0 3px #6c52ff18}button{width:100%;padding:14px;border:0;border-radius:17px;background:linear-gradient(135deg,#6745ff,#a05cff);color:#fff;font-size:16px;font-weight:bold;cursor:pointer;box-shadow:0 10px 25px #00000030}button:active{transform:scale(.97)}button:disabled{opacity:.5;cursor:not-allowed}.item{position:relative;overflow:hidden;padding:17px;border:1px solid #ffffff0d;border-radius:20px;margin-bottom:10px;cursor:pointer;background:linear-gradient(145deg,#171d34,#101528);box-shadow:0 10px 25px #00000025}.item:hover{background:linear-gradient(145deg,#1b2240,#131a31);border-color:#6c52ff40}.item strong{display:block;margin-bottom:7px;color:#fff}.item span{color:#788199;font-size:14px}.hidden{display:none}.message{text-align:center;padding:15px;color:#788199}.error{color:#ff718b;text-align:center;padding:10px}.back{background:linear-gradient(135deg,#475569,#64748b);margin-bottom:15px}@media(min-width:700px){.container{max-width:750px;padding:30px}.card{padding:27px;border-radius:27px}h1{font-size:32px}h2{font-size:25px}input{padding:16px;font-size:17px}button{padding:16px;font-size:17px}.item{padding:20px;border-radius:22px}}@media(min-width:1100px){.container{max-width:900px;padding:35px}.card{padding:32px}}</style>
+<style>*{box-sizing:border-box;margin:0;padding:0;font-family:Tahoma,Arial,sans-serif}html,body{min-height:100vh;background:#080b18;color:#fff}body{overflow-x:hidden}.container{width:100%;max-width:600px;margin:auto;padding:17px}.card{position:relative;overflow:hidden;background:linear-gradient(145deg,#171d34,#101528);border:1px solid #ffffff0d;border-radius:23px;padding:20px;box-shadow:0 12px 30px #00000030}h1,h2{margin:0 0 18px;text-align:center;color:#fff}input{width:100%;padding:14px;border:1px solid #ffffff18;border-radius:16px;background:#11172a;color:#fff;font-size:16px;outline:none;margin-bottom:10px}input:focus{border-color:#6c52ff80;box-shadow:0 0 0 3px #6c52ff18}button{width:100%;padding:14px;border:0;border-radius:17px;background:linear-gradient(135deg,#6745ff,#a05cff);color:#fff;font-size:16px;font-weight:bold;cursor:pointer;box-shadow:0 10px 25px #00000030}button:active{transform:scale(.97)}button:disabled{opacity:.5;cursor:not-allowed}.actions{display:flex;gap:8px;margin-bottom:10px}.actions button{flex:1}.refresh{background:linear-gradient(135deg,#1d2948,#26365d);border:1px solid #ffffff20}.refresh:active{background:linear-gradient(135deg,#142038,#1d2b4a)}.item{position:relative;overflow:hidden;padding:17px;border:1px solid #ffffff0d;border-radius:20px;margin-bottom:10px;cursor:pointer;background:linear-gradient(145deg,#171d34,#101528);box-shadow:0 10px 25px #00000025}.item:hover{background:linear-gradient(145deg,#1b2240,#131a31);border-color:#6c52ff40}.item strong{display:block;margin-bottom:7px;color:#fff}.item span{color:#788199;font-size:14px}.hidden{display:none}.message{text-align:center;padding:15px;color:#788199}.error{color:#ff718b;text-align:center;padding:10px}.success{color:#20d6a1;text-align:center;padding:10px}.back{background:linear-gradient(135deg,#475569,#64748b);margin-bottom:15px}@media(min-width:700px){.container{max-width:750px;padding:30px}.card{padding:27px;border-radius:27px}h1{font-size:32px}h2{font-size:25px}input{padding:16px;font-size:17px}button{padding:16px;font-size:17px}.item{padding:20px;border-radius:22px}}@media(min-width:1100px){.container{max-width:900px;padding:35px}.card{padding:32px}}</style>
 </head>
 <body>
 <div id="loginScreen" class="container">
 <div class="card">
 <h1>دخول الطالب</h1>
 <input id="code" type="text" inputmode="numeric" placeholder="أدخل كود الطالب">
+<div class="actions">
 <button id="loginBtn" type="button">إرسال</button>
+<button id="refreshBtn" class="refresh" type="button">🔄 تحديث البيانات</button>
+</div>
 <div id="loginMessage"></div>
 </div>
 </div>
 <div id="subscriptionsScreen" class="container hidden">
 <div class="card">
 <h2>الاشتراكات</h2>
+<div class="actions">
+<button id="refreshSubscriptionsBtn" class="refresh" type="button">🔄 تحديث البيانات</button>
+</div>
+<div id="refreshStatus"></div>
 <div id="subscriptions"></div>
 </div>
 </div>
@@ -26,6 +33,10 @@
 <div class="card">
 <button class="back" id="backSubscriptions" type="button">العودة للاشتراكات</button>
 <h2 id="meetingsTitle">الميتنجات</h2>
+<div class="actions">
+<button id="refreshMeetingsBtn" class="refresh" type="button">🔄 تحديث البيانات</button>
+</div>
+<div id="meetingsStatus"></div>
 <div id="meetings"></div>
 </div>
 </div>
@@ -36,13 +47,22 @@ const subscriptionsScreen=document.getElementById('subscriptionsScreen');
 const meetingsScreen=document.getElementById('meetingsScreen');
 const codeInput=document.getElementById('code');
 const loginBtn=document.getElementById('loginBtn');
+const refreshBtn=document.getElementById('refreshBtn');
+const refreshSubscriptionsBtn=document.getElementById('refreshSubscriptionsBtn');
+const refreshMeetingsBtn=document.getElementById('refreshMeetingsBtn');
 const loginMessage=document.getElementById('loginMessage');
+const refreshStatus=document.getElementById('refreshStatus');
+const meetingsStatus=document.getElementById('meetingsStatus');
 const subscriptions=document.getElementById('subscriptions');
 const meetings=document.getElementById('meetings');
 const meetingsTitle=document.getElementById('meetingsTitle');
 const backSubscriptions=document.getElementById('backSubscriptions');
 let currentStudentCode='';
+let currentSubscription=null;
 loginBtn.addEventListener('click',loadSubscriptions);
+refreshBtn.addEventListener('click',refreshSubscriptions);
+refreshSubscriptionsBtn.addEventListener('click',refreshSubscriptions);
+refreshMeetingsBtn.addEventListener('click',refreshMeetings);
 codeInput.addEventListener('keydown',e=>{
 if(e.key==='Enter')loadSubscriptions();
 });
@@ -52,25 +72,75 @@ if(!code){
 loginMessage.innerHTML='<div class="error">أدخل كود الطالب</div>';
 return;
 }
+currentStudentCode=code;
+const cached=getSubscriptionsCache(code);
+if(cached){
+renderSubscriptions(cached);
+loginScreen.classList.add('hidden');
+subscriptionsScreen.classList.remove('hidden');
+}
 loginBtn.disabled=true;
 loginBtn.textContent='جاري التحميل...';
 loginMessage.innerHTML='<div class="message">جاري التحقق...</div>';
 try{
-const response=await fetch(API+'?action=subscriptions&code='+encodeURIComponent(code));
+const response=await fetch(API+'?action=subscriptions&code='+encodeURIComponent(code)+'&_cache='+Date.now(),{cache:'no-store'});
 if(!response.ok)throw new Error('فشل الاتصال بالخادم');
 const data=await response.json();
 if(data.error)throw new Error(data.error);
-if(!data.subscriptions||!data.subscriptions.length)throw new Error('لا توجد اشتراكات للطالب');
-currentStudentCode=code;
-localStorage.setItem('studentCode',code);
+if(!data.subscriptions||!data.subscriptions.length){
+if(!cached)throw new Error('لا توجد اشتراكات للطالب');
+return;
+}
+saveSubscriptionsCache(code,data.subscriptions);
 renderSubscriptions(data.subscriptions);
 loginScreen.classList.add('hidden');
 subscriptionsScreen.classList.remove('hidden');
 }catch(e){
-loginMessage.innerHTML='<div class="error">'+escapeHtml(e.message)+'</div>';
+if(!cached)loginMessage.innerHTML='<div class="error">'+escapeHtml(e.message)+'</div>';
 }finally{
 loginBtn.disabled=false;
 loginBtn.textContent='إرسال';
+}
+}
+async function refreshSubscriptions(){
+const code=currentStudentCode||codeInput.value.trim();
+if(!code){
+loginMessage.innerHTML='<div class="error">أدخل كود الطالب</div>';
+return;
+}
+currentStudentCode=code;
+const cached=getSubscriptionsCache(code);
+if(cached){
+renderSubscriptions(cached);
+loginScreen.classList.add('hidden');
+subscriptionsScreen.classList.remove('hidden');
+}
+refreshBtn.disabled=true;
+refreshSubscriptionsBtn.disabled=true;
+refreshBtn.textContent='جاري التحديث...';
+refreshSubscriptionsBtn.textContent='جاري التحديث...';
+refreshStatus.innerHTML='<div class="success">جاري تحديث البيانات...</div>';
+try{
+const response=await fetch(API+'?action=subscriptions&code='+encodeURIComponent(code)+'&_refresh='+Date.now(),{cache:'no-store'});
+if(!response.ok)throw new Error('فشل الاتصال بالخادم');
+const data=await response.json();
+if(data.error)throw new Error(data.error);
+if(!data.subscriptions||!data.subscriptions.length){
+refreshStatus.innerHTML='<div class="error">لا توجد بيانات جديدة، تم الاحتفاظ بالبيانات القديمة.</div>';
+return;
+}
+saveSubscriptionsCache(code,data.subscriptions);
+renderSubscriptions(data.subscriptions);
+loginScreen.classList.add('hidden');
+subscriptionsScreen.classList.remove('hidden');
+refreshStatus.innerHTML='<div class="success">تم تحديث البيانات بنجاح.</div>';
+}catch(e){
+refreshStatus.innerHTML='<div class="error">تعذر التحديث، تم الاحتفاظ بالبيانات القديمة.</div>';
+}finally{
+refreshBtn.disabled=false;
+refreshSubscriptionsBtn.disabled=false;
+refreshBtn.textContent='🔄 تحديث البيانات';
+refreshSubscriptionsBtn.textContent='🔄 تحديث البيانات';
 }
 }
 function renderSubscriptions(list){
@@ -84,19 +154,92 @@ subscriptions.appendChild(div);
 });
 }
 async function loadMeetings(item){
+currentSubscription=item;
 subscriptionsScreen.classList.add('hidden');
 meetingsScreen.classList.remove('hidden');
+const cached=getMeetingsCache(currentStudentCode,item);
+if(cached){
+renderMeetings(cached);
+}else{
 meetings.innerHTML='<div class="message">جاري تحميل الميتنجات...</div>';
+}
 meetingsTitle.textContent=item.teacher+' - '+item.subject;
+refreshMeetingsBtn.disabled=true;
+refreshMeetingsBtn.textContent='جاري التحميل...';
 try{
-const url=API+'?action=meetings&code='+encodeURIComponent(currentStudentCode)+'&subscription='+encodeURIComponent(item.subscription)+'&column='+encodeURIComponent(item.column)+'&teacher='+encodeURIComponent(item.teacher)+'&subject='+encodeURIComponent(item.subject);
-const response=await fetch(url);
+const url=API+'?action=meetings&code='+encodeURIComponent(currentStudentCode)+'&subscription='+encodeURIComponent(item.subscription)+'&column='+encodeURIComponent(item.column)+'&teacher='+encodeURIComponent(item.teacher)+'&subject='+encodeURIComponent(item.subject)+'&_cache='+Date.now();
+const response=await fetch(url,{cache:'no-store'});
 if(!response.ok)throw new Error('فشل الاتصال بالخادم');
 const data=await response.json();
 if(data.error)throw new Error(data.error);
+saveMeetingsCache(currentStudentCode,item,data.meetings||[]);
 renderMeetings(data.meetings||[]);
 }catch(e){
-meetings.innerHTML='<div class="error">'+escapeHtml(e.message)+'</div>';
+if(!cached)meetings.innerHTML='<div class="error">'+escapeHtml(e.message)+'</div>';
+}finally{
+refreshMeetingsBtn.disabled=false;
+refreshMeetingsBtn.textContent='🔄 تحديث البيانات';
+}
+}
+async function refreshMeetings(){
+if(!currentStudentCode||!currentSubscription){
+return;
+}
+const item=currentSubscription;
+const cached=getMeetingsCache(currentStudentCode,item);
+if(cached)renderMeetings(cached);
+refreshMeetingsBtn.disabled=true;
+refreshMeetingsBtn.textContent='جاري التحديث...';
+refreshMeetingsBtn.style.filter='brightness(.8)';
+meetingsStatus.innerHTML='<div class="success">جاري تحديث البيانات...</div>';
+try{
+const url=API+'?action=meetings&code='+encodeURIComponent(currentStudentCode)+'&subscription='+encodeURIComponent(item.subscription)+'&column='+encodeURIComponent(item.column)+'&teacher='+encodeURIComponent(item.teacher)+'&subject='+encodeURIComponent(item.subject)+'&_refresh='+Date.now();
+const response=await fetch(url,{cache:'no-store'});
+if(!response.ok)throw new Error('فشل الاتصال بالخادم');
+const data=await response.json();
+if(data.error)throw new Error(data.error);
+saveMeetingsCache(currentStudentCode,item,data.meetings||[]);
+renderMeetings(data.meetings||[]);
+meetingsStatus.innerHTML='<div class="success">تم تحديث البيانات بنجاح.</div>';
+}catch(e){
+meetingsStatus.innerHTML='<div class="error">تعذر التحديث، تم الاحتفاظ بالبيانات القديمة.</div>';
+}finally{
+refreshMeetingsBtn.disabled=false;
+refreshMeetingsBtn.textContent='🔄 تحديث البيانات';
+refreshMeetingsBtn.style.filter='';
+}
+}
+function saveSubscriptionsCache(code,list){
+try{
+localStorage.setItem('meetings_subscriptions_'+code,JSON.stringify({data:list,savedAt:Date.now()}));
+}catch(e){}
+}
+function getSubscriptionsCache(code){
+try{
+const cached=localStorage.getItem('meetings_subscriptions_'+code);
+if(!cached)return null;
+const parsed=JSON.parse(cached);
+return parsed.data||null;
+}catch(e){
+return null;
+}
+}
+function getMeetingsKey(code,item){
+return 'meetings_data_'+code+'_'+String(item.subscription)+'_'+String(item.column);
+}
+function saveMeetingsCache(code,item,list){
+try{
+localStorage.setItem(getMeetingsKey(code,item),JSON.stringify({data:list,savedAt:Date.now()}));
+}catch(e){}
+}
+function getMeetingsCache(code,item){
+try{
+const cached=localStorage.getItem(getMeetingsKey(code,item));
+if(!cached)return null;
+const parsed=JSON.parse(cached);
+return parsed.data||null;
+}catch(e){
+return null;
 }
 }
 function renderMeetings(list){
