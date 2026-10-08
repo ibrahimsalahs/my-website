@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>المواعيد</title>
-<style>*{box-sizing:border-box;margin:0;padding:0;font-family:Tahoma,Arial,sans-serif}
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Tahoma,Arial,sans-serif}
 html,body{min-height:100vh;background:#080b18;color:#fff}
 body{overflow-x:hidden}
 .container{width:100%;max-width:none;margin:auto;padding:10px}
@@ -13,12 +14,17 @@ body{overflow-x:hidden}
 h1,h2{text-align:center;margin:0 0 10px;color:#fff;font-size:16px}
 input{width:100%;padding:9px;border:1px solid #ffffff18;border-radius:10px;background:#11172a;color:#fff;font-size:12px;margin-bottom:7px;outline:none}
 input:focus{border-color:#6c52ff80;box-shadow:0 0 0 2px #6c52ff18}
-button{width:100%;padding:9px;border:0;border-radius:11px;background:linear-gradient(135deg,#6745ff,#a05cff);color:#fff;font-size:12px;font-weight:bold;cursor:pointer;box-shadow:0 6px 15px #00000030}
-button:active{transform:scale(.98)}
+button{width:100%;padding:9px;border:0;border-radius:11px;background:linear-gradient(135deg,#6745ff,#a05cff);color:#fff;font-size:12px;font-weight:bold;cursor:pointer;box-shadow:0 6px 15px #00000030;transition:.2s}
+button:active{transform:scale(.98);filter:brightness(.9)}
 button:disabled{opacity:.6;cursor:not-allowed}
 .message{text-align:center;padding:9px;color:#788199;font-size:11px}
 .error{color:#ff718b;text-align:center;padding:7px;font-size:11px}
+.success{color:#20d6a1;text-align:center;padding:7px;font-size:11px}
 .hidden{display:none}
+.actions{display:flex;gap:7px;margin-bottom:10px}
+.actions button{flex:1}
+.refresh{background:linear-gradient(135deg,#1d2948,#26365d);border:1px solid #ffffff20}
+.refresh:active{background:linear-gradient(135deg,#142038,#1d2b4a)}
 .tableWrap{width:100%;overflow-x:auto;border-radius:12px}
 table{width:100%;min-width:0;border-collapse:separate;border-spacing:0;text-align:center;overflow:hidden;border-radius:12px;background:#11172a;font-size:9px;table-layout:fixed}
 th,td{border:1px solid #ffffff0d;padding:6px 3px;vertical-align:middle;word-break:break-word}
@@ -45,7 +51,8 @@ h2{font-size:16px}
 th,td{padding:7px 4px}
 table{font-size:9px}
 .dayItem{font-size:8px}
-      }</style>
+}
+</style>
 </head>
 <body>
 
@@ -53,7 +60,10 @@ table{font-size:9px}
 <div class="card login">
 <h1>دخول الطالب</h1>
 <input id="code" type="text" inputmode="numeric" placeholder="أدخل كود الطالب">
+<div class="actions">
 <button id="loginBtn">إرسال</button>
+<button id="refreshBtn" class="refresh">🔄 تحديث البيانات</button>
+</div>
 <div id="message"></div>
 </div>
 </div>
@@ -61,6 +71,10 @@ table{font-size:9px}
 <div id="scheduleScreen" class="container hidden">
 <div class="card">
 <h2>جدول المواعيد</h2>
+<div class="actions">
+<button id="refreshScheduleBtn" class="refresh">🔄 تحديث البيانات</button>
+</div>
+<div id="refreshStatus"></div>
 <div id="content"></div>
 </div>
 </div>
@@ -72,10 +86,16 @@ const loginScreen=document.getElementById("loginScreen");
 const scheduleScreen=document.getElementById("scheduleScreen");
 const codeInput=document.getElementById("code");
 const loginBtn=document.getElementById("loginBtn");
+const refreshBtn=document.getElementById("refreshBtn");
+const refreshScheduleBtn=document.getElementById("refreshScheduleBtn");
 const message=document.getElementById("message");
+const refreshStatus=document.getElementById("refreshStatus");
 const content=document.getElementById("content");
+let currentCode="";
 
 loginBtn.addEventListener("click",loadSchedule);
+refreshBtn.addEventListener("click",refreshSchedule);
+refreshScheduleBtn.addEventListener("click",refreshSchedule);
 codeInput.addEventListener("keydown",e=>{
 if(e.key==="Enter")loadSchedule();
 });
@@ -86,21 +106,98 @@ if(!code){
 message.innerHTML='<div class="error">أدخل كود الطالب</div>';
 return;
 }
+currentCode=code;
+const cached=getScheduleCache(code);
+if(cached){
+renderSchedule(cached);
+loginScreen.classList.add("hidden");
+scheduleScreen.classList.remove("hidden");
+}
 loginBtn.disabled=true;
+loginBtn.textContent="جاري التحميل...";
 message.innerHTML='<div class="message">جاري تحميل المواعيد...</div>';
 try{
-const response=await fetch(API+"?code="+encodeURIComponent(code));
+const response=await fetch(API+"?code="+encodeURIComponent(code)+"&_cache="+Date.now(),{cache:"no-store"});
 if(!response.ok)throw new Error("فشل الاتصال بالخادم");
 const data=await response.json();
 if(data.error)throw new Error(data.error);
-if(!data.rows||!data.rows.length)throw new Error("لا توجد مواعيد للطالب");
+if(!data.rows||!data.rows.length){
+if(!cached)throw new Error("لا توجد مواعيد للطالب");
+return;
+}
+saveScheduleCache(code,data);
 renderSchedule(data);
 loginScreen.classList.add("hidden");
 scheduleScreen.classList.remove("hidden");
 }catch(e){
+if(!cached){
 message.innerHTML='<div class="error">'+escapeHtml(e.message)+'</div>';
+}
 }finally{
 loginBtn.disabled=false;
+loginBtn.textContent="إرسال";
+}
+}
+
+async function refreshSchedule(){
+const code=currentCode||codeInput.value.trim();
+if(!code){
+message.innerHTML='<div class="error">أدخل كود الطالب</div>';
+return;
+}
+currentCode=code;
+const cached=getScheduleCache(code);
+if(cached){
+renderSchedule(cached);
+loginScreen.classList.add("hidden");
+scheduleScreen.classList.remove("hidden");
+}
+refreshBtn.disabled=true;
+refreshScheduleBtn.disabled=true;
+refreshBtn.textContent="جاري التحديث...";
+refreshScheduleBtn.textContent="جاري التحديث...";
+refreshStatus.innerHTML='<div class="success">جاري تحديث البيانات...</div>';
+try{
+const response=await fetch(API+"?code="+encodeURIComponent(code)+"&_refresh="+Date.now(),{cache:"no-store"});
+if(!response.ok)throw new Error("فشل الاتصال بالخادم");
+const data=await response.json();
+if(data.error)throw new Error(data.error);
+if(!data.rows||!data.rows.length){
+refreshStatus.innerHTML='<div class="error">لا توجد بيانات جديدة، تم الاحتفاظ بالبيانات القديمة.</div>';
+return;
+}
+saveScheduleCache(code,data);
+renderSchedule(data);
+loginScreen.classList.add("hidden");
+scheduleScreen.classList.remove("hidden");
+refreshStatus.innerHTML='<div class="success">تم تحديث البيانات بنجاح.</div>';
+}catch(e){
+refreshStatus.innerHTML='<div class="error">تعذر التحديث، تم الاحتفاظ بالبيانات القديمة.</div>';
+}finally{
+refreshBtn.disabled=false;
+refreshScheduleBtn.disabled=false;
+refreshBtn.textContent="🔄 تحديث البيانات";
+refreshScheduleBtn.textContent="🔄 تحديث البيانات";
+}
+}
+
+function saveScheduleCache(code,data){
+try{
+localStorage.setItem("schedule_"+code,JSON.stringify({
+data:data,
+savedAt:Date.now()
+}));
+}catch(e){}
+}
+
+function getScheduleCache(code){
+try{
+const cached=localStorage.getItem("schedule_"+code);
+if(!cached)return null;
+const parsed=JSON.parse(cached);
+return parsed.data||null;
+}catch(e){
+return null;
 }
 }
 
@@ -148,6 +245,6 @@ return String(value).replace(/[&<>"']/g,char=>({
 }[char]));
 }
 </script>
-  <script src="auth.js"></script>
+<script src="auth.js"></script>
 </body>
 </html>
