@@ -17,6 +17,10 @@ input:focus{border-color:#6c52ff80;box-shadow:0 0 0 3px #6c52ff18}
 button{width:100%;padding:14px;border:0;border-radius:17px;background:linear-gradient(135deg,#6745ff,#a05cff);color:#fff;font-size:16px;font-weight:bold;cursor:pointer;box-shadow:0 10px 25px #00000030;transition:.2s}
 button:active{transform:scale(.97)}
 button:disabled{opacity:.6;cursor:not-allowed}
+.actions{display:flex;gap:8px;margin-bottom:10px}
+.actions button{flex:1}
+.refresh{background:linear-gradient(135deg,#1d2948,#26365d);border:1px solid #ffffff20}
+.refresh:active{background:linear-gradient(135deg,#142038,#1d2b4a)}
 .item{position:relative;overflow:hidden;padding:17px;border:1px solid #ffffff0d;border-radius:20px;margin-bottom:10px;cursor:pointer;background:linear-gradient(145deg,#171d34,#101528);box-shadow:0 10px 25px #00000025;transition:.2s}
 .item:hover{background:linear-gradient(145deg,#1b2240,#131a31);border-color:#6c52ff40}
 .item strong{display:block;color:#fff;margin-bottom:5px}
@@ -24,7 +28,8 @@ button:disabled{opacity:.6;cursor:not-allowed}
 .hidden{display:none}
 .message{text-align:center;padding:15px;color:#788199}
 .error{color:#ff718b;text-align:center;padding:10px}
-.back{background:linear-gradient(135deg,#475569,#64748b);margin-bottom:15px}
+.success{color:#20d6a1;text-align:center;padding:10px}
+.back{background:linear-gradient(135deg,#475569);margin-bottom:15px}
 @media(min-width:700px){
 .container{max-width:750px;padding:30px}
 .card{padding:27px;border-radius:27px}
@@ -45,13 +50,20 @@ button{padding:16px;font-size:17px}
 <div class="card">
 <h1>دخول الطالب</h1>
 <input id="code" type="text" inputmode="numeric" placeholder="أدخل كود الطالب">
+<div class="actions">
 <button type="button" id="loginBtn">إرسال</button>
+<button type="button" id="refreshBtn" class="refresh">🔄 تحديث البيانات</button>
+</div>
 <div id="loginMessage"></div>
 </div>
 </div>
 <div id="subscriptionsScreen" class="container hidden">
 <div class="card">
 <h2>الاشتراكات</h2>
+<div class="actions">
+<button type="button" id="refreshSubscriptionsBtn" class="refresh">🔄 تحديث البيانات</button>
+</div>
+<div id="refreshStatus"></div>
 <div id="subscriptions"></div>
 </div>
 </div>
@@ -59,6 +71,10 @@ button{padding:16px;font-size:17px}
 <div class="card">
 <button type="button" class="back" id="backSubscriptions">العودة للاشتراكات</button>
 <h2 id="videosTitle">الفيديوهات</h2>
+<div class="actions">
+<button type="button" id="refreshVideosBtn" class="refresh">🔄 تحديث البيانات</button>
+</div>
+<div id="videosStatus"></div>
 <div id="videos"></div>
 </div>
 </div>
@@ -69,13 +85,22 @@ const subscriptionsScreen=document.getElementById('subscriptionsScreen');
 const videosScreen=document.getElementById('videosScreen');
 const codeInput=document.getElementById('code');
 const loginBtn=document.getElementById('loginBtn');
+const refreshBtn=document.getElementById('refreshBtn');
+const refreshSubscriptionsBtn=document.getElementById('refreshSubscriptionsBtn');
+const refreshVideosBtn=document.getElementById('refreshVideosBtn');
 const loginMessage=document.getElementById('loginMessage');
+const refreshStatus=document.getElementById('refreshStatus');
+const videosStatus=document.getElementById('videosStatus');
 const subscriptions=document.getElementById('subscriptions');
 const videos=document.getElementById('videos');
 const videosTitle=document.getElementById('videosTitle');
 const backSubscriptions=document.getElementById('backSubscriptions');
 let currentStudentCode='';
+let currentSubscription=null;
 loginBtn.addEventListener('click',loadSubscriptions);
+refreshBtn.addEventListener('click',refreshSubscriptions);
+refreshSubscriptionsBtn.addEventListener('click',refreshSubscriptions);
+refreshVideosBtn.addEventListener('click',refreshVideos);
 codeInput.addEventListener('keydown',e=>{
 if(e.key==='Enter')loadSubscriptions();
 });
@@ -85,25 +110,75 @@ if(!code){
 loginMessage.innerHTML='<div class="error">أدخل كود الطالب</div>';
 return;
 }
+currentStudentCode=code;
+const cached=getSubscriptionsCache(code);
+if(cached){
+renderSubscriptions(cached);
+loginScreen.classList.add('hidden');
+subscriptionsScreen.classList.remove('hidden');
+}
 loginBtn.disabled=true;
 loginBtn.textContent='جاري التحميل...';
 loginMessage.innerHTML='<div class="message">جاري التحقق...</div>';
 try{
-const response=await fetch(API+'?action=subscriptions&code='+encodeURIComponent(code));
+const response=await fetch(API+'?action=subscriptions&code='+encodeURIComponent(code)+'&_cache='+Date.now(),{cache:'no-store'});
 if(!response.ok)throw new Error('فشل الاتصال بالخادم');
 const data=await response.json();
 if(data.error)throw new Error(data.error);
-if(!data.subscriptions||!data.subscriptions.length)throw new Error('لا توجد اشتراكات للطالب');
-currentStudentCode=code;
-localStorage.setItem('studentCode',code);
+if(!data.subscriptions||!data.subscriptions.length){
+if(!cached)throw new Error('لا توجد اشتراكات للطالب');
+return;
+}
+saveSubscriptionsCache(code,data.subscriptions);
 renderSubscriptions(data.subscriptions);
 loginScreen.classList.add('hidden');
 subscriptionsScreen.classList.remove('hidden');
 }catch(e){
-loginMessage.innerHTML='<div class="error">'+escapeHtml(e.message)+'</div>';
+if(!cached)loginMessage.innerHTML='<div class="error">'+escapeHtml(e.message)+'</div>';
 }finally{
 loginBtn.disabled=false;
 loginBtn.textContent='إرسال';
+}
+}
+async function refreshSubscriptions(){
+const code=codeInput.value.trim()||currentStudentCode;
+if(!code){
+loginMessage.innerHTML='<div class="error">أدخل كود الطالب</div>';
+return;
+}
+currentStudentCode=code;
+const cached=getSubscriptionsCache(code);
+if(cached){
+renderSubscriptions(cached);
+loginScreen.classList.add('hidden');
+subscriptionsScreen.classList.remove('hidden');
+}
+refreshBtn.disabled=true;
+refreshSubscriptionsBtn.disabled=true;
+refreshBtn.textContent='جاري التحديث...';
+refreshSubscriptionsBtn.textContent='جاري التحديث...';
+refreshStatus.innerHTML='<div class="success">جاري تحديث البيانات...</div>';
+try{
+const response=await fetch(API+'?action=subscriptions&code='+encodeURIComponent(code)+'&_refresh='+Date.now(),{cache:'no-store'});
+if(!response.ok)throw new Error('فشل الاتصال بالخادم');
+const data=await response.json();
+if(data.error)throw new Error(data.error);
+if(!data.subscriptions||!data.subscriptions.length){
+refreshStatus.innerHTML='<div class="error">لا توجد بيانات جديدة، تم الاحتفاظ بالبيانات القديمة.</div>';
+return;
+}
+saveSubscriptionsCache(code,data.subscriptions);
+renderSubscriptions(data.subscriptions);
+loginScreen.classList.add('hidden');
+subscriptionsScreen.classList.remove('hidden');
+refreshStatus.innerHTML='<div class="success">تم تحديث البيانات بنجاح.</div>';
+}catch(e){
+refreshStatus.innerHTML='<div class="error">تعذر التحديث، تم الاحتفاظ بالبيانات القديمة.</div>';
+}finally{
+refreshBtn.disabled=false;
+refreshSubscriptionsBtn.disabled=false;
+refreshBtn.textContent='🔄 تحديث البيانات';
+refreshSubscriptionsBtn.textContent='🔄 تحديث البيانات';
 }
 }
 function renderSubscriptions(list){
@@ -111,27 +186,98 @@ subscriptions.innerHTML='';
 list.forEach(item=>{
 const div=document.createElement('div');
 div.className='item';
-div.innerHTML='<strong>الاشتراك '+escapeHtml(item.subscription)+'</strong>';
-div.innerHTML+='<span>المعلم: '+escapeHtml(item.teacher)+'</span><br>';
-div.innerHTML+='<span>المادة: '+escapeHtml(item.subject)+'</span>';
+div.innerHTML='<strong>الاشتراك '+escapeHtml(item.subscription)+'</strong><span>المعلم: '+escapeHtml(item.teacher)+'</span><br><span>المادة: '+escapeHtml(item.subject)+'</span>';
 div.addEventListener('click',()=>loadVideos(item));
 subscriptions.appendChild(div);
 });
 }
 async function loadVideos(item){
+currentSubscription=item;
 subscriptionsScreen.classList.add('hidden');
 videosScreen.classList.remove('hidden');
-videos.innerHTML='<div class="message">جاري تحميل الفيديوهات...</div>';
 videosTitle.textContent=item.teacher+' - '+item.subject;
+const cached=getVideosCache(currentStudentCode,item);
+if(cached){
+renderVideos(cached);
+}else{
+videos.innerHTML='<div class="message">جاري تحميل الفيديوهات...</div>';
+}
+refreshVideosBtn.disabled=true;
+refreshVideosBtn.textContent='جاري التحميل...';
 try{
-const url=API+'?action=videos&code='+encodeURIComponent(currentStudentCode)+'&subscription='+encodeURIComponent(item.subscription)+'&column='+encodeURIComponent(item.column)+'&teacher='+encodeURIComponent(item.teacher)+'&subject='+encodeURIComponent(item.subject);
-const response=await fetch(url);
+const url=API+'?action=videos&code='+encodeURIComponent(currentStudentCode)+'&subscription='+encodeURIComponent(item.subscription)+'&column='+encodeURIComponent(item.column)+'&teacher='+encodeURIComponent(item.teacher)+'&subject='+encodeURIComponent(item.subject)+'&_cache='+Date.now();
+const response=await fetch(url,{cache:'no-store'});
 if(!response.ok)throw new Error('فشل الاتصال بالخادم');
 const data=await response.json();
 if(data.error)throw new Error(data.error);
+saveVideosCache(currentStudentCode,item,data.videos||[]);
 renderVideos(data.videos||[]);
 }catch(e){
-videos.innerHTML='<div class="error">'+escapeHtml(e.message)+'</div>';
+if(!cached)videos.innerHTML='<div class="error">'+escapeHtml(e.message)+'</div>';
+}finally{
+refreshVideosBtn.disabled=false;
+refreshVideosBtn.textContent='🔄 تحديث البيانات';
+}
+}
+async function refreshVideos(){
+if(!currentStudentCode||!currentSubscription)return;
+const item=currentSubscription;
+const cached=getVideosCache(currentStudentCode,item);
+if(cached)renderVideos(cached);
+refreshVideosBtn.disabled=true;
+refreshVideosBtn.textContent='جاري التحديث...';
+videosStatus.innerHTML='<div class="success">جاري تحديث البيانات...</div>';
+try{
+const url=API+'?action=videos&code='+encodeURIComponent(currentStudentCode)+'&subscription='+encodeURIComponent(item.subscription)+'&column='+encodeURIComponent(item.column)+'&teacher='+encodeURIComponent(item.teacher)+'&subject='+encodeURIComponent(item.subject)+'&_refresh='+Date.now();
+const response=await fetch(url,{cache:'no-store'});
+if(!response.ok)throw new Error('فشل الاتصال بالخادم');
+const data=await response.json();
+if(data.error)throw new Error(data.error);
+if(!data.videos||!data.videos.length){
+videosStatus.innerHTML='<div class="error">لا توجد بيانات جديدة، تم الاحتفاظ بالبيانات القديمة.</div>';
+return;
+}
+saveVideosCache(currentStudentCode,item,data.videos);
+renderVideos(data.videos);
+videosStatus.innerHTML='<div class="success">تم تحديث البيانات بنجاح.</div>';
+}catch(e){
+videosStatus.innerHTML='<div class="error">تعذر التحديث، تم الاحتفاظ بالبيانات القديمة.</div>';
+}finally{
+refreshVideosBtn.disabled=false;
+refreshVideosBtn.textContent='🔄 تحديث البيانات';
+}
+}
+function saveSubscriptionsCache(code,list){
+try{
+localStorage.setItem('videos_subscriptions_'+code,JSON.stringify({data:list,savedAt:Date.now()}));
+}catch(e){}
+}
+function getSubscriptionsCache(code){
+try{
+const cached=localStorage.getItem('videos_subscriptions_'+code);
+if(!cached)return null;
+const parsed=JSON.parse(cached);
+return parsed.data||null;
+}catch(e){
+return null;
+}
+}
+function getVideosKey(code,item){
+return 'videos_data_'+code+'_'+String(item.subscription)+'_'+String(item.column);
+}
+function saveVideosCache(code,item,list){
+try{
+localStorage.setItem(getVideosKey(code,item),JSON.stringify({data:list,savedAt:Date.now()}));
+}catch(e){}
+}
+function getVideosCache(code,item){
+try{
+const cached=localStorage.getItem(getVideosKey(code,item));
+if(!cached)return null;
+const parsed=JSON.parse(cached);
+return parsed.data||null;
+}catch(e){
+return null;
 }
 }
 function renderVideos(list){
