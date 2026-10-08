@@ -18,6 +18,8 @@ h1{margin-top:0;color:#fff}
 .refresh{background:linear-gradient(135deg,#1d2948,#26365d);border:1px solid #ffffff20}
 .refresh:active{background:linear-gradient(135deg,#142038,#1d2b4a)}
 .message{margin-top:15px;min-height:20px;color:#aeb6ce}
+.success{color:#20d6a1}
+.error{color:#ff718b}
 .student{display:none;margin-top:20px;padding:17px;background:linear-gradient(145deg,#171d34,#101528);border:1px solid #ffffff0d;border-radius:20px;text-align:right;box-shadow:0 10px 25px #00000025}
 .row{padding:10px 0;border-bottom:1px solid #ffffff09}
 .row:last-child{border-bottom:0}
@@ -59,76 +61,76 @@ const studentName=document.getElementById("studentName");
 const studentCode=document.getElementById("studentCode");
 const studentWhatsapp=document.getElementById("studentWhatsapp");
 function showMessage(text){message.textContent=text}
-function getCache(whatsapp){
-try{
-const data=localStorage.getItem("studentData_"+whatsapp);
-return data?JSON.parse(data):null;
-}catch(e){return null}
-}
-function saveCache(whatsapp,data){
-try{localStorage.setItem("studentData_"+whatsapp,JSON.stringify(data))}catch(e){}
-}
-function renderStudent(data){
-studentName.textContent=data.name||"";
-studentCode.textContent=data.code||"";
-studentWhatsapp.textContent=data.whatsapp||"";
-student.style.display="block";
-}
 async function searchStudent(){
 const whatsapp=whatsappInput.value.trim();
 if(!whatsapp){showMessage("أدخل رقم الواتساب");return}
-const cached=getCache(whatsapp);
-if(cached){
-renderStudent(cached);
-showMessage("بيانات الطالب محفوظة");
-}
 sendBtn.disabled=true;
-sendBtn.textContent="جاري البحث...";
-if(!cached)showMessage("جاري البحث...");
+showMessage("جاري البحث...");
+student.style.display="none";
 try{
-const response=await fetch(API_URL+"?whatsapp="+encodeURIComponent(whatsapp)+"&_cache="+Date.now(),{method:"GET",redirect:"follow",cache:"no-store"});
+const response=await fetch(API_URL+"?whatsapp="+encodeURIComponent(whatsapp),{method:"GET",redirect:"follow"});
 if(!response.ok)throw new Error("HTTP "+response.status);
 const data=await response.json();
 if(!data.success){
-if(!cached)showMessage(data.message||"لم يتم العثور على الطالب");
+showMessage(data.message||"لم يتم العثور على الطالب");
+sendBtn.disabled=false;
 return;
 }
-saveCache(whatsapp,data);
-renderStudent(data);
-showMessage("تم تحديث بيانات الطالب وحفظها");
+localStorage.setItem("studentName",data.name);
+localStorage.setItem("studentCode",data.code);
+localStorage.setItem("studentWhatsapp",data.whatsapp);
+studentName.textContent=data.name;
+studentCode.textContent=data.code;
+studentWhatsapp.textContent=data.whatsapp;
+student.style.display="block";
+showMessage("تم العثور على بيانات الطالب وحفظها");
 }catch(error){
 console.error(error);
-if(!cached)showMessage("حدث خطأ في الاتصال بجوجل");
-else showMessage("تعذر التحديث وتم الاحتفاظ بالبيانات القديمة");
-}finally{
-sendBtn.disabled=false;
-sendBtn.textContent="إرسال";
+showMessage("حدث خطأ في الاتصال بجوجل");
 }
+sendBtn.disabled=false;
 }
 async function refreshStudent(){
-const whatsapp=whatsappInput.value.trim();
-if(!whatsapp){showMessage("أدخل رقم الواتساب");return}
-const cached=getCache(whatsapp);
-if(cached)renderStudent(cached);
+const whatsapp=whatsappInput.value.trim()||localStorage.getItem("studentWhatsapp");
+if(!whatsapp){
+showMessage("أدخل رقم الواتساب");
+return;
+}
+const oldName=localStorage.getItem("studentName");
+const oldCode=localStorage.getItem("studentCode");
+const oldWhatsapp=localStorage.getItem("studentWhatsapp");
 refreshBtn.disabled=true;
+sendBtn.disabled=true;
 refreshBtn.textContent="جاري التحديث...";
 showMessage("جاري تحديث البيانات...");
 try{
 const response=await fetch(API_URL+"?whatsapp="+encodeURIComponent(whatsapp)+"&_refresh="+Date.now(),{method:"GET",redirect:"follow",cache:"no-store"});
 if(!response.ok)throw new Error("HTTP "+response.status);
 const data=await response.json();
-if(!data.success){
-showMessage(cached?"لا توجد بيانات جديدة، تم الاحتفاظ بالبيانات القديمة.":data.message||"لم يتم العثور على الطالب");
-return;
-}
-saveCache(whatsapp,data);
-renderStudent(data);
-showMessage("تم تحديث البيانات بنجاح");
+if(!data.success)throw new Error(data.message||"لم يتم العثور على الطالب");
+localStorage.setItem("studentName",data.name);
+localStorage.setItem("studentCode",data.code);
+localStorage.setItem("studentWhatsapp",data.whatsapp);
+whatsappInput.value=data.whatsapp;
+studentName.textContent=data.name;
+studentCode.textContent=data.code;
+studentWhatsapp.textContent=data.whatsapp;
+student.style.display="block";
+message.className="message success";
+showMessage("تم تحديث بيانات الطالب بنجاح");
 }catch(error){
-console.error(error);
-showMessage(cached?"تعذر التحديث وتم الاحتفاظ بالبيانات القديمة":"حدث خطأ في الاتصال بجوجل");
+if(oldName&&oldCode&&oldWhatsapp){
+whatsappInput.value=oldWhatsapp;
+studentName.textContent=oldName;
+studentCode.textContent=oldCode;
+studentWhatsapp.textContent=oldWhatsapp;
+student.style.display="block";
+}
+message.className="message error";
+showMessage("تعذر التحديث، تم الاحتفاظ بالبيانات القديمة");
 }finally{
 refreshBtn.disabled=false;
+sendBtn.disabled=false;
 refreshBtn.textContent="🔄 تحديث البيانات";
 }
 }
@@ -140,14 +142,10 @@ const savedCode=localStorage.getItem("studentCode");
 const savedWhatsapp=localStorage.getItem("studentWhatsapp");
 if(savedName&&savedCode&&savedWhatsapp){
 whatsappInput.value=savedWhatsapp;
-const cached=getCache(savedWhatsapp);
-if(cached)renderStudent(cached);
-else{
 studentName.textContent=savedName;
 studentCode.textContent=savedCode;
 studentWhatsapp.textContent=savedWhatsapp;
 student.style.display="block";
-}
 showMessage("بيانات الطالب محفوظة");
 }
 </script>
