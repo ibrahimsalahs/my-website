@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl"> 
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -11,9 +11,12 @@ body{min-height:100vh;background:#080b18;color:#fff;display:flex;align-items:cen
 h1{margin-top:0;color:#fff}
 .input{width:100%;padding:14px;border:1px solid #ffffff18;border-radius:16px;background:#11172a;color:#fff;font-size:16px;margin:15px 0;outline:none}
 .input:focus{border-color:#6c52ff80;box-shadow:0 0 0 3px #6c52ff18}
+.actions{display:flex;gap:8px}
 .btn{width:100%;padding:14px;border:0;border-radius:17px;background:linear-gradient(135deg,#6745ff,#a05cff);color:#fff;font-size:16px;font-weight:bold;cursor:pointer;box-shadow:0 10px 25px #00000030}
 .btn:active{transform:scale(.97)}
 .btn:disabled{opacity:.6;cursor:not-allowed}
+.refresh{background:linear-gradient(135deg,#1d2948,#26365d);border:1px solid #ffffff20}
+.refresh:active{background:linear-gradient(135deg,#142038,#1d2b4a)}
 .message{margin-top:15px;min-height:20px;color:#aeb6ce}
 .student{display:none;margin-top:20px;padding:17px;background:linear-gradient(145deg,#171d34,#101528);border:1px solid #ffffff0d;border-radius:20px;text-align:right;box-shadow:0 10px 25px #00000025}
 .row{padding:10px 0;border-bottom:1px solid #ffffff09}
@@ -26,14 +29,17 @@ h1{font-size:32px}
 .input{padding:16px;font-size:17px}
 .btn{padding:16px;font-size:17px}
 .student{padding:22px}
-     }</style>
+}</style>
 </head>
 <body>
 <div class="container">
 <div class="card">
 <h1>دخول الطالب</h1>
 <input id="whatsapp" class="input" type="tel" inputmode="numeric" placeholder="أدخل رقم الواتساب">
+<div class="actions">
 <button id="sendBtn" class="btn">إرسال</button>
+<button id="refreshBtn" class="btn refresh">🔄 تحديث البيانات</button>
+</div>
 <div id="message" class="message"></div>
 <div id="student" class="student">
 <div class="row"><span class="label">الاسم:</span> <span id="studentName"></span></div>
@@ -46,57 +52,102 @@ h1{font-size:32px}
 const API_URL="https://script.google.com/macros/s/AKfycbziqvFVwbBILy6QdeiWL-JumuVep9plkB9uL7fsdzgZb9UouHXsQm-uFEKGy0qf-_y1/exec";
 const whatsappInput=document.getElementById("whatsapp");
 const sendBtn=document.getElementById("sendBtn");
+const refreshBtn=document.getElementById("refreshBtn");
 const message=document.getElementById("message");
 const student=document.getElementById("student");
 const studentName=document.getElementById("studentName");
 const studentCode=document.getElementById("studentCode");
 const studentWhatsapp=document.getElementById("studentWhatsapp");
-
 function showMessage(text){message.textContent=text}
-
+function getCache(whatsapp){
+try{
+const data=localStorage.getItem("studentData_"+whatsapp);
+return data?JSON.parse(data):null;
+}catch(e){return null}
+}
+function saveCache(whatsapp,data){
+try{localStorage.setItem("studentData_"+whatsapp,JSON.stringify(data))}catch(e){}
+}
+function renderStudent(data){
+studentName.textContent=data.name||"";
+studentCode.textContent=data.code||"";
+studentWhatsapp.textContent=data.whatsapp||"";
+student.style.display="block";
+}
 async function searchStudent(){
 const whatsapp=whatsappInput.value.trim();
 if(!whatsapp){showMessage("أدخل رقم الواتساب");return}
+const cached=getCache(whatsapp);
+if(cached){
+renderStudent(cached);
+showMessage("بيانات الطالب محفوظة");
+}
 sendBtn.disabled=true;
-showMessage("جاري البحث...");
-student.style.display="none";
+sendBtn.textContent="جاري البحث...";
+if(!cached)showMessage("جاري البحث...");
 try{
-const response=await fetch(API_URL+"?whatsapp="+encodeURIComponent(whatsapp),{method:"GET",redirect:"follow"});
+const response=await fetch(API_URL+"?whatsapp="+encodeURIComponent(whatsapp)+"&_cache="+Date.now(),{method:"GET",redirect:"follow",cache:"no-store"});
 if(!response.ok)throw new Error("HTTP "+response.status);
 const data=await response.json();
 if(!data.success){
-showMessage(data.message||"لم يتم العثور على الطالب");
-sendBtn.disabled=false;
+if(!cached)showMessage(data.message||"لم يتم العثور على الطالب");
 return;
 }
-localStorage.setItem("studentName",data.name);
-localStorage.setItem("studentCode",data.code);
-localStorage.setItem("studentWhatsapp",data.whatsapp);
-studentName.textContent=data.name;
-studentCode.textContent=data.code;
-studentWhatsapp.textContent=data.whatsapp;
-student.style.display="block";
-showMessage("تم العثور على بيانات الطالب وحفظها");
+saveCache(whatsapp,data);
+renderStudent(data);
+showMessage("تم تحديث بيانات الطالب وحفظها");
 }catch(error){
 console.error(error);
-showMessage("حدث خطأ في الاتصال بجوجل");
-}
+if(!cached)showMessage("حدث خطأ في الاتصال بجوجل");
+else showMessage("تعذر التحديث وتم الاحتفاظ بالبيانات القديمة");
+}finally{
 sendBtn.disabled=false;
+sendBtn.textContent="إرسال";
 }
-
+}
+async function refreshStudent(){
+const whatsapp=whatsappInput.value.trim();
+if(!whatsapp){showMessage("أدخل رقم الواتساب");return}
+const cached=getCache(whatsapp);
+if(cached)renderStudent(cached);
+refreshBtn.disabled=true;
+refreshBtn.textContent="جاري التحديث...";
+showMessage("جاري تحديث البيانات...");
+try{
+const response=await fetch(API_URL+"?whatsapp="+encodeURIComponent(whatsapp)+"&_refresh="+Date.now(),{method:"GET",redirect:"follow",cache:"no-store"});
+if(!response.ok)throw new Error("HTTP "+response.status);
+const data=await response.json();
+if(!data.success){
+showMessage(cached?"لا توجد بيانات جديدة، تم الاحتفاظ بالبيانات القديمة.":data.message||"لم يتم العثور على الطالب");
+return;
+}
+saveCache(whatsapp,data);
+renderStudent(data);
+showMessage("تم تحديث البيانات بنجاح");
+}catch(error){
+console.error(error);
+showMessage(cached?"تعذر التحديث وتم الاحتفاظ بالبيانات القديمة":"حدث خطأ في الاتصال بجوجل");
+}finally{
+refreshBtn.disabled=false;
+refreshBtn.textContent="🔄 تحديث البيانات";
+}
+}
 sendBtn.addEventListener("click",searchStudent);
+refreshBtn.addEventListener("click",refreshStudent);
 whatsappInput.addEventListener("keydown",e=>{if(e.key==="Enter")searchStudent()});
-
 const savedName=localStorage.getItem("studentName");
 const savedCode=localStorage.getItem("studentCode");
 const savedWhatsapp=localStorage.getItem("studentWhatsapp");
-
 if(savedName&&savedCode&&savedWhatsapp){
 whatsappInput.value=savedWhatsapp;
+const cached=getCache(savedWhatsapp);
+if(cached)renderStudent(cached);
+else{
 studentName.textContent=savedName;
 studentCode.textContent=savedCode;
 studentWhatsapp.textContent=savedWhatsapp;
 student.style.display="block";
+}
 showMessage("بيانات الطالب محفوظة");
 }
 </script>
