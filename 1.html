@@ -5,343 +5,282 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
 <title>اختبار أكاديمية البيان</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:Tahoma,Arial,sans-serif}
-body{min-height:100vh;background:#080b18;color:#fff;overflow-x:hidden}
-.container{width:100%;max-width:760px;margin:auto;padding:17px}
-.card,.section,.loading{position:relative;overflow:hidden;background:linear-gradient(145deg,#171d34,#101528);border:1px solid #ffffff0d;border-radius:24px;padding:20px;margin-bottom:18px;box-shadow:0 12px 30px #00000030}
-.logo{font-size:28px;font-weight:800;text-align:center;margin-bottom:8px;color:#fff}
-.subtitle{text-align:center;color:#aeb6ce;line-height:1.9}
-.input{width:100%;border:1px solid #ffffff18;border-radius:16px;padding:15px;background:#11172a;color:#fff;font:inherit;font-size:17px;outline:none;margin:10px 0}
+*{box-sizing:border-box}
+body{margin:0;background:#080b18;color:#fff;font-family:Tahoma,Arial,sans-serif}
+.container{width:min(760px,94%);margin:20px auto 50px}
+.card,.section,.loading{background:linear-gradient(145deg,#171d34,#101528);border:1px solid #ffffff0d;border-radius:24px;padding:20px;margin-bottom:18px;box-shadow:0 12px 30px #00000030}
+.logo{text-align:center;font-size:28px;font-weight:800;margin-bottom:8px;color:#fff;text-shadow:0 0 14px #a05cff70}
+.subtitle{text-align:center;color:#d5daf0;line-height:1.9}
+.input{width:100%;border:1px solid #ffffff18;border-radius:16px;padding:15px;font:inherit;font-size:17px;outline:none;margin:10px 0;background:#11172a;color:#fff}
+.input::placeholder{color:#8992aa}
 .input:focus{border-color:#6c52ff80;box-shadow:0 0 0 3px #6c52ff18}
-.btn{width:100%;border:0;border-radius:17px;padding:16px;font:inherit;font-size:17px;font-weight:800;cursor:pointer;transition:.2s}
+.actions{display:flex;gap:8px;margin-top:10px}
+.btn{width:100%;border:0;border-radius:16px;padding:16px;font:inherit;font-size:17px;font-weight:800;cursor:pointer;color:#fff;box-shadow:0 10px 25px #00000030;transition:.2s}
 .btn:active{transform:scale(.97)}
-.primary{background:linear-gradient(135deg,#6745ff,#a05cff);color:#fff;box-shadow:0 10px 25px #00000030}
-.primary:hover{filter:brightness(1.08)}
-.primary:disabled{opacity:.7;cursor:not-allowed}
-.refresh-btn{background:linear-gradient(135deg,#1d2948,#26365d);color:#fff;border:1px solid #ffffff20;box-shadow:0 10px 25px #00000030}
-.refresh-btn:hover{background:linear-gradient(135deg,#26365d,#304572)}
-.refresh-btn:disabled{opacity:.7;cursor:not-allowed}
-.search-actions{display:flex;gap:10px;margin-top:10px}
-.search-actions .btn{flex:1}
-.header-info{line-height:2;font-size:16px}
-.info-item{padding:8px 0;border-bottom:1px solid #ffffff09}
+.primary{background:linear-gradient(135deg,#6745ff,#a05cff)}
+.primary:disabled,.refresh:disabled{opacity:.6;cursor:not-allowed}
+.refresh{background:linear-gradient(135deg,#1d2948,#26365d);border:1px solid #ffffff20}
+.refresh:active{background:linear-gradient(135deg,#142038,#1d2b4a)}
+.info{line-height:2;color:#fff}
+.info-item{padding:10px 0;border-bottom:1px solid #ffffff0d;color:#fff}
 .info-item:last-child{border-bottom:0}
-.label{color:#788199}
-.section-title{font-size:22px;font-weight:800;margin:2px 4px 18px}
-.question{border:1px solid #ffffff0d;border-radius:20px;padding:18px;margin:14px 0;background:linear-gradient(145deg,#11172a,#151b30)}
-.question-title{font-size:18px;font-weight:700;line-height:1.8;margin-bottom:14px}
-.option{display:flex;align-items:center;gap:10px;background:#171d34;border:1px solid #ffffff0d;border-radius:14px;padding:13px;margin:9px 0;cursor:pointer;transition:.25s}
-.option:has(input:checked){border-color:#6c52ff80;background:#6c52ff18}
-.option input{width:19px;height:19px;flex:none}
-.answer-input{width:100%;min-height:110px;resize:vertical;border:1px solid #ffffff18;border-radius:16px;padding:15px;background:#11172a;color:#fff;font:inherit;font-size:16px;outline:none}
-.answer-input:focus{border-color:#6c52ff80;box-shadow:0 0 0 3px #6c52ff18}
-.extract-passage{background:#11172a;border-right:4px solid #6c52ff;border-radius:12px;padding:15px;line-height:2;margin-bottom:16px;color:#d9deeb}
-.status{display:none;text-align:center;padding:15px;border-radius:15px;margin-top:15px;font-weight:700}
-.error{color:#ff718b;background:#ff477512;border:1px solid #ff477525}
-.success{color:#20d6a1;background:#20d6a112;border:1px solid #20d6a125}
-.loading{text-align:center;padding:35px;color:#a99cff}
-.badge{display:inline-block;background:#6c52ff18;color:#a99cff;padding:5px 10px;border-radius:30px;font-size:13px;margin-bottom:10px;border:1px solid #6c52ff25}
-.hidden{display:none!important}
-@media(max-width:520px){
-.search-actions{flex-direction:row}
-.search-actions .btn{font-size:15px;padding:15px 8px}
+.label{color:#b9adff;text-shadow:0 0 8px #6c52ff50}
+.info-item b{color:#fff;text-shadow:0 0 8px #ffffff25}
+.section-title{font-size:22px;font-weight:800;margin:2px 4px 18px;color:#fff;text-shadow:0 0 12px #a05cff50}
+.question{border:1px solid #ffffff10;border-radius:20px;padding:18px;margin:14px 0;background:linear-gradient(145deg,#171d34,#101528);box-shadow:0 8px 20px #00000020}
+.question-title{font-size:18px;font-weight:700;line-height:1.9;margin-bottom:14px;color:#fff;text-shadow:0 0 9px #ffffff22}
+.question-type{display:inline-block;background:#292052;color:#c9bdff;padding:6px 12px;border-radius:30px;font-size:13px;font-weight:700;margin-bottom:12px;border:1px solid #ffffff0d}
+.option{display:flex;align-items:center;gap:10px;background:#11172a;border:1px solid #ffffff12;border-radius:14px;padding:13px;margin:9px 0;cursor:pointer;color:#fff;transition:.2s}
+.option:hover{border-color:#6c52ff60;background:#171d34}
+.option.selected{border-color:#6c52ff;background:#211b42}
+.option input{width:19px;height:19px;flex:none;accent-color:#7955ff}
+.option span{color:#fff;text-shadow:0 0 7px #ffffff18}
+.answer{width:100%;min-height:110px;resize:vertical;border:1px solid #ffffff18;border-radius:16px;padding:15px;font:inherit;font-size:16px;outline:none;background:#11172a;color:#fff}
+.answer::placeholder{color:#8992aa}
+.answer:focus{border-color:#6c52ff80;box-shadow:0 0 0 3px #6c52ff18}
+.passage{background:#11172a;border-right:4px solid #7955ff;border-radius:12px;padding:15px;line-height:2;margin-bottom:16px;color:#fff;text-shadow:0 0 8px #ffffff18}
+.status{text-align:center;padding:15px;border-radius:15px;margin-top:15px;font-weight:700}
+.error{color:#ff9aaa;background:#351822;border:1px solid #ff718b30}
+.success{color:#5ff0c1;background:#102d27;border:1px solid #20d6a130}
+.loading{text-align:center;padding:35px;color:#fff}
+.hidden{display:none}
+.badge{display:inline-block;background:#292052;color:#c9bdff;padding:5px 10px;border-radius:30px;font-size:13px;margin-bottom:10px;border:1px solid #ffffff0d}
+@media(max-width:600px){
+.actions{gap:7px}
+.actions .btn{font-size:15px;padding:14px 8px}
 }
 @media(min-width:700px){
-.container{max-width:850px;padding:30px}
-.card,.section,.loading{padding:27px;border-radius:27px}
-.logo{font-size:34px}
-.subtitle{font-size:14px}
-.input{padding:17px}
-.btn{padding:17px}
-.question{padding:22px}
-.question-title{font-size:20px}
-}
-@media(min-width:1100px){
-.container{max-width:1000px;padding:35px}
-.card,.section,.loading{padding:32px}
+.container{width:min(820px,94%);margin-top:30px}
+.card,.section{padding:27px;border-radius:27px}
+.logo{font-size:32px}
 }
 </style>
 </head>
 <body>
 <div class="container">
-<div id="searchCard" class="card">
+<div id="searchBox" class="card">
 <div class="logo">أكاديمية البيان</div>
 <div class="subtitle">أدخل رقم الاختبار لبدء الاختبار</div>
-<input id="examNumber" class="input" type="text" inputmode="numeric" placeholder="رقم الاختبار">
-<div class="search-actions">
-<button id="loadBtn" class="btn primary" type="button">عرض الاختبار</button>
-<button id="refreshBtn" class="btn refresh-btn" type="button">🔄 تحديث البيانات</button>
+<input id="examNumber" class="input" type="text" inputmode="numeric" autocomplete="off" placeholder="رقم الاختبار">
+<div class="actions">
+<button id="searchButton" class="btn primary" type="button">عرض الاختبار</button>
+<button id="refreshButton" class="btn refresh" type="button">🔄 تحديث البيانات</button>
 </div>
-<div id="searchStatus" class="status"></div>
-<div id="refreshStatus" class="status"></div>
+<div id="searchStatus"></div>
 </div>
 <div id="loading" class="loading hidden">جاري تحميل الاختبار...</div>
-<div id="app" class="hidden">
+<div id="examPage" class="hidden">
 <div class="card">
 <div class="logo">أكاديمية البيان</div>
-<div id="examInfo" class="header-info"></div>
+<div id="examInfo" class="info"></div>
 </div>
 <div class="card">
 <div class="section-title">بيانات الطالب</div>
-<input id="studentName" class="input" type="text" placeholder="اكتب اسم الطالب">
+<input id="studentName" class="input" type="text" autocomplete="name" placeholder="اكتب اسم الطالب">
 </div>
-<form id="examForm"></form>
+<form id="questions"></form>
 <div class="card">
-<button id="submitBtn" class="btn primary" type="button">إرسال الاختبار</button>
-<div id="submitStatus" class="status"></div>
+<button id="submitButton" class="btn primary" type="button">إرسال الاختبار</button>
+<div id="submitStatus"></div>
 </div>
 </div>
 </div>
 <script>
 const API_URL='https://script.google.com/macros/s/AKfycbyM0l9EyFN5wqaa304r3aqiI3kt_mxQ57_LJXFGiCmT2aL7eaYLT6l0CnsyRH5carH2IQ/exec';
-let EXAM_DATA=null;
-let CURRENT_EXAM_NUMBER=null;
-const CACHE_PREFIX='bayaan_exam_';
-document.getElementById('loadBtn').addEventListener('click',loadExam);
-document.getElementById('refreshBtn').addEventListener('click',refreshExam);
-document.getElementById('examNumber').addEventListener('keydown',e=>{
-if(e.key==='Enter')loadExam();
-});
-document.getElementById('submitBtn').addEventListener('click',collectExam);
-async function loadExam(){
-const examNumber=document.getElementById('examNumber').value.trim();
-const status=document.getElementById('searchStatus');
-if(!examNumber){
-showStatus(status,'أدخل رقم الاختبار.','error');
-return;
-}
-document.getElementById('loadBtn').disabled=true;
-document.getElementById('loading').classList.remove('hidden');
-status.style.display='none';
-const cached=getCachedExam(examNumber);
-if(cached){
-EXAM_DATA=cached;
-CURRENT_EXAM_NUMBER=examNumber;
-renderExam(cached);
-}
+let examData=null;
+const searchButton=document.getElementById('searchButton'),refreshButton=document.getElementById('refreshButton'),examNumberInput=document.getElementById('examNumber'),submitButton=document.getElementById('submitButton');
+searchButton.addEventListener('click',getExam);
+refreshButton.addEventListener('click',refreshExam);
+examNumberInput.addEventListener('keydown',e=>{if(e.key==='Enter')getExam()});
+submitButton.addEventListener('click',collectAnswers);
+function getExamCache(number){
 try{
-const url=API_URL+'?action=getExam&examNumber='+encodeURIComponent(examNumber)+'&_cache='+Date.now();
-const response=await fetch(url,{cache:'no-store'});
+const data=localStorage.getItem('exam_data_'+number);
+if(!data)return null;
+return JSON.parse(data);
+}catch(e){return null}
+}
+function saveExamCache(number,data){
+try{localStorage.setItem('exam_data_'+number,JSON.stringify(data))}catch(e){}
+}
+async function getExam(){
+const examNumber=examNumberInput.value.trim();
+if(!examNumber){showStatus('searchStatus','أدخل رقم الاختبار.','error');return}
+const cached=getExamCache(examNumber);
+if(cached){
+examData=cached;
+displayExam(cached);
+}
+searchButton.disabled=true;
+document.getElementById('searchStatus').innerHTML='';
+document.getElementById('loading').classList.remove('hidden');
+try{
+const response=await fetch(API_URL+'?action=getExam&examNumber='+encodeURIComponent(examNumber)+'&_cache='+Date.now(),{cache:'no-store'});
+if(!response.ok)throw new Error('HTTP '+response.status);
 const data=await response.json();
 if(!data.success){
-if(!cached)showStatus(status,data.message||'رقم الاختبار غير موجود.','error');
+if(!cached)showStatus('searchStatus',data.message||'رقم الاختبار غير موجود.','error');
 return;
 }
 if(!data.exam){
-if(!cached)showStatus(status,'لم تصل بيانات الاختبار.','error');
+if(!cached)showStatus('searchStatus','لم تصل بيانات الاختبار.','error');
 return;
 }
-EXAM_DATA=data.exam;
-CURRENT_EXAM_NUMBER=examNumber;
-saveCachedExam(examNumber,data.exam);
-renderExam(data.exam);
+examData=data.exam;
+saveExamCache(examNumber,data.exam);
+displayExam(data.exam);
 }catch(error){
 console.error(error);
-if(!cached)showStatus(status,'حدث خطأ أثناء الاتصال بالخادم.','error');
+if(!cached)showStatus('searchStatus','حدث خطأ أثناء الاتصال بالخادم.','error');
 }finally{
 document.getElementById('loading').classList.add('hidden');
-document.getElementById('loadBtn').disabled=false;
+searchButton.disabled=false;
 }
 }
 async function refreshExam(){
-const examNumber=document.getElementById('examNumber').value.trim();
-const status=document.getElementById('refreshStatus');
-const button=document.getElementById('refreshBtn');
-if(!examNumber){
-showStatus(status,'أدخل رقم الاختبار أولًا.','error');
-return;
+const examNumber=examNumberInput.value.trim();
+if(!examNumber){showStatus('searchStatus','أدخل رقم الاختبار.','error');return}
+const cached=getExamCache(examNumber);
+if(cached){
+examData=cached;
+displayExam(cached);
 }
-const cached=getCachedExam(examNumber);
-if(cached&&!EXAM_DATA){
-EXAM_DATA=cached;
-CURRENT_EXAM_NUMBER=examNumber;
-renderExam(cached);
-}
-button.disabled=true;
-button.textContent='جاري التحديث...';
-showStatus(status,'جاري تحديث البيانات...','success');
+refreshButton.disabled=true;
+searchButton.disabled=true;
+refreshButton.textContent='جاري التحديث...';
+showStatus('searchStatus','جاري تحديث بيانات الاختبار...','success');
 try{
-const url=API_URL+'?action=getExam&examNumber='+encodeURIComponent(examNumber)+'&_refresh='+Date.now();
-const response=await fetch(url,{cache:'no-store'});
+const response=await fetch(API_URL+'?action=getExam&examNumber='+encodeURIComponent(examNumber)+'&_refresh='+Date.now(),{cache:'no-store'});
+if(!response.ok)throw new Error('HTTP '+response.status);
 const data=await response.json();
-if(!data.success){
-showStatus(status,data.message||'تعذر تحديث بيانات الاختبار. البيانات القديمة ما زالت متاحة.','error');
-return;
-}
-if(!data.exam){
-showStatus(status,'لم تصل بيانات جديدة. البيانات القديمة ما زالت متاحة.','error');
-return;
-}
-EXAM_DATA=data.exam;
-CURRENT_EXAM_NUMBER=examNumber;
-saveCachedExam(examNumber,data.exam);
-renderExam(data.exam);
-showStatus(status,'تم تحديث البيانات بنجاح.','success');
+if(!data.success)throw new Error(data.message||'رقم الاختبار غير موجود.');
+if(!data.exam)throw new Error('لم تصل بيانات الاختبار.');
+saveExamCache(examNumber,data.exam);
+examData=data.exam;
+displayExam(data.exam);
+showStatus('searchStatus','تم تحديث بيانات الاختبار بنجاح.','success');
 }catch(error){
 console.error(error);
-showStatus(status,'تعذر الاتصال بالخادم. البيانات القديمة ما زالت متاحة.','error');
+if(cached){
+examData=cached;
+displayExam(cached);
+showStatus('searchStatus','تعذر التحديث، تم الاحتفاظ ببيانات الاختبار القديمة.','error');
+}else{
+showStatus('searchStatus','حدث خطأ أثناء تحديث بيانات الاختبار.','error');
+}
 }finally{
-button.disabled=false;
-button.textContent='🔄 تحديث البيانات';
+refreshButton.disabled=false;
+searchButton.disabled=false;
+refreshButton.textContent='🔄 تحديث البيانات';
 }
 }
-function saveCachedExam(examNumber,exam){
-try{
-localStorage.setItem(CACHE_PREFIX+examNumber,JSON.stringify({
-exam:exam,
-savedAt:Date.now()
-}));
-}catch(error){
-console.error(error);
-}
-}
-function getCachedExam(examNumber){
-try{
-const cached=localStorage.getItem(CACHE_PREFIX+examNumber);
-if(!cached)return null;
-const data=JSON.parse(cached);
-return data.exam||null;
-}catch(error){
-console.error(error);
-return null;
-}
-}
-function renderExam(exam){
-document.getElementById('searchCard').classList.add('hidden');
-document.getElementById('app').classList.remove('hidden');
-document.getElementById('examInfo').innerHTML='<div class="badge">اختبار</div><div class="info-item"><span class="label">المعلم:</span> <b>'+escapeHtml(exam.A)+'</b></div><div class="info-item"><span class="label">المادة:</span> <b>'+escapeHtml(exam.B)+'</b></div><div class="info-item"><span class="label">رقم الاختبار:</span> <b>'+escapeHtml(exam.C)+'</b></div><div class="info-item"><span class="label">المدة:</span> <b>'+escapeHtml(exam.D)+'</b></div><div class="info-item"><span class="label">اسم الاختبار:</span> <b>'+escapeHtml(exam.E)+'</b></div>';
-const form=document.getElementById('examForm');
+function displayExam(exam){
+document.getElementById('searchBox').classList.add('hidden');
+document.getElementById('examPage').classList.remove('hidden');
+document.getElementById('examInfo').innerHTML='<div class="badge">بيانات الاختبار</div><div class="info-item"><span class="label">المعلم:</span> <b>'+safe(exam.A)+'</b></div><div class="info-item"><span class="label">المادة:</span> <b>'+safe(exam.B)+'</b></div><div class="info-item"><span class="label">رقم الاختبار:</span> <b>'+safe(exam.C)+'</b></div><div class="info-item"><span class="label">المدة:</span> <b>'+safe(exam.D)+'</b></div><div class="info-item"><span class="label">اسم الاختبار:</span> <b>'+safe(exam.E)+'</b></div>';
+const form=document.getElementById('questions');
 form.innerHTML='';
 const sections=exam.sections||{};
-renderChoiceSection(form,'أولًا: أسئلة الاختيار من متعدد',sections.choice);
-renderTrueFalseSection(form,'ثانيًا: صح وخطأ',sections.trueFalse);
-renderOpenSection(form,'ثالثًا: أكمل',sections.complete);
-renderMixedSection(form,'رابعًا: أسئلة متنوعة',sections.mixed);
-renderExtractSection(form,'خامسًا: استخرج من الفقرة السابقة',sections.extract);
+renderChoice(form,sections.choice||[]);
+renderTrueFalse(form,sections.trueFalse||[]);
+renderComplete(form,sections.complete||[]);
+renderMixed(form,sections.mixed||[]);
+renderExtract(form,sections.extract||[]);
 }
-function renderChoiceSection(parent,title,questions){
-if(!Array.isArray(questions)||!questions.length)return;
-const section=createSection(title);
-questions.forEach((q,i)=>{
+function renderChoice(parent,data){
+if(!data.length)return;
+const section=createSection('أولًا: أسئلة الاختيار من متعدد');
+data.forEach((q,i)=>{
 const box=document.createElement('div');
 box.className='question';
-let options='';
-(q.options||[]).forEach(option=>{
-options+='<label class="option"><input type="radio" name="q_'+escapeAttr(q.id||i)+'" value="'+escapeAttr(option)+'"><span>'+escapeHtml(option)+'</span></label>';
-});
-box.innerHTML='<div class="question-title">'+(i+1)+'. '+escapeHtml(q.question||'')+'</div>'+options;
+const name='choice_'+i;
+let html='<div class="question-title">'+(i+1)+'. '+safe(q.question)+'</div>';
+(q.options||[]).forEach(option=>{html+='<label class="option"><input type="radio" name="'+safeAttr(name)+'" value="'+safeAttr(option)+'"><span>'+safe(option)+'</span></label>'});
+box.innerHTML=html;
 section.appendChild(box);
 });
 parent.appendChild(section);
 }
-function renderTrueFalseSection(parent,title,questions){
-if(!Array.isArray(questions)||!questions.length)return;
-const section=createSection(title);
-questions.forEach((q,i)=>{
-const id=q.id||i;
+function renderTrueFalse(parent,data){
+if(!data.length)return;
+const section=createSection('ثانيًا: صح وخطأ');
+data.forEach((q,i)=>{
 const box=document.createElement('div');
 box.className='question';
-box.innerHTML='<div class="question-title">'+(i+1)+'. '+escapeHtml(q.question||'')+'</div><label class="option"><input type="radio" name="q_'+escapeAttr(id)+'" value="صح"><span>صح</span></label><label class="option"><input type="radio" name="q_'+escapeAttr(id)+'" value="خطأ"><span>خطأ</span></label>';
+const name='trueFalse_'+i;
+box.innerHTML='<div class="question-title">'+(i+1)+'. '+safe(q.question)+'</div><label class="option"><input type="radio" name="'+name+'" value="صح"><span>صح</span></label><label class="option"><input type="radio" name="'+name+'" value="خطأ"><span>خطأ</span></label>';
 section.appendChild(box);
 });
 parent.appendChild(section);
 }
-function renderOpenSection(parent,title,questions){
-if(!Array.isArray(questions)||!questions.length)return;
-const section=createSection(title);
-questions.forEach((q,i)=>{
-const id=q.id||i;
+function renderComplete(parent,data){
+if(!data.length)return;
+const section=createSection('ثالثًا: أكمل');
+data.forEach((q,i)=>{
 const box=document.createElement('div');
 box.className='question';
-box.innerHTML='<div class="question-title">'+(i+1)+'. '+escapeHtml(q.question||'')+'</div><textarea class="answer-input" data-question-id="'+escapeAttr(id)+'" placeholder="اكتب الإجابة هنا"></textarea>';
+box.innerHTML='<div class="question-title">'+(i+1)+'. '+safe(q.question)+'</div><textarea class="answer" data-section="complete" data-id="'+i+'" placeholder="اكتب الإجابة هنا"></textarea>';
 section.appendChild(box);
 });
 parent.appendChild(section);
 }
-function renderMixedSection(parent,title,groups){
-if(!Array.isArray(groups)||!groups.length)return;
-const section=createSection(title);
-groups.forEach((group,groupIndex)=>{
-const groupBox=document.createElement('div');
-groupBox.className='question';
-groupBox.innerHTML='<div class="question-title">نوع السؤال: '+escapeHtml(group.type||'')+'</div>';
-(group.questions||[]).forEach((q,i)=>{
-const inner=document.createElement('div');
-inner.className='question';
-inner.innerHTML='<div class="question-title">'+(i+1)+'. '+escapeHtml(q)+'</div><textarea class="answer-input" data-question-id="'+escapeAttr((group.id||groupIndex)+'_'+i)+'" placeholder="اكتب الإجابة هنا"></textarea>';
-groupBox.appendChild(inner);
-});
-section.appendChild(groupBox);
+function renderMixed(parent,data){
+if(!data.length)return;
+const section=createSection('رابعًا: أسئلة متنوعة');
+data.forEach((q,i)=>{
+const box=document.createElement('div');
+box.className='question';
+box.innerHTML='<div class="question-type">'+safe(q.type||'سؤال متنوع')+'</div><div class="question-title">'+(i+1)+'. '+safe(q.question)+'</div><textarea class="answer" data-section="mixed" data-id="'+i+'" placeholder="اكتب الإجابة هنا"></textarea>';
+section.appendChild(box);
 });
 parent.appendChild(section);
 }
-function renderExtractSection(parent,title,groups){
-if(!Array.isArray(groups)||!groups.length)return;
-const section=createSection(title);
-groups.forEach((group,groupIndex)=>{
-const groupBox=document.createElement('div');
-groupBox.className='question';
-groupBox.innerHTML='<div class="extract-passage">'+escapeHtml(group.passage||'')+'</div>';
-(group.questions||[]).forEach((q,i)=>{
-const inner=document.createElement('div');
-inner.className='question';
-inner.innerHTML='<div class="question-title">'+(i+1)+'. '+escapeHtml(q)+'</div><textarea class="answer-input" data-question-id="'+escapeAttr((group.id||groupIndex)+'_'+i)+'" placeholder="اكتب الإجابة هنا"></textarea>';
-groupBox.appendChild(inner);
+function renderExtract(parent,data){
+if(!data.length)return;
+const section=createSection('خامسًا: استخرج من الفقرة');
+let paragraph='';
+let questionNumber=0;
+data.forEach((q,i)=>{
+if(q.type==='paragraph'){
+paragraph=q.question;
+}else{
+const box=document.createElement('div');
+box.className='question';
+box.innerHTML='<div class="question-title">'+(++questionNumber)+'. '+safe(q.question)+'</div><textarea class="answer" data-section="extract" data-id="'+i+'" placeholder="اكتب الإجابة هنا"></textarea>';
+section.appendChild(box);
+}
 });
-section.appendChild(groupBox);
-});
+if(paragraph){
+const passage=document.createElement('div');
+passage.className='passage';
+passage.textContent=paragraph;
+section.insertBefore(passage,section.children[1]||null);
+}
 parent.appendChild(section);
 }
 function createSection(title){
 const section=document.createElement('section');
 section.className='section';
-const h=document.createElement('div');
-h.className='section-title';
-h.textContent=title;
-section.appendChild(h);
+const titleElement=document.createElement('div');
+titleElement.className='section-title';
+titleElement.textContent=title;
+section.appendChild(titleElement);
 return section;
 }
-function collectExam(){
-if(!EXAM_DATA)return;
-const studentName=document.getElementById('studentName').value.trim();
-const status=document.getElementById('submitStatus');
-if(!studentName){
-showStatus(status,'اكتب اسم الطالب أولًا.','error');
-return;
+function collectAnswers(){
+if(!examData)return;
+submitExamData(examData);
 }
-const answers=[];
-document.querySelectorAll('#examForm input[type="radio"]:checked').forEach(input=>{
-answers.push({
-questionId:input.name.replace('q_',''),
-answer:input.value
-});
-});
-document.querySelectorAll('#examForm textarea[data-question-id]').forEach(input=>{
-answers.push({
-questionId:input.dataset.questionId,
-answer:input.value.trim()
-});
-});
-const result={
-examNumber:EXAM_DATA.C,
-studentName:studentName,
-answers:answers
-};
-console.log(result);
-showStatus(status,'تم تجميع بيانات الاختبار بنجاح.','success');
-}
-function showStatus(element,message,type){
+function showStatus(id,message,type){
+const element=document.getElementById(id);
 element.textContent=message;
 element.className='status '+type;
-element.style.display='block';
 }
-function escapeHtml(value){
+function safe(value){
 return String(value??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
 }
-function escapeAttr(value){
-return escapeHtml(value);
-}
+function safeAttr(value){return safe(value)}
 </script>
-<script src="auth.js"></script>
+<script src="exam.js"></script>
 </body>
 </html>
