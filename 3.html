@@ -6,7 +6,55 @@
 <script src="auth.js"></script>
 <title>الكتب</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-<style>*{box-sizing:border-box;margin:0;padding:0;font-family:Tahoma,Arial,sans-serif}html,body{min-height:100vh;background:#080b18;color:#fff}body{overflow-x:hidden}.container{width:100%;max-width:600px;margin:auto;padding:17px}.card{position:relative;overflow:hidden;background:linear-gradient(145deg,#171d34,#101528);border:1px solid #ffffff0d;border-radius:23px;padding:20px;box-shadow:0 12px 30px #00000030;margin-bottom:15px}h1,h2{margin:0 0 18px;text-align:center;color:#fff}input{width:100%;padding:14px;border:1px solid #ffffff18;border-radius:16px;background:#11172a;color:#fff;font-size:16px;outline:none;margin-bottom:10px}input:focus{border-color:#6c52ff80;box-shadow:0 0 0 3px #6c52ff18}button{width:100%;padding:14px;border:0;border-radius:17px;background:linear-gradient(135deg,#6745ff,#a05cff);color:#fff;font-size:16px;font-weight:bold;cursor:pointer;box-shadow:0 10px 25px #00000030}button:active{transform:scale(.97)}button:disabled{opacity:.5;cursor:not-allowed}.item{position:relative;overflow:hidden;padding:17px;border:1px solid #ffffff0d;border-radius:20px;margin-bottom:10px;cursor:pointer;background:linear-gradient(145deg,#171d34,#101528);box-shadow:0 10px 25px #00000025}.item:hover{border-color:#6c52ff40}.item strong{display:block;margin-bottom:7px;color:#fff}.item span{color:#788199;font-size:14px}.hidden{display:none}.message{text-align:center;padding:15px;color:#788199}.error{color:#ff718b;text-align:center;padding:10px}.back{background:linear-gradient(135deg,#475569,#64748b);margin-bottom:15px}#pdfScreen{position:fixed;inset:0;background:#080b18;overflow:auto;z-index:20}#pdfTop{position:sticky;top:0;background:#11172aee;border-bottom:1px solid #ffffff0d;padding:9px;z-index:30;backdrop-filter:blur(15px)}#pdfTop button{max-width:120px;background:linear-gradient(135deg,#6745ff,#a05cff)}#loading{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font:18px Tahoma,Arial,sans-serif;background:#080b18;z-index:99}#error{display:none;position:fixed;inset:0;align-items:center;justify-content:center;color:#fff;font:18px Tahoma,Arial,sans-serif;text-align:center;padding:20px;background:#080b18;z-index:99}#pages{width:100%;padding:8px;direction:ltr}.page{display:block;margin:0 auto 10px;background:#fff;max-width:100%;height:auto;box-shadow:0 8px 25px #0008;border-radius:4px}@media(min-width:700px){.container{max-width:750px;padding:30px}.card{padding:27px;border-radius:27px}h1{font-size:32px}h2{font-size:25px}input{padding:16px;font-size:17px}button{padding:16px;font-size:17px}.item{padding:20px;border-radius:22px}}@media(min-width:1100px){.container{max-width:950px;padding:35px}.card{padding:32px}}</style>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Tahoma,Arial,sans-serif}
+html,body{min-height:100vh;background:#080b18;color:#fff}
+body{overflow-x:hidden}
+.container{width:100%;max-width:600px;margin:auto;padding:17px}
+.card{position:relative;overflow:hidden;background:linear-gradient(145deg,#171d34,#101528);border:1px solid #ffffff0d;border-radius:23px;padding:20px;box-shadow:0 12px 30px #00000030;margin-bottom:15px}
+h1,h2{margin:0 0 18px;text-align:center;color:#fff}
+input{width:100%;padding:14px;border:1px solid #ffffff18;border-radius:16px;background:#11172a;color:#fff;font-size:16px;outline:none;margin-bottom:10px}
+input:focus{border-color:#6c52ff80;box-shadow:0 0 0 3px #6c52ff18}
+button{width:100%;padding:14px;border:0;border-radius:17px;background:linear-gradient(135deg,#6745ff,#a05cff);color:#fff;font-size:16px;font-weight:bold;cursor:pointer;box-shadow:0 10px 25px #00000030;transition:.2s}
+button:active{transform:scale(.97);filter:brightness(.9)}
+button:disabled{opacity:.5;cursor:not-allowed}
+.item{position:relative;overflow:hidden;padding:17px;border:1px solid #ffffff0d;border-radius:20px;margin-bottom:10px;cursor:pointer;background:linear-gradient(145deg,#171d34,#101528);box-shadow:0 10px 25px #00000025}
+.item:hover{border-color:#6c52ff40}
+.item strong{display:block;margin-bottom:7px;color:#fff}
+.item span{color:#788199;font-size:14px}
+.hidden{display:none}
+.message{text-align:center;padding:15px;color:#788199}
+.error{color:#ff718b;text-align:center;padding:10px}
+.success{color:#20d6a1;text-align:center;padding:10px}
+.actions{display:flex;gap:10px;margin-bottom:15px}
+.actions button{flex:1}
+.refresh{background:linear-gradient(135deg,#1d2948,#26365d);border:1px solid #ffffff20}
+.refresh:active{background:linear-gradient(135deg,#142038,#1d2b4a)}
+.back{background:linear-gradient(135deg,#475569,#64748b)}
+#pdfScreen{position:fixed;inset:0;background:#080b18;overflow:auto;z-index:20}
+#pdfTop{position:sticky;top:0;background:#11172aee;border-bottom:1px solid #ffffff0d;padding:9px;z-index:30;backdrop-filter:blur(15px)}
+#pdfTop button{max-width:120px;background:linear-gradient(135deg,#6745ff,#a05cff)}
+#loading{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font:18px Tahoma,Arial,sans-serif;background:#080b18;z-index:99}
+#error{display:none;position:fixed;inset:0;align-items:center;justify-content:center;color:#fff;font:18px Tahoma,Arial,sans-serif;text-align:center;padding:20px;background:#080b18;z-index:99}
+#pages{width:100%;padding:8px;direction:ltr}
+.page{display:block;margin:0 auto 10px;background:#fff;max-width:100%;height:auto;box-shadow:0 8px 25px #0008;border-radius:4px}
+@media(max-width:520px){
+.actions button{font-size:14px;padding:14px 8px}
+}
+@media(min-width:700px){
+.container{max-width:750px;padding:30px}
+.card{padding:27px;border-radius:27px}
+h1{font-size:32px}
+h2{font-size:25px}
+input{padding:16px;font-size:17px}
+button{padding:16px;font-size:17px}
+.item{padding:20px;border-radius:22px}
+}
+@media(min-width:1100px){
+.container{max-width:950px;padding:35px}
+.card{padding:32px}
+}
+</style>
 </head>
 <body>
 <div id="app">
@@ -22,13 +70,21 @@
 <div class="card">
 <h2>الاشتراكات</h2>
 <div id="subscriptions"></div>
+<div class="actions">
+<button id="refreshSubscriptions" class="refresh" type="button">🔄 تحديث البيانات</button>
+</div>
+<div id="subscriptionsStatus"></div>
 </div>
 </div>
 <div id="booksScreen" class="container hidden">
 <div class="card">
+<div class="actions">
 <button class="back" id="backSubscriptions" type="button">العودة للاشتراكات</button>
+<button id="refreshBooks" class="refresh" type="button">🔄 تحديث البيانات</button>
+</div>
 <h2 id="booksTitle">الكتب</h2>
 <div id="books"></div>
+<div id="booksStatus"></div>
 </div>
 </div>
 </div>
@@ -56,6 +112,10 @@ const subscriptions=document.getElementById('subscriptions');
 const books=document.getElementById('books');
 const booksTitle=document.getElementById('booksTitle');
 const backSubscriptions=document.getElementById('backSubscriptions');
+const refreshSubscriptions=document.getElementById('refreshSubscriptions');
+const refreshBooks=document.getElementById('refreshBooks');
+const subscriptionsStatus=document.getElementById('subscriptionsStatus');
+const booksStatus=document.getElementById('booksStatus');
 const closePdf=document.getElementById('closePdf');
 const loading=document.getElementById('loading');
 const error=document.getElementById('error');
@@ -66,31 +126,77 @@ loginBtn.addEventListener('click',loadSubscriptions);
 codeInput.addEventListener('keydown',e=>{
 if(e.key==='Enter')loadSubscriptions();
 });
+refreshSubscriptions.addEventListener('click',refreshSubscriptionData);
+refreshBooks.addEventListener('click',refreshBooksData);
 async function loadSubscriptions(){
 const code=codeInput.value.trim();
 if(!code){
 loginMessage.innerHTML='<div class="error">أدخل كود الطالب</div>';
 return;
 }
+currentStudentCode=code;
 loginBtn.disabled=true;
 loginBtn.textContent='جاري التحميل...';
 loginMessage.innerHTML='<div class="message">جاري التحقق...</div>';
+const cached=getSubscriptionsCache(code);
+if(cached){
+renderSubscriptions(cached);
+loginScreen.classList.add('hidden');
+subscriptionsScreen.classList.remove('hidden');
+}
 try{
-const response=await fetch(API+'?action=subscriptions&code='+encodeURIComponent(code));
+const response=await fetch(API+'?action=subscriptions&code='+encodeURIComponent(code)+'&_cache='+Date.now(),{cache:'no-store'});
 if(!response.ok)throw new Error('فشل الاتصال بالخادم');
 const data=await response.json();
 if(data.error)throw new Error(data.error);
-if(!data.subscriptions||!data.subscriptions.length)throw new Error('لا توجد اشتراكات للطالب');
-currentStudentCode=code;
-localStorage.setItem('studentCode',code);
+if(!data.subscriptions||!data.subscriptions.length){
+if(!cached)throw new Error('لا توجد اشتراكات للطالب');
+return;
+}
+saveSubscriptionsCache(code,data.subscriptions);
 renderSubscriptions(data.subscriptions);
 loginScreen.classList.add('hidden');
 subscriptionsScreen.classList.remove('hidden');
 }catch(e){
+if(!cached){
 loginMessage.innerHTML='<div class="error">'+escapeHtml(e.message)+'</div>';
+}
 }finally{
 loginBtn.disabled=false;
 loginBtn.textContent='إرسال';
+}
+}
+async function refreshSubscriptionData(){
+if(!currentStudentCode){
+currentStudentCode=codeInput.value.trim();
+}
+if(!currentStudentCode)return;
+const cached=getSubscriptionsCache(currentStudentCode);
+if(cached){
+renderSubscriptions(cached);
+subscriptionsScreen.classList.remove('hidden');
+loginScreen.classList.add('hidden');
+}
+refreshSubscriptions.disabled=true;
+refreshSubscriptions.textContent='جاري التحديث...';
+subscriptionsStatus.innerHTML='<div class="success">جاري تحديث البيانات...</div>';
+try{
+const response=await fetch(API+'?action=subscriptions&code='+encodeURIComponent(currentStudentCode)+'&_refresh='+Date.now(),{cache:'no-store'});
+if(!response.ok)throw new Error('فشل الاتصال بالخادم');
+const data=await response.json();
+if(data.error)throw new Error(data.error);
+if(!data.subscriptions||!data.subscriptions.length){
+subscriptionsStatus.innerHTML='<div class="error">لا توجد بيانات جديدة، تم الاحتفاظ بالبيانات القديمة.</div>';
+return;
+}
+saveSubscriptionsCache(currentStudentCode,data.subscriptions);
+renderSubscriptions(data.subscriptions);
+subscriptionsStatus.innerHTML='<div class="success">تم تحديث البيانات بنجاح.</div>';
+}catch(e){
+subscriptionsStatus.innerHTML='<div class="error">تعذر التحديث، تم الاحتفاظ بالبيانات القديمة.</div>';
+}finally{
+refreshSubscriptions.disabled=false;
+refreshSubscriptions.textContent='🔄 تحديث البيانات';
 }
 }
 function renderSubscriptions(list){
@@ -107,18 +213,97 @@ async function loadBooks(item){
 selectedSubscription=item;
 subscriptionsScreen.classList.add('hidden');
 booksScreen.classList.remove('hidden');
-books.innerHTML='<div class="message">جاري تحميل الكتب...</div>';
 booksTitle.textContent=item.teacher+' - '+item.subject;
+const cached=getBooksCache(item);
+if(cached){
+renderBooks(cached);
+}else{
+books.innerHTML='<div class="message">جاري تحميل الكتب...</div>';
+}
 try{
-const url=API+'?action=books&code='+encodeURIComponent(currentStudentCode)+'&subscription='+encodeURIComponent(item.subscription)+'&column='+encodeURIComponent(item.column)+'&teacher='+encodeURIComponent(item.teacher)+'&subject='+encodeURIComponent(item.subject);
-const response=await fetch(url);
+const url=API+'?action=books&code='+encodeURIComponent(currentStudentCode)+'&subscription='+encodeURIComponent(item.subscription)+'&column='+encodeURIComponent(item.column)+'&teacher='+encodeURIComponent(item.teacher)+'&subject='+encodeURIComponent(item.subject)+'&_cache='+Date.now();
+const response=await fetch(url,{cache:'no-store'});
 if(!response.ok)throw new Error('فشل الاتصال بالخادم');
 const data=await response.json();
 if(data.error)throw new Error(data.error);
+saveBooksCache(item,data.books||[]);
 renderBooks(data.books||[]);
 }catch(e){
+if(!cached){
 books.innerHTML='<div class="error">'+escapeHtml(e.message)+'</div>';
 }
+}
+}
+async function refreshBooksData(){
+if(!selectedSubscription)return;
+const item=selectedSubscription;
+const cached=getBooksCache(item);
+if(cached){
+renderBooks(cached);
+}
+refreshBooks.disabled=true;
+refreshBooks.textContent='جاري التحديث...';
+booksStatus.innerHTML='<div class="success">جاري تحديث البيانات...</div>';
+try{
+const url=API+'?action=books&code='+encodeURIComponent(currentStudentCode)+'&subscription='+encodeURIComponent(item.subscription)+'&column='+encodeURIComponent(item.column)+'&teacher='+encodeURIComponent(item.teacher)+'&subject='+encodeURIComponent(item.subject)+'&_refresh='+Date.now();
+const response=await fetch(url,{cache:'no-store'});
+if(!response.ok)throw new Error('فشل الاتصال بالخادم');
+const data=await response.json();
+if(data.error)throw new Error(data.error);
+if(!data.books||!data.books.length){
+booksStatus.innerHTML='<div class="error">لا توجد بيانات جديدة، تم الاحتفاظ بالبيانات القديمة.</div>';
+return;
+}
+saveBooksCache(item,data.books);
+renderBooks(data.books);
+booksStatus.innerHTML='<div class="success">تم تحديث البيانات بنجاح.</div>';
+}catch(e){
+booksStatus.innerHTML='<div class="error">تعذر التحديث، تم الاحتفاظ بالبيانات القديمة.</div>';
+}finally{
+refreshBooks.disabled=false;
+refreshBooks.textContent='🔄 تحديث البيانات';
+}
+}
+function getSubscriptionsCache(code){
+try{
+const data=localStorage.getItem('books_subscriptions_'+code);
+if(!data)return null;
+const parsed=JSON.parse(data);
+return parsed.subscriptions||null;
+}catch(e){
+return null;
+}
+}
+function saveSubscriptionsCache(code,list){
+try{
+localStorage.setItem('books_subscriptions_'+code,JSON.stringify({
+subscriptions:list,
+savedAt:Date.now()
+}));
+}catch(e){}
+}
+function getBooksCache(item){
+try{
+const key=getBooksCacheKey(item);
+const data=localStorage.getItem('books_data_'+key);
+if(!data)return null;
+const parsed=JSON.parse(data);
+return parsed.books||null;
+}catch(e){
+return null;
+}
+}
+function saveBooksCache(item,list){
+try{
+const key=getBooksCacheKey(item);
+localStorage.setItem('books_data_'+key,JSON.stringify({
+books:list,
+savedAt:Date.now()
+}));
+}catch(e){}
+}
+function getBooksCacheKey(item){
+return encodeURIComponent(currentStudentCode+'_'+String(item.subscription||'')+'_'+String(item.column||'')+'_'+String(item.teacher||'')+'_'+String(item.subject||''));
 }
 function renderBooks(list){
 books.innerHTML='';
