@@ -35,8 +35,14 @@ body{min-height:100vh;background:#080b18;color:#fff;overflow-x:hidden}
 .loading{text-align:center;padding:35px;color:#a99cff}
 .badge{display:inline-block;background:#6c52ff18;color:#a99cff;padding:5px 10px;border-radius:30px;font-size:13px;margin-bottom:10px;border:1px solid #6c52ff25}
 .hidden{display:none!important}
-.action-buttons{display:flex;gap:10px}
-.action-buttons .btn{flex:1}
+.search-actions{display:flex;gap:10px;margin-top:10px}
+.search-actions .btn{flex:1}
+.refresh-btn{background:#11172a;color:#fff;border:1px solid #ffffff30;box-shadow:0 10px 25px #00000030}
+.submit-actions{display:flex;gap:10px}
+.submit-actions .btn{flex:1}
+@media(max-width:500px){
+.search-actions,.submit-actions{flex-direction:column}
+}
 @media(min-width:700px){
 .container{max-width:850px;padding:30px}
 .card,.section,.loading{padding:27px;border-radius:27px}
@@ -59,8 +65,12 @@ body{min-height:100vh;background:#080b18;color:#fff;overflow-x:hidden}
 <div class="logo">أكاديمية البيان</div>
 <div class="subtitle">أدخل رقم الاختبار لبدء الاختبار</div>
 <input id="examNumber" class="input" type="text" inputmode="numeric" placeholder="رقم الاختبار">
-<button id="loadBtn" class="btn primary">عرض الاختبار</button>
+<div class="search-actions">
+<button id="loadBtn" class="btn primary" type="button">عرض الاختبار</button>
+<button id="refreshBtn" class="btn refresh-btn" type="button">🔄 تحديث البيانات</button>
+</div>
 <div id="searchStatus" class="status"></div>
+<div id="refreshStatus" class="status"></div>
 </div>
 <div id="loading" class="loading hidden">جاري تحميل الاختبار...</div>
 <div id="app" class="hidden">
@@ -74,9 +84,8 @@ body{min-height:100vh;background:#080b18;color:#fff;overflow-x:hidden}
 </div>
 <form id="examForm"></form>
 <div class="card">
-<div class="action-buttons">
+<div class="submit-actions">
 <button id="submitBtn" class="btn primary" type="button">إرسال الاختبار</button>
-<button id="refreshBtn" class="btn primary" type="button">تحديث</button>
 </div>
 <div id="submitStatus" class="status"></div>
 </div>
@@ -86,13 +95,18 @@ body{min-height:100vh;background:#080b18;color:#fff;overflow-x:hidden}
 const API_URL='https://script.google.com/macros/s/AKfycbyM0l9EyFN5wqaa304r3aqiI3kt_mxQ57_LJXFGiCmT2aL7eaYLT6l0CnsyRH5carH2IQ/exec';
 let EXAM_DATA=null;
 document.getElementById('loadBtn').addEventListener('click',loadExam);
-document.getElementById('examNumber').addEventListener('keydown',e=>{if(e.key==='Enter')loadExam()});
-document.getElementById('submitBtn').addEventListener('click',collectExam);
 document.getElementById('refreshBtn').addEventListener('click',refreshExam);
+document.getElementById('examNumber').addEventListener('keydown',e=>{
+if(e.key==='Enter')loadExam();
+});
+document.getElementById('submitBtn').addEventListener('click',collectExam);
 async function loadExam(){
 const examNumber=document.getElementById('examNumber').value.trim();
 const status=document.getElementById('searchStatus');
-if(!examNumber){showStatus(status,'أدخل رقم الاختبار.','error');return}
+if(!examNumber){
+showStatus(status,'أدخل رقم الاختبار.','error');
+return;
+}
 document.getElementById('loadBtn').disabled=true;
 document.getElementById('loading').classList.remove('hidden');
 status.style.display='none';
@@ -100,8 +114,14 @@ try{
 const url=API_URL+'?action=getExam&examNumber='+encodeURIComponent(examNumber);
 const response=await fetch(url);
 const data=await response.json();
-if(!data.success){showStatus(status,data.message||'رقم الاختبار غير موجود.','error');return}
-if(!data.exam){showStatus(status,'لم تصل بيانات الاختبار.','error');return}
+if(!data.success){
+showStatus(status,data.message||'رقم الاختبار غير موجود.','error');
+return;
+}
+if(!data.exam){
+showStatus(status,'لم تصل بيانات الاختبار.','error');
+return;
+}
 EXAM_DATA=data.exam;
 renderExam(data.exam);
 }catch(error){
@@ -113,26 +133,35 @@ document.getElementById('loadBtn').disabled=false;
 }
 }
 async function refreshExam(){
-if(!EXAM_DATA)return;
-const examNumber=EXAM_DATA.C;
-const status=document.getElementById('submitStatus');
-const refreshBtn=document.getElementById('refreshBtn');
-refreshBtn.disabled=true;
-showStatus(status,'جاري تحديث بيانات الاختبار...','success');
+const examNumber=document.getElementById('examNumber').value.trim();
+const status=document.getElementById('refreshStatus');
+const button=document.getElementById('refreshBtn');
+if(!examNumber){
+showStatus(status,'أدخل رقم الاختبار أولًا.','error');
+return;
+}
+button.disabled=true;
+status.style.display='none';
 try{
-const url=API_URL+'?action=getExam&examNumber='+encodeURIComponent(examNumber);
-const response=await fetch(url);
+const url=API_URL+'?action=getExam&examNumber='+encodeURIComponent(examNumber)+'&_refresh='+Date.now();
+const response=await fetch(url,{cache:'no-store'});
 const data=await response.json();
-if(!data.success){showStatus(status,data.message||'تعذر تحديث بيانات الاختبار.','error');return}
-if(!data.exam){showStatus(status,'لم تصل بيانات الاختبار.','error');return}
+if(!data.success){
+showStatus(status,data.message||'رقم الاختبار غير موجود.','error');
+return;
+}
+if(!data.exam){
+showStatus(status,'لم تصل بيانات الاختبار.','error');
+return;
+}
 EXAM_DATA=data.exam;
 renderExam(data.exam);
-showStatus(document.getElementById('submitStatus'),'تم تحديث بيانات الاختبار بنجاح.','success');
+showStatus(status,'تم تحديث بيانات الاختبار بنجاح.','success');
 }catch(error){
 console.error(error);
 showStatus(status,'حدث خطأ أثناء تحديث البيانات.','error');
 }finally{
-refreshBtn.disabled=false;
+button.disabled=false;
 }
 }
 function renderExam(exam){
@@ -234,15 +263,28 @@ function collectExam(){
 if(!EXAM_DATA)return;
 const studentName=document.getElementById('studentName').value.trim();
 const status=document.getElementById('submitStatus');
-if(!studentName){showStatus(status,'اكتب اسم الطالب أولًا.','error');return}
+if(!studentName){
+showStatus(status,'اكتب اسم الطالب أولًا.','error');
+return;
+}
 const answers=[];
 document.querySelectorAll('#examForm input[type="radio"]:checked').forEach(input=>{
-answers.push({questionId:input.name.replace('q_',''),answer:input.value});
+answers.push({
+questionId:input.name.replace('q_',''),
+answer:input.value
+});
 });
 document.querySelectorAll('#examForm textarea[data-question-id]').forEach(input=>{
-answers.push({questionId:input.dataset.questionId,answer:input.value.trim()});
+answers.push({
+questionId:input.dataset.questionId,
+answer:input.value.trim()
 });
-const result={examNumber:EXAM_DATA.C,studentName:studentName,answers:answers};
+});
+const result={
+examNumber:EXAM_DATA.C,
+studentName:studentName,
+answers:answers
+};
 console.log(result);
 showStatus(status,'تم تجميع بيانات الاختبار بنجاح.','success');
 }
@@ -254,7 +296,9 @@ element.style.display='block';
 function escapeHtml(value){
 return String(value??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
 }
-function escapeAttr(value){return escapeHtml(value)}
+function escapeAttr(value){
+return escapeHtml(value);
+}
 </script>
 <script src="auth.js"></script>
 </body>
