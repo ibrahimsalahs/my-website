@@ -13,9 +13,16 @@ body{min-height:100vh;background:#080b18;color:#fff;overflow-x:hidden}
 .subtitle{text-align:center;color:#aeb6ce;line-height:1.9}
 .input{width:100%;border:1px solid #ffffff18;border-radius:16px;padding:15px;background:#11172a;color:#fff;font:inherit;font-size:17px;outline:none;margin:10px 0}
 .input:focus{border-color:#6c52ff80;box-shadow:0 0 0 3px #6c52ff18}
-.btn{width:100%;border:0;border-radius:17px;padding:16px;font:inherit;font-size:17px;font-weight:800;cursor:pointer}
+.btn{width:100%;border:0;border-radius:17px;padding:16px;font:inherit;font-size:17px;font-weight:800;cursor:pointer;transition:.2s}
+.btn:active{transform:scale(.97)}
 .primary{background:linear-gradient(135deg,#6745ff,#a05cff);color:#fff;box-shadow:0 10px 25px #00000030}
-.primary:disabled{opacity:.6;cursor:not-allowed}
+.primary:hover{filter:brightness(1.08)}
+.primary:disabled{opacity:.7;cursor:not-allowed}
+.refresh-btn{background:linear-gradient(135deg,#1d2948,#26365d);color:#fff;border:1px solid #ffffff20;box-shadow:0 10px 25px #00000030}
+.refresh-btn:hover{background:linear-gradient(135deg,#26365d,#304572)}
+.refresh-btn:disabled{opacity:.7;cursor:not-allowed}
+.search-actions{display:flex;gap:10px;margin-top:10px}
+.search-actions .btn{flex:1}
 .header-info{line-height:2;font-size:16px}
 .info-item{padding:8px 0;border-bottom:1px solid #ffffff09}
 .info-item:last-child{border-bottom:0}
@@ -35,13 +42,9 @@ body{min-height:100vh;background:#080b18;color:#fff;overflow-x:hidden}
 .loading{text-align:center;padding:35px;color:#a99cff}
 .badge{display:inline-block;background:#6c52ff18;color:#a99cff;padding:5px 10px;border-radius:30px;font-size:13px;margin-bottom:10px;border:1px solid #6c52ff25}
 .hidden{display:none!important}
-.search-actions{display:flex;gap:10px;margin-top:10px}
-.search-actions .btn{flex:1}
-.refresh-btn{background:#11172a;color:#fff;border:1px solid #ffffff30;box-shadow:0 10px 25px #00000030}
-.submit-actions{display:flex;gap:10px}
-.submit-actions .btn{flex:1}
-@media(max-width:500px){
-.search-actions,.submit-actions{flex-direction:column}
+@media(max-width:520px){
+.search-actions{flex-direction:row}
+.search-actions .btn{font-size:15px;padding:15px 8px}
 }
 @media(min-width:700px){
 .container{max-width:850px;padding:30px}
@@ -84,9 +87,7 @@ body{min-height:100vh;background:#080b18;color:#fff;overflow-x:hidden}
 </div>
 <form id="examForm"></form>
 <div class="card">
-<div class="submit-actions">
 <button id="submitBtn" class="btn primary" type="button">إرسال الاختبار</button>
-</div>
 <div id="submitStatus" class="status"></div>
 </div>
 </div>
@@ -94,6 +95,8 @@ body{min-height:100vh;background:#080b18;color:#fff;overflow-x:hidden}
 <script>
 const API_URL='https://script.google.com/macros/s/AKfycbyM0l9EyFN5wqaa304r3aqiI3kt_mxQ57_LJXFGiCmT2aL7eaYLT6l0CnsyRH5carH2IQ/exec';
 let EXAM_DATA=null;
+let CURRENT_EXAM_NUMBER=null;
+const CACHE_PREFIX='bayaan_exam_';
 document.getElementById('loadBtn').addEventListener('click',loadExam);
 document.getElementById('refreshBtn').addEventListener('click',refreshExam);
 document.getElementById('examNumber').addEventListener('keydown',e=>{
@@ -110,23 +113,31 @@ return;
 document.getElementById('loadBtn').disabled=true;
 document.getElementById('loading').classList.remove('hidden');
 status.style.display='none';
+const cached=getCachedExam(examNumber);
+if(cached){
+EXAM_DATA=cached;
+CURRENT_EXAM_NUMBER=examNumber;
+renderExam(cached);
+}
 try{
-const url=API_URL+'?action=getExam&examNumber='+encodeURIComponent(examNumber);
-const response=await fetch(url);
+const url=API_URL+'?action=getExam&examNumber='+encodeURIComponent(examNumber)+'&_cache='+Date.now();
+const response=await fetch(url,{cache:'no-store'});
 const data=await response.json();
 if(!data.success){
-showStatus(status,data.message||'رقم الاختبار غير موجود.','error');
+if(!cached)showStatus(status,data.message||'رقم الاختبار غير موجود.','error');
 return;
 }
 if(!data.exam){
-showStatus(status,'لم تصل بيانات الاختبار.','error');
+if(!cached)showStatus(status,'لم تصل بيانات الاختبار.','error');
 return;
 }
 EXAM_DATA=data.exam;
+CURRENT_EXAM_NUMBER=examNumber;
+saveCachedExam(examNumber,data.exam);
 renderExam(data.exam);
 }catch(error){
 console.error(error);
-showStatus(status,'حدث خطأ أثناء الاتصال بالخادم.','error');
+if(!cached)showStatus(status,'حدث خطأ أثناء الاتصال بالخادم.','error');
 }finally{
 document.getElementById('loading').classList.add('hidden');
 document.getElementById('loadBtn').disabled=false;
@@ -140,28 +151,59 @@ if(!examNumber){
 showStatus(status,'أدخل رقم الاختبار أولًا.','error');
 return;
 }
+const cached=getCachedExam(examNumber);
+if(cached&&!EXAM_DATA){
+EXAM_DATA=cached;
+CURRENT_EXAM_NUMBER=examNumber;
+renderExam(cached);
+}
 button.disabled=true;
-status.style.display='none';
+button.textContent='جاري التحديث...';
+showStatus(status,'جاري تحديث البيانات...','success');
 try{
 const url=API_URL+'?action=getExam&examNumber='+encodeURIComponent(examNumber)+'&_refresh='+Date.now();
 const response=await fetch(url,{cache:'no-store'});
 const data=await response.json();
 if(!data.success){
-showStatus(status,data.message||'رقم الاختبار غير موجود.','error');
+showStatus(status,data.message||'تعذر تحديث بيانات الاختبار. البيانات القديمة ما زالت متاحة.','error');
 return;
 }
 if(!data.exam){
-showStatus(status,'لم تصل بيانات الاختبار.','error');
+showStatus(status,'لم تصل بيانات جديدة. البيانات القديمة ما زالت متاحة.','error');
 return;
 }
 EXAM_DATA=data.exam;
+CURRENT_EXAM_NUMBER=examNumber;
+saveCachedExam(examNumber,data.exam);
 renderExam(data.exam);
-showStatus(status,'تم تحديث بيانات الاختبار بنجاح.','success');
+showStatus(status,'تم تحديث البيانات بنجاح.','success');
 }catch(error){
 console.error(error);
-showStatus(status,'حدث خطأ أثناء تحديث البيانات.','error');
+showStatus(status,'تعذر الاتصال بالخادم. البيانات القديمة ما زالت متاحة.','error');
 }finally{
 button.disabled=false;
+button.textContent='🔄 تحديث البيانات';
+}
+}
+function saveCachedExam(examNumber,exam){
+try{
+localStorage.setItem(CACHE_PREFIX+examNumber,JSON.stringify({
+exam:exam,
+savedAt:Date.now()
+}));
+}catch(error){
+console.error(error);
+}
+}
+function getCachedExam(examNumber){
+try{
+const cached=localStorage.getItem(CACHE_PREFIX+examNumber);
+if(!cached)return null;
+const data=JSON.parse(cached);
+return data.exam||null;
+}catch(error){
+console.error(error);
+return null;
 }
 }
 function renderExam(exam){
