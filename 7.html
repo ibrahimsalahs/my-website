@@ -3,25 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>رقم الأختبار </title>
-<style>*{box-sizing:border-box;margin:0;padding:0;font-family:Tahoma,Arial,sans-serif}
+<title>رقم الأختبار</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Tahoma,Arial,sans-serif;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent;-webkit-user-drag:none}
+html,body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 body{min-height:100vh;background:#080b18;color:#fff;overflow-x:hidden}
 .container{width:100%;max-width:480px;margin:auto;padding:17px}
 .card{position:relative;overflow:hidden;background:linear-gradient(145deg,#171d34,#101528);border:1px solid #ffffff0d;border-radius:23px;padding:20px;box-shadow:0 12px 30px #00000030;margin-bottom:15px}
 h1{text-align:center;margin:5px 0 25px;font-size:25px;color:#fff}
-input{width:100%;padding:14px;border:1px solid #ffffff18;border-radius:16px;background:#11172a;color:#fff;font-size:15px;text-align:center;outline:none}
+input{width:100%;padding:14px;border:1px solid #ffffff18;border-radius:16px;background:#11172a;color:#fff;font-size:15px;text-align:center;outline:none;-webkit-user-select:text;user-select:text;-webkit-touch-callout:default}
 input:focus{border-color:#6c52ff80;box-shadow:0 0 0 3px #6c52ff18}
-button{width:100%;padding:14px;border:0;border-radius:17px;background:linear-gradient(135deg,#6745ff,#a05cff);color:#fff;font-size:14px;font-weight:bold;margin-top:12px;cursor:pointer;box-shadow:0 10px 25px #00000030}
+button{width:100%;padding:14px;border:0;border-radius:17px;background:linear-gradient(135deg,#6745ff,#a05cff);color:#fff;font-size:14px;font-weight:bold;margin-top:12px;cursor:pointer;box-shadow:0 10px 25px #00000030;transition:.2s}
 button:active{transform:scale(.97)}
+button:disabled{background:linear-gradient(135deg,#34334b,#46465b);color:#aaa;opacity:.9;cursor:not-allowed;transform:none;box-shadow:none}
 .hidden{display:none}
 .error{text-align:center;color:#ff718b;margin-top:12px;font-size:12px}
 .loading{text-align:center;margin:15px;color:#a99cff;font-size:12px}
+.verify{text-align:center;color:#a99cff;margin-top:12px;font-size:12px;min-height:15px}
 .subscription{position:relative;overflow:hidden;padding:17px;background:linear-gradient(110deg,#21184a,#161c38 55%,#103e42);border:1px solid #ffffff12;border-radius:20px;margin-top:10px;cursor:pointer;box-shadow:0 10px 25px #00000025}
 .subscription:before{content:"";position:absolute;width:70px;height:70px;border-radius:50%;background:#6c52ff;filter:blur(35px);opacity:.2;top:-25px;right:-20px}
 .subscription b{display:block;font-size:15px;margin-bottom:5px;position:relative}
-.task{position:relative;overflow:hidden;padding:18px;border-radius:20px;background:linear-gradient(145deg,#171d34,#101528);border:1px solid #ffffff0d;margin-top:12px;box-shadow:0 10px 25px #00000025}
+.task{position:relative;overflow:hidden;padding:18px;border-radius:20px;background:linear-gradient(145deg,#171d34,#101528);border:1px solid #ffffff0d;margin-top:12px;box-shadow:0 10px 25px #00000025;cursor:pointer}
 .task span{display:block;color:#788199;font-size:11px;margin-bottom:7px}
-.task strong{font-size:18px;color:#fff}
+.task strong{font-size:18px;color:#fff;-webkit-user-select:text;user-select:text;-webkit-touch-callout:default}
 .back{background:linear-gradient(135deg,#475569,#64748b)}
 @media(min-width:700px){
 .container{max-width:700px;padding:30px}
@@ -35,14 +39,16 @@ button{padding:16px;font-size:15px}
 @media(min-width:1100px){
 .container{max-width:850px;padding:35px}
 .card{padding:32px}
-              }</style>
+}
+</style>
 </head>
 <body>
 <div class="container">
 <div id="login" class="card">
-<h1> رقم الأختبار</h1>
+<h1>رقم الأختبار</h1>
 <input id="code" inputmode="numeric" placeholder="أدخل كود الطالب">
-<button onclick="login()">دخول الطالب</button>
+<button id="loginBtn" onclick="login()">دخول الطالب</button>
+<div id="verify" class="verify"></div>
 <div id="error" class="error"></div>
 </div>
 <div id="subscriptions" class="hidden">
@@ -64,10 +70,16 @@ const API='https://script.google.com/macros/s/AKfycbzoHAnjEks-i6SryiqqhEQOF3wdNy
 let code='';
 function normalize(v){return String(v||'').replace(/[٠-٩]/g,d=>String('٠١٢٣٤٥٦٧٨٩'.indexOf(d))).trim()}
 async function login(){
-code=normalize(document.getElementById('code').value);
+const btn=document.getElementById('loginBtn');
+const verify=document.getElementById('verify');
 const error=document.getElementById('error');
+code=normalize(document.getElementById('code').value);
 error.textContent='';
+verify.textContent='';
 if(!code){error.textContent='أدخل كود الطالب';return}
+btn.disabled=true;
+btn.textContent='جاري التحقق...';
+verify.textContent='جاري التحقق...';
 try{
 const r=await fetch(API+'?action=subscriptions&code='+encodeURIComponent(code));
 const data=await r.json();
@@ -80,11 +92,19 @@ list.innerHTML='';
 data.subscriptions.forEach(s=>{
 const div=document.createElement('div');
 div.className='subscription';
-div.innerHTML='<b>الاشتراك '+s.subscription+'</b><span>المعلم: '+escapeHtml(s.teacher)+'</span><span>المادة: '+escapeHtml(s.subject)+'</span>';
+div.innerHTML='<b>الاشتراك '+escapeHtml(s.subscription)+'</b><span>المعلم: '+escapeHtml(s.teacher)+'</span><span>المادة: '+escapeHtml(s.subject)+'</span>';
 div.onclick=()=>getTasks(s);
 list.appendChild(div);
 });
-}catch(e){error.textContent='تعذر الاتصال بالخادم'}
+}catch(e){
+error.textContent='تعذر الاتصال بالخادم';
+}finally{
+if(!document.getElementById('login').classList.contains('hidden')){
+btn.disabled=false;
+btn.textContent='دخول الطالب';
+verify.textContent='';
+}
+}
 }
 async function getTasks(s){
 document.getElementById('subscriptions').classList.add('hidden');
@@ -96,14 +116,8 @@ const r=await fetch(url);
 const data=await r.json();
 if(!data.success){document.getElementById('taskData').innerHTML='<div class="error">'+escapeHtml(data.error||'حدث خطأ')+'</div>';return}
 if(!data.tasks||!data.tasks.length){document.getElementById('taskData').innerHTML='<div class="loading">لا توجد مهام أو واجبات</div>';return}
-document.getElementById('taskData').innerHTML=data.tasks.map(t=>'<div class="task" onclick="openTask(\''+encodeURIComponent(t.target)+'\')" style="cursor:pointer"><span>رقم الأختبار</span><strong>'+escapeHtml(t.name)+'</strong></div>').join('');
+document.getElementById('taskData').innerHTML=data.tasks.map(t=>'<div class="task"><span>رقم الأختبار</span><strong>'+escapeHtml(t.name)+'</strong></div>').join('');
 }catch(e){document.getElementById('taskData').innerHTML='<div class="error">تعذر الاتصال بالخادم</div>'}
-}
-function openTask(target){
-target=decodeURIComponent(target);
-let url=target;
-if(!/^https?:\/\//i.test(url))url='https://drive.google.com/file/d/'+encodeURIComponent(url)+'/view';
-window.open(url,'_blank');
 }
 function back(){
 document.getElementById('tasks').classList.add('hidden');
@@ -112,7 +126,25 @@ document.getElementById('subscriptions').classList.remove('hidden');
 function escapeHtml(v){
 return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
 }
+document.addEventListener('contextmenu',e=>{
+if(!e.target.closest('.task strong'))e.preventDefault();
+},{passive:false});
+document.addEventListener('selectstart',e=>{
+if(!e.target.closest('.task strong')&&!e.target.matches('#code'))e.preventDefault();
+},{passive:false});
+document.addEventListener('dragstart',e=>e.preventDefault(),{passive:false});
+document.addEventListener('copy',e=>{
+if(!window.getSelection()?.anchorNode?.parentElement?.closest('.task strong'))e.preventDefault();
+},{passive:false});
+document.addEventListener('cut',e=>e.preventDefault(),{passive:false});
+document.addEventListener('paste',e=>{
+if(!e.target.matches('#code'))e.preventDefault();
+},{passive:false});
+document.addEventListener('touchstart',e=>{if(e.touches.length>1)e.preventDefault()},{passive:false});
+document.addEventListener('gesturestart',e=>e.preventDefault(),{passive:false});
+document.addEventListener('gesturechange',e=>e.preventDefault(),{passive:false});
+document.addEventListener('gestureend',e=>e.preventDefault(),{passive:false});
 </script>
-  <script src="auth.js"></script>
+<script src="auth.js"></script>
 </body>
 </html>
