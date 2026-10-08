@@ -14,7 +14,7 @@ h1{text-align:center;margin:5px 0 25px;font-size:28px;color:#fff}
 input{width:100%;padding:14px;border:1px solid #ffffff18;border-radius:16px;background:#11172a;color:#fff;font-size:16px;text-align:center;outline:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 input:focus{border-color:#6c52ff80;box-shadow:0 0 0 3px #6c52ff18}
 button{width:100%;padding:14px;border:0;border-radius:17px;background:linear-gradient(135deg,#6745ff,#a05cff);color:#fff;font-size:16px;font-weight:bold;margin-top:12px;cursor:pointer;box-shadow:0 10px 25px #00000030;transition:.2s;-webkit-user-select:none;user-select:none}
-button:active{transform:scale(.97)}
+button:active{transform:scale(.97);filter:brightness(.9)}
 button:disabled{background:linear-gradient(135deg,#38384f,#4a4a5e);color:#aaa;opacity:.9;cursor:not-allowed;transform:none;box-shadow:none}
 .hidden{display:none}
 .error{text-align:center;color:#ff718b;margin-top:12px;font-size:12px}
@@ -26,6 +26,15 @@ button:disabled{background:linear-gradient(135deg,#38384f,#4a4a5e);color:#aaa;op
 .task span{display:block;color:#788199;font-size:14px;margin-bottom:7px}
 .task strong{font-size:19px;color:#fff}
 .back{background:linear-gradient(135deg,#475569,#64748b)}
+.actions{display:flex;gap:10px}
+.actions button{flex:1}
+.refresh{background:linear-gradient(135deg,#1d2948,#26365d);border:1px solid #ffffff20}
+.refresh:hover{background:linear-gradient(135deg,#26365d,#304572)}
+.refresh:active{background:linear-gradient(135deg,#142038,#1d2b4a);transform:scale(.97)}
+@media(max-width:520px){
+.actions{flex-direction:row}
+.actions button{font-size:14px;padding:14px 8px}
+}
 @media(min-width:700px){
 .container{max-width:700px;padding:30px}
 .card{padding:27px;border-radius:27px}
@@ -53,46 +62,64 @@ button{padding:16px;font-size:17px}
 <div class="card">
 <h1>الاشتراكات</h1>
 <div id="list"></div>
+<div class="actions">
+<button id="refreshSubscriptionsBtn" class="refresh" onclick="refreshSubscriptions()">🔄 تحديث البيانات</button>
+</div>
+<div id="refreshSubscriptionsStatus"></div>
 </div>
 </div>
 <div id="tasks" class="hidden">
 <div class="card">
 <h1>المهام والواجبات</h1>
 <div id="taskData"></div>
+<div class="actions">
 <button class="back" onclick="back()">العودة للاشتراكات</button>
+<button id="refreshTasksBtn" class="refresh" onclick="refreshTasks()">🔄 تحديث البيانات</button>
+</div>
+<div id="refreshTasksStatus"></div>
 </div>
 </div>
 </div>
 <script>
 const API='https://script.google.com/macros/s/AKfycbx16fK1kYstjobRCKxXfK9lqIuYWKssKZcWUykSQoUi0RvTilQowcrpiWBtH5rQWn7R/exec';
 let code='';
-function normalize(v){return String(v||'').replace(/[٠-٩]/g,d=>String('٠١٢٣٤٥٦٧٨٩'.indexOf(d))).trim()}
+let currentSubscription=null;
+let currentTasksKey='';
+const SUB_CACHE_PREFIX='tasks_subscriptions_';
+const TASK_CACHE_PREFIX='tasks_data_';
+function normalize(v){
+return String(v||'').replace(/[٠-٩]/g,d=>String('٠١٢٣٤٥٦٧٨٩'.indexOf(d))).trim();
+}
 async function login(){
 const btn=document.getElementById('loginBtn');
 code=normalize(document.getElementById('code').value);
 const error=document.getElementById('error');
 error.textContent='';
-if(!code){error.textContent='أدخل كود الطالب';return}
+if(!code){
+error.textContent='أدخل كود الطالب';
+return;
+}
 btn.disabled=true;
 btn.textContent='جاري التحميل...';
+const cached=getSubscriptionsCache(code);
+if(cached){
+showSubscriptions(cached);
+}
 try{
-const r=await fetch(API+'?action=subscriptions&code='+encodeURIComponent(code));
+const r=await fetch(API+'?action=subscriptions&code='+encodeURIComponent(code)+'&_cache='+Date.now(),{cache:'no-store'});
 const data=await r.json();
-if(!data.success){error.textContent=data.error||'حدث خطأ';return}
-if(!data.subscriptions||!data.subscriptions.length){error.textContent='لا توجد اشتراكات';return}
-document.getElementById('login').classList.add('hidden');
-document.getElementById('subscriptions').classList.remove('hidden');
-const list=document.getElementById('list');
-list.innerHTML='';
-data.subscriptions.forEach(s=>{
-const div=document.createElement('div');
-div.className='subscription';
-div.innerHTML='<b>الاشتراك '+escapeHtml(s.subscription)+'</b><span>المعلم: '+escapeHtml(s.teacher)+'</span><span>المادة: '+escapeHtml(s.subject)+'</span>';
-div.onclick=()=>getTasks(s);
-list.appendChild(div);
-});
+if(!data.success){
+if(!cached)error.textContent=data.error||'حدث خطأ';
+return;
+}
+if(!data.subscriptions||!data.subscriptions.length){
+if(!cached)error.textContent='لا توجد اشتراكات';
+return;
+}
+saveSubscriptionsCache(code,data.subscriptions);
+showSubscriptions(data.subscriptions);
 }catch(e){
-error.textContent='تعذر الاتصال بالخادم';
+if(!cached)error.textContent='تعذر الاتصال بالخادم';
 }finally{
 if(!document.getElementById('login').classList.contains('hidden')){
 btn.disabled=false;
@@ -100,18 +127,168 @@ btn.textContent='دخول الطالب';
 }
 }
 }
+function showSubscriptions(subscriptions){
+document.getElementById('login').classList.add('hidden');
+document.getElementById('subscriptions').classList.remove('hidden');
+const list=document.getElementById('list');
+list.innerHTML='';
+subscriptions.forEach(s=>{
+const div=document.createElement('div');
+div.className='subscription';
+div.innerHTML='<b>الاشتراك '+escapeHtml(s.subscription)+'</b><span>المعلم: '+escapeHtml(s.teacher)+'</span><span>المادة: '+escapeHtml(s.subject)+'</span>';
+div.onclick=()=>getTasks(s);
+list.appendChild(div);
+});
+}
+async function refreshSubscriptions(){
+if(!code){
+code=normalize(document.getElementById('code').value);
+}
+if(!code){
+document.getElementById('error').textContent='أدخل كود الطالب أولًا';
+return;
+}
+const btn=document.getElementById('refreshSubscriptionsBtn');
+const status=document.getElementById('refreshSubscriptionsStatus');
+const cached=getSubscriptionsCache(code);
+if(cached){
+showSubscriptions(cached);
+}
+btn.disabled=true;
+btn.textContent='جاري التحديث...';
+showRefreshStatus(status,'جاري تحديث البيانات...','success');
+try{
+const r=await fetch(API+'?action=subscriptions&code='+encodeURIComponent(code)+'&_refresh='+Date.now(),{cache:'no-store'});
+const data=await r.json();
+if(!data.success){
+showRefreshStatus(status,data.error||'تعذر تحديث البيانات. البيانات القديمة ما زالت متاحة.','error');
+return;
+}
+if(!data.subscriptions||!data.subscriptions.length){
+showRefreshStatus(status,'لا توجد بيانات جديدة. البيانات القديمة ما زالت متاحة.','error');
+return;
+}
+saveSubscriptionsCache(code,data.subscriptions);
+showSubscriptions(data.subscriptions);
+showRefreshStatus(status,'تم تحديث البيانات بنجاح.','success');
+}catch(e){
+showRefreshStatus(status,'تعذر الاتصال بالخادم. البيانات القديمة ما زالت متاحة.','error');
+}finally{
+btn.disabled=false;
+btn.textContent='🔄 تحديث البيانات';
+}
+}
 async function getTasks(s){
+currentSubscription=s;
+currentTasksKey=makeTasksKey(s);
 document.getElementById('subscriptions').classList.add('hidden');
 document.getElementById('tasks').classList.remove('hidden');
+const cached=getTasksCache(currentTasksKey);
+if(cached){
+showTasks(cached);
+}else{
 document.getElementById('taskData').innerHTML='<div class="loading">جاري تحميل المهام والواجبات...</div>';
+}
 try{
-const url=API+'?action=tasks&code='+encodeURIComponent(code)+'&subscription='+encodeURIComponent(s.subscription)+'&column='+encodeURIComponent(s.column)+'&teacher='+encodeURIComponent(s.teacher)+'&subject='+encodeURIComponent(s.subject);
-const r=await fetch(url);
+const url=API+'?action=tasks&code='+encodeURIComponent(code)+'&subscription='+encodeURIComponent(s.subscription)+'&column='+encodeURIComponent(s.column)+'&teacher='+encodeURIComponent(s.teacher)+'&subject='+encodeURIComponent(s.subject)+'&_cache='+Date.now();
+const r=await fetch(url,{cache:'no-store'});
 const data=await r.json();
-if(!data.success){document.getElementById('taskData').innerHTML='<div class="error">'+escapeHtml(data.error||'حدث خطأ')+'</div>';return}
-if(!data.tasks||!data.tasks.length){document.getElementById('taskData').innerHTML='<div class="loading">لا توجد مهام أو واجبات</div>';return}
-document.getElementById('taskData').innerHTML=data.tasks.map(t=>'<div class="task" onclick="openTask(\''+encodeURIComponent(t.target)+'\')"><span>المهمة</span><strong>'+escapeHtml(t.name)+'</strong></div>').join('');
-}catch(e){document.getElementById('taskData').innerHTML='<div class="error">تعذر الاتصال بالخادم</div>'}
+if(!data.success){
+if(!cached)document.getElementById('taskData').innerHTML='<div class="error">'+escapeHtml(data.error||'حدث خطأ')+'</div>';
+return;
+}
+if(!data.tasks||!data.tasks.length){
+if(!cached)document.getElementById('taskData').innerHTML='<div class="loading">لا توجد مهام أو واجبات</div>';
+return;
+}
+saveTasksCache(currentTasksKey,data.tasks);
+showTasks(data.tasks);
+}catch(e){
+if(!cached)document.getElementById('taskData').innerHTML='<div class="error">تعذر الاتصال بالخادم</div>';
+}
+}
+function showTasks(tasks){
+document.getElementById('taskData').innerHTML=tasks.map(t=>'<div class="task" onclick="openTask(\''+encodeURIComponent(t.target)+'\')"><span>المهمة</span><strong>'+escapeHtml(t.name)+'</strong></div>').join('');
+}
+async function refreshTasks(){
+if(!currentSubscription)return;
+const btn=document.getElementById('refreshTasksBtn');
+const status=document.getElementById('refreshTasksStatus');
+const cached=getTasksCache(currentTasksKey);
+if(cached){
+showTasks(cached);
+}
+btn.disabled=true;
+btn.textContent='جاري التحديث...';
+showRefreshStatus(status,'جاري تحديث البيانات...','success');
+try{
+const s=currentSubscription;
+const url=API+'?action=tasks&code='+encodeURIComponent(code)+'&subscription='+encodeURIComponent(s.subscription)+'&column='+encodeURIComponent(s.column)+'&teacher='+encodeURIComponent(s.teacher)+'&subject='+encodeURIComponent(s.subject)+'&_refresh='+Date.now();
+const r=await fetch(url,{cache:'no-store'});
+const data=await r.json();
+if(!data.success){
+showRefreshStatus(status,data.error||'تعذر تحديث البيانات. البيانات القديمة ما زالت متاحة.','error');
+return;
+}
+if(!data.tasks||!data.tasks.length){
+showRefreshStatus(status,'لا توجد بيانات جديدة. البيانات القديمة ما زالت متاحة.','error');
+return;
+}
+saveTasksCache(currentTasksKey,data.tasks);
+showTasks(data.tasks);
+showRefreshStatus(status,'تم تحديث البيانات بنجاح.','success');
+}catch(e){
+showRefreshStatus(status,'تعذر الاتصال بالخادم. البيانات القديمة ما زالت متاحة.','error');
+}finally{
+btn.disabled=false;
+btn.textContent='🔄 تحديث البيانات';
+}
+}
+function saveSubscriptionsCache(studentCode,subscriptions){
+try{
+localStorage.setItem(SUB_CACHE_PREFIX+studentCode,JSON.stringify({
+subscriptions:subscriptions,
+savedAt:Date.now()
+}));
+}catch(e){}
+}
+function getSubscriptionsCache(studentCode){
+try{
+const cached=localStorage.getItem(SUB_CACHE_PREFIX+studentCode);
+if(!cached)return null;
+const data=JSON.parse(cached);
+return data.subscriptions||null;
+}catch(e){
+return null;
+}
+}
+function makeTasksKey(s){
+return code+'_'+String(s.subscription||'')+'_'+String(s.column||'')+'_'+String(s.teacher||'')+'_'+String(s.subject||'');
+}
+function saveTasksCache(key,tasks){
+try{
+localStorage.setItem(TASK_CACHE_PREFIX+key,JSON.stringify({
+tasks:tasks,
+savedAt:Date.now()
+}));
+}catch(e){}
+}
+function getTasksCache(key){
+try{
+const cached=localStorage.getItem(TASK_CACHE_PREFIX+key);
+if(!cached)return null;
+const data=JSON.parse(cached);
+return data.tasks||null;
+}catch(e){
+return null;
+}
+}
+function showRefreshStatus(element,message,type){
+element.textContent=message;
+element.className=type;
+element.style.textAlign='center';
+element.style.marginTop='12px';
+element.style.fontSize='12px';
 }
 function openTask(target){
 target=decodeURIComponent(target);
