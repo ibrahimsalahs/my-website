@@ -1,312 +1,301 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<!DOCTYPE html><html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<script src="auth.js"></script>
-<title>الفيديوهات</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#071019">
+<title>تقييم الاشتراكات | EduSpace</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:Tahoma,Arial,sans-serif}
-html,body{min-height:100vh;background:#080b18;color:#fff}
-body{overflow-x:hidden}
-.container{width:100%;max-width:600px;margin:auto;padding:17px}
-.card{position:relative;overflow:hidden;background:linear-gradient(145deg,#171d34,#101528);border:1px solid #ffffff0d;border-radius:23px;padding:20px;box-shadow:0 12px 30px #00000030}
-h1,h2{margin:0 0 18px;text-align:center;color:#fff}
-input{width:100%;padding:14px;border:1px solid #ffffff18;border-radius:16px;background:#11172a;color:#fff;font-size:16px;outline:none;margin-bottom:10px}
-input:focus{border-color:#6c52ff80;box-shadow:0 0 0 3px #6c52ff18}
-button{width:100%;padding:14px;border:0;border-radius:17px;background:linear-gradient(135deg,#6745ff,#a05cff);color:#fff;font-size:16px;font-weight:bold;cursor:pointer;box-shadow:0 10px 25px #00000030;transition:.2s}
-button:active{transform:scale(.97)}
-button:disabled{opacity:.6;cursor:not-allowed}
-.actions{display:flex;gap:8px;margin-bottom:10px}
-.actions button{flex:1}
-.refresh{background:linear-gradient(135deg,#1d2948,#26365d);border:1px solid #ffffff20}
-.refresh:active{background:linear-gradient(135deg,#142038,#1d2b4a)}
-.item{position:relative;overflow:hidden;padding:17px;border:1px solid #ffffff0d;border-radius:20px;margin-bottom:10px;cursor:pointer;background:linear-gradient(145deg,#171d34,#101528);box-shadow:0 10px 25px #00000025;transition:.2s}
-.item:hover{background:linear-gradient(145deg,#1b2240,#131a31);border-color:#6c52ff40}
-.item strong{display:block;color:#fff;margin-bottom:5px}
-.item span{color:#aab2c5}
-.hidden{display:none}
-.message{text-align:center;padding:15px;color:#788199}
-.error{color:#ff718b;text-align:center;padding:10px}
-.success{color:#20d6a1;text-align:center;padding:10px}
-.back{background:linear-gradient(135deg,#475569);margin-bottom:15px}
-@media(min-width:700px){
-.container{max-width:750px;padding:30px}
-.card{padding:27px;border-radius:27px}
-h1{font-size:32px}
-h2{font-size:25px}
-input{padding:16px;font-size:17px}
-button{padding:16px;font-size:17px}
-.item{padding:20px;border-radius:22px}
-}
-@media(min-width:1100px){
-.container{max-width:900px;padding:35px}
-.card{padding:32px}
-}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%;font-family:Arial,Tahoma,sans-serif;background:#071019;color:#f8f5ff}
+body{padding:20px;background:radial-gradient(ellipse at 10% 0%,rgba(191,66,190,.16),transparent 38%),radial-gradient(ellipse at 100% 30%,rgba(102,65,200,.15),transparent 35%),linear-gradient(145deg,#071019,#0d202b,#08141d);background-attachment:fixed}
+.container{max-width:720px;margin:auto}
+.header{text-align:center;padding:14px 10px 22px}
+.logo{width:65px;height:65px;margin:0 auto 13px;border-radius:22px;display:flex;align-items:center;justify-content:center;font-size:30px;color:#fff;background:linear-gradient(135deg,#ed62cf,#9656f5,#00c7a2);box-shadow:0 0 28px #b74fd94d,0 0 12px #00c7a233}
+h1{font-size:25px;margin:0 0 9px;color:#fff;text-shadow:0 0 16px #d879ff70}
+.subtitle{font-size:13px;color:#c9c3df;line-height:1.8}
+.card{position:relative;overflow:hidden;background:linear-gradient(145deg,rgba(20,37,52,.97),rgba(15,24,39,.98));border:1px solid rgba(192,111,239,.25);border-radius:20px;padding:20px;margin-bottom:16px;box-shadow:0 10px 32px #0003,inset 0 1px 0 #ffffff08}
+.card:before{content:"";position:absolute;top:0;right:8%;width:110px;height:2px;background:linear-gradient(90deg,transparent,#ed69d2,#9e72ff,transparent);opacity:.9}
+.section-title{display:flex;align-items:center;gap:9px;font-size:16px;font-weight:bold;color:#f5d8ff;margin-bottom:17px}
+.section-icon{width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:10px;background:linear-gradient(135deg,#9d48c9,#613ec0);box-shadow:0 0 15px #a450ce35;color:#fff}
+label{display:block;margin:16px 0 8px;font-size:13px;font-weight:bold;color:#ded7f6}
+select,input,textarea{width:100%;padding:13px 14px;border:1px solid #594568;border-radius:12px;background:#0a1621;color:#fff;font-family:inherit;font-size:14px;outline:none;transition:border-color .2s,box-shadow .2s}
+select:focus,input:focus,textarea:focus{border-color:#db75dc;box-shadow:0 0 0 3px #d45bd21c,0 0 15px #bd50e01c}
+select option{background:#0d1925;color:#fff}
+textarea{min-height:100px;resize:vertical;line-height:1.8}
+select:disabled{opacity:.65}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.info-box{min-width:0;padding:13px;border-radius:13px;border:1px solid #344653;background:linear-gradient(145deg,#0a1924,#101b2a)}
+.info-box small{display:block;color:#bcb2d9;font-size:12px;margin-bottom:8px}
+.info-box strong{display:block;color:#fff;font-size:14px;line-height:1.7;overflow-wrap:anywhere;text-shadow:0 0 12px #ffffff16}
+.student-box{border-color:#7e4c9b;background:linear-gradient(135deg,#281b36,#111d2b)}
+.student-box strong{color:#f4d5ff}
+.subscription-box{grid-column:1/-1;border-color:#4d4b88;background:linear-gradient(120deg,#211d3b,#10252d)}
+.subscription-box strong{font-size:18px;color:#fff;text-shadow:0 0 12px #bd7aff55}
+.subscription-badge{display:inline-flex;align-items:center;gap:7px;margin-top:11px;padding:6px 11px;border-radius:20px;background:#8b5ad126;border:1px solid #aa76e45c;color:#e6c9ff;font-size:12px}
+.subscription-dot{width:7px;height:7px;border-radius:50%;background:#00d8b0;box-shadow:0 0 8px #00d8b0}
+.hidden{display:none!important}
+button{width:100%;border:0;border-radius:12px;padding:14px;font-family:inherit;font-size:15px;font-weight:bold;cursor:pointer;transition:transform .15s,opacity .2s;margin-top:13px}
+button:active{transform:scale(.985)}
+.primary{color:#fff;background:linear-gradient(110deg,#a347d1,#d650b6,#7653e8);box-shadow:0 5px 20px #a34cc42e,inset 0 1px 0 #ffffff30;text-shadow:0 1px 5px #0003}
+.secondary{color:#e0d0ff;background:linear-gradient(110deg,#292043,#19313e);border:1px solid #654c88}
+button:disabled{opacity:.6;cursor:wait}
+.banner{display:none;padding:13px 15px;border-radius:12px;margin-bottom:15px;font-size:14px;line-height:1.8;overflow-wrap:anywhere}
+.banner.show{display:block}
+.banner.success{color:#b7ffe8;background:#0d332d;border:1px solid #16866a;box-shadow:0 0 16px #00c7a20c}
+.banner.error{color:#ffd4e9;background:#391b30;border:1px solid #a84979}
+.banner.loading{color:#ead7ff;background:#251d3c;border:1px solid #7551a5}
+.rating-note{margin-top:9px;font-size:12px;color:#c7b5dc;line-height:1.7}
+.footer{text-align:center;color:#9e9ab7;font-size:11px;padding:8px 0 18px}
+@media(max-width:480px){body{padding:12px}.header{padding:10px 8px 19px}.logo{width:57px;height:57px;border-radius:19px;font-size:26px}h1{font-size:22px}.card{padding:15px;border-radius:17px}.info-grid{gap:8px}.info-box{padding:11px}.info-box strong{font-size:13px}.subscription-box strong{font-size:17px}select,textarea{font-size:14px}}
 </style>
 </head>
 <body>
-<div id="loginScreen" class="container">
-<div class="card">
-<h1>دخول الطالب</h1>
-<input id="code" type="text" inputmode="numeric" placeholder="أدخل كود الطالب">
-<div class="actions">
-<button type="button" id="loginBtn">إرسال</button>
-<button type="button" id="refreshBtn" class="refresh">🔄 تحديث البيانات</button>
+<div class="container">
+<header class="header">
+<div class="logo">✦</div>
+<h1>تقييم الاشتراكات</h1>
+<div class="subtitle">EduSpace · متابعة وتقييم الاشتراكات</div>
+</header>
+<div id="banner" class="banner"></div>
+<section class="card">
+<div class="section-title"><span class="section-icon">♙</span>بيانات الطالب</div>
+<label for="student">اختر الطالب</label>
+<select id="student"><option value="">جاري تحميل الطلاب...</option></select>
+<div id="studentInfo" class="info-grid hidden">
+<div class="info-box student-box"><small>اسم الطالب</small><strong id="studentName"></strong></div>
+<div class="info-box student-box"><small>كود الطالب</small><strong id="studentCode"></strong></div>
 </div>
-<div id="loginMessage"></div>
+<label for="subscription">اختر الاشتراك</label>
+<select id="subscription" disabled><option value="">اختر الطالب أولًا</option></select>
+<div id="subscriptionInfo" class="info-grid hidden">
+<div class="info-box subscription-box">
+<small>الاشتراك المحدد</small>
+<strong id="subscriptionTitle"></strong>
+<div class="subscription-badge"><span class="subscription-dot"></span><span id="subscriptionNumber"></span></div>
 </div>
 </div>
-<div id="subscriptionsScreen" class="container hidden">
-<div class="card">
-<h2>الاشتراكات</h2>
-<div class="actions">
-<button type="button" id="refreshSubscriptionsBtn" class="refresh">🔄 تحديث البيانات</button>
+</section>
+<section id="evaluationCard" class="card hidden">
+<div class="section-title"><span class="section-icon">✧</span>تقييم المعلم</div>
+<label for="evaluationType">نوع التقييم</label>
+<select id="evaluationType">
+<option value="">اختر نوع التقييم</option>
+<option value="good">⭐ تقييم جيد</option>
+<option value="bad">⚠️ تقييم سيئ</option>
+</select>
+<div id="ratingWrap" class="hidden">
+<label for="rating">درجة التقييم</label>
+<select id="rating"></select>
+<div class="rating-note" id="ratingNote"></div>
 </div>
-<div id="refreshStatus"></div>
-<div id="subscriptions"></div>
-</div>
-</div>
-<div id="videosScreen" class="container hidden">
-<div class="card">
-<button type="button" class="back" id="backSubscriptions">العودة للاشتراكات</button>
-<h2 id="videosTitle">الفيديوهات</h2>
-<div class="actions">
-<button type="button" id="refreshVideosBtn" class="refresh">🔄 تحديث البيانات</button>
-</div>
-<div id="videosStatus"></div>
-<div id="videos"></div>
-</div>
+<label for="notes">الملاحظات</label>
+<textarea id="notes" maxlength="1000" placeholder="اكتب ملاحظاتك هنا إن وجدت..."></textarea>
+<button id="submitBtn" class="primary" type="button">✦ إرسال التقييم</button>
+<button id="refreshBtn" class="secondary" type="button">↻ تحديث بيانات الطلاب</button>
+</section>
+<div class="footer">EduSpace · المنصة التعليمية</div>
 </div>
 <script>
-const API='https://script.google.com/macros/s/AKfycbxkhA-QNvq-b9ghroVoUtLHohTOzfkQfrFnOwVFejyp347tHlJV9q-Ibzn8HB90zAyH8g/exec';
-const loginScreen=document.getElementById('loginScreen');
-const subscriptionsScreen=document.getElementById('subscriptionsScreen');
-const videosScreen=document.getElementById('videosScreen');
-const codeInput=document.getElementById('code');
-const loginBtn=document.getElementById('loginBtn');
-const refreshBtn=document.getElementById('refreshBtn');
-const refreshSubscriptionsBtn=document.getElementById('refreshSubscriptionsBtn');
-const refreshVideosBtn=document.getElementById('refreshVideosBtn');
-const loginMessage=document.getElementById('loginMessage');
-const refreshStatus=document.getElementById('refreshStatus');
-const videosStatus=document.getElementById('videosStatus');
-const subscriptions=document.getElementById('subscriptions');
-const videos=document.getElementById('videos');
-const videosTitle=document.getElementById('videosTitle');
-const backSubscriptions=document.getElementById('backSubscriptions');
-let currentStudentCode='';
-let currentSubscription=null;
-loginBtn.addEventListener('click',loadSubscriptions);
-refreshBtn.addEventListener('click',refreshSubscriptions);
-refreshSubscriptionsBtn.addEventListener('click',refreshSubscriptions);
-refreshVideosBtn.addEventListener('click',refreshVideos);
-codeInput.addEventListener('keydown',e=>{
-if(e.key==='Enter')loadSubscriptions();
-});
-async function loadSubscriptions(){
-const code=codeInput.value.trim();
-if(!code){
-loginMessage.innerHTML='<div class="error">أدخل كود الطالب</div>';
-return;
+const API_URL="https://script.google.com/macros/s/AKfycby9C_lOvYe26jxO5T3tquJhSa2WdZHPIczj94rXy6FKxL3m-8DJMVXczmQslVFxbOyllw/exec";
+const $=id=>document.getElementById(id);
+let students=[];
+let selectedStudent=null;
+let selectedSubscription=null;
+function showBanner(message,type="loading"){
+const el=$("banner");
+el.textContent=message;
+el.className="banner show "+type;
 }
-currentStudentCode=code;
-const cached=getSubscriptionsCache(code);
-if(cached){
-renderSubscriptions(cached);
-loginScreen.classList.add('hidden');
-subscriptionsScreen.classList.remove('hidden');
+function hideBanner(){
+$("banner").className="banner";
+$("banner").textContent="";
 }
-loginBtn.disabled=true;
-loginBtn.textContent='جاري التحميل...';
-loginMessage.innerHTML='<div class="message">جاري التحقق...</div>';
+function getDisplaySubscription(data){
+const raw=String(data||"").trim();
+const match=raw.match(/^?\s*([^()-]+?)\s*-\s*\d+\s*-\s*[^-()]*\s*-\s*([^-()]+?)\s*-\s*[^()]*?/);
+if(match){
+const teacher=match[1].trim();
+const subject=match[2].trim();
+if(teacher&&subject)return teacher+" — "+subject;
+}
+const parts=raw.replace(/^\(/,"").split("-");
+if(parts.length>=4){
+const teacher=parts[0].trim();
+const subject=parts[3].trim();
+if(teacher&&subject)return teacher+" — "+subject;
+}
+return "اشتراك "+(raw?"مسجل":"");
+}
+async function requestStudents(){
+$("student").disabled=true;
+$("student").innerHTML='<option value="">جاري تحميل الطلاب...</option>';
 try{
-const response=await fetch(API+'?action=subscriptions&code='+encodeURIComponent(code)+'&_cache='+Date.now(),{cache:'no-store'});
-if(!response.ok)throw new Error('فشل الاتصال بالخادم');
+const response=await fetch(API_URL+"?action=getStudents&_="+Date.now(),{method:"GET",cache:"no-store"});
 const data=await response.json();
-if(data.error)throw new Error(data.error);
-if(!data.subscriptions||!data.subscriptions.length){
-if(!cached)throw new Error('لا توجد اشتراكات للطالب');
-return;
-}
-saveSubscriptionsCache(code,data.subscriptions);
-renderSubscriptions(data.subscriptions);
-loginScreen.classList.add('hidden');
-subscriptionsScreen.classList.remove('hidden');
-}catch(e){
-if(!cached)loginMessage.innerHTML='<div class="error">'+escapeHtml(e.message)+'</div>';
-}finally{
-loginBtn.disabled=false;
-loginBtn.textContent='إرسال';
-}
-}
-async function refreshSubscriptions(){
-const code=codeInput.value.trim()||currentStudentCode;
-if(!code){
-loginMessage.innerHTML='<div class="error">أدخل كود الطالب</div>';
-return;
-}
-currentStudentCode=code;
-const cached=getSubscriptionsCache(code);
-if(cached){
-renderSubscriptions(cached);
-loginScreen.classList.add('hidden');
-subscriptionsScreen.classList.remove('hidden');
-}
-refreshBtn.disabled=true;
-refreshSubscriptionsBtn.disabled=true;
-refreshBtn.textContent='جاري التحديث...';
-refreshSubscriptionsBtn.textContent='جاري التحديث...';
-refreshStatus.innerHTML='<div class="success">جاري تحديث البيانات...</div>';
-try{
-const response=await fetch(API+'?action=subscriptions&code='+encodeURIComponent(code)+'&_refresh='+Date.now(),{cache:'no-store'});
-if(!response.ok)throw new Error('فشل الاتصال بالخادم');
-const data=await response.json();
-if(data.error)throw new Error(data.error);
-if(!data.subscriptions||!data.subscriptions.length){
-refreshStatus.innerHTML='<div class="error">لا توجد بيانات جديدة، تم الاحتفاظ بالبيانات القديمة.</div>';
-return;
-}
-saveSubscriptionsCache(code,data.subscriptions);
-renderSubscriptions(data.subscriptions);
-loginScreen.classList.add('hidden');
-subscriptionsScreen.classList.remove('hidden');
-refreshStatus.innerHTML='<div class="success">تم تحديث البيانات بنجاح.</div>';
-}catch(e){
-refreshStatus.innerHTML='<div class="error">تعذر التحديث، تم الاحتفاظ بالبيانات القديمة.</div>';
-}finally{
-refreshBtn.disabled=false;
-refreshSubscriptionsBtn.disabled=false;
-refreshBtn.textContent='🔄 تحديث البيانات';
-refreshSubscriptionsBtn.textContent='🔄 تحديث البيانات';
-}
-}
-function renderSubscriptions(list){
-subscriptions.innerHTML='';
-list.forEach(item=>{
-const div=document.createElement('div');
-div.className='item';
-div.innerHTML='<strong>الاشتراك '+escapeHtml(item.subscription)+'</strong><span>المعلم: '+escapeHtml(item.teacher)+'</span><br><span>المادة: '+escapeHtml(item.subject)+'</span>';
-div.addEventListener('click',()=>loadVideos(item));
-subscriptions.appendChild(div);
+if(!data.success)throw new Error(data.message||"تعذر جلب بيانات الطلاب");
+students=Array.isArray(data.students)?data.students:[];
+$("student").innerHTML='<option value="">اختر الطالب</option>';
+students.forEach((s,i)=>{
+const option=document.createElement("option");
+option.value=String(i);
+option.textContent=s.studentName+" — كود "+s.studentCode;
+$("student").appendChild(option);
 });
-}
-async function loadVideos(item){
-currentSubscription=item;
-subscriptionsScreen.classList.add('hidden');
-videosScreen.classList.remove('hidden');
-videosTitle.textContent=item.teacher+' - '+item.subject;
-const cached=getVideosCache(currentStudentCode,item);
-if(cached){
-renderVideos(cached);
-}else{
-videos.innerHTML='<div class="message">جاري تحميل الفيديوهات...</div>';
-}
-refreshVideosBtn.disabled=true;
-refreshVideosBtn.textContent='جاري التحميل...';
-try{
-const url=API+'?action=videos&code='+encodeURIComponent(currentStudentCode)+'&subscription='+encodeURIComponent(item.subscription)+'&column='+encodeURIComponent(item.column)+'&teacher='+encodeURIComponent(item.teacher)+'&subject='+encodeURIComponent(item.subject)+'&_cache='+Date.now();
-const response=await fetch(url,{cache:'no-store'});
-if(!response.ok)throw new Error('فشل الاتصال بالخادم');
-const data=await response.json();
-if(data.error)throw new Error(data.error);
-saveVideosCache(currentStudentCode,item,data.videos||[]);
-renderVideos(data.videos||[]);
-}catch(e){
-if(!cached)videos.innerHTML='<div class="error">'+escapeHtml(e.message)+'</div>';
+$("student").disabled=false;
+resetStudentFields();
+showBanner("تم تحميل بيانات الطلاب بنجاح","success");
+setTimeout(hideBanner,2200);
+}catch(error){
+$("student").innerHTML='<option value="">تعذر تحميل الطلاب</option>';
+showBanner(error.message||"تعذر الاتصال بالخادم. تحقق من رابط النشر وإعدادات Apps Script.","error");
 }finally{
-refreshVideosBtn.disabled=false;
-refreshVideosBtn.textContent='🔄 تحديث البيانات';
+$("student").disabled=false;
 }
 }
-async function refreshVideos(){
-if(!currentStudentCode||!currentSubscription)return;
-const item=currentSubscription;
-const cached=getVideosCache(currentStudentCode,item);
-if(cached)renderVideos(cached);
-refreshVideosBtn.disabled=true;
-refreshVideosBtn.textContent='جاري التحديث...';
-videosStatus.innerHTML='<div class="success">جاري تحديث البيانات...</div>';
-try{
-const url=API+'?action=videos&code='+encodeURIComponent(currentStudentCode)+'&subscription='+encodeURIComponent(item.subscription)+'&column='+encodeURIComponent(item.column)+'&teacher='+encodeURIComponent(item.teacher)+'&subject='+encodeURIComponent(item.subject)+'&_refresh='+Date.now();
-const response=await fetch(url,{cache:'no-store'});
-if(!response.ok)throw new Error('فشل الاتصال بالخادم');
-const data=await response.json();
-if(data.error)throw new Error(data.error);
-if(!data.videos||!data.videos.length){
-videosStatus.innerHTML='<div class="error">لا توجد بيانات جديدة، تم الاحتفاظ بالبيانات القديمة.</div>';
+function resetStudentFields(){
+selectedStudent=null;
+selectedSubscription=null;
+$("studentInfo").classList.add("hidden");
+$("subscriptionInfo").classList.add("hidden");
+$("evaluationCard").classList.add("hidden");
+$("subscription").disabled=true;
+$("subscription").innerHTML='<option value="">اختر الطالب أولًا</option>';
+$("evaluationType").value="";
+$("rating").innerHTML="";
+$("ratingWrap").classList.add("hidden");
+$("notes").value="";
+}
+function renderSubscriptions(student){
+selectedStudent=student;
+selectedSubscription=null;
+$("studentInfo").classList.remove("hidden");
+$("studentName").textContent=student.studentName;
+$("studentCode").textContent=student.studentCode;
+$("subscription").innerHTML='<option value="">اختر الاشتراك</option>';
+(student.subscriptions||[]).forEach(sub=>{
+const option=document.createElement("option");
+option.value=String(sub.number);
+option.textContent=getDisplaySubscription(sub.data);
+$("subscription").appendChild(option);
+});
+$("subscription").disabled=false;
+$("subscriptionInfo").classList.add("hidden");
+$("evaluationCard").classList.add("hidden");
+if(!student.subscriptions||!student.subscriptions.length){
+$("subscription").innerHTML='<option value="">لا توجد اشتراكات لهذا الطالب</option>';
+$("subscription").disabled=true;
+showBanner("لا توجد اشتراكات مسجلة في صف هذا الطالب.","error");
+}else hideBanner();
+}
+function updateRatingOptions(){
+const type=$("evaluationType").value;
+const rating=$("rating");
+rating.innerHTML="";
+if(!type){
+$("ratingWrap").classList.add("hidden");
 return;
 }
-saveVideosCache(currentStudentCode,item,data.videos);
-renderVideos(data.videos);
-videosStatus.innerHTML='<div class="success">تم تحديث البيانات بنجاح.</div>';
-}catch(e){
-videosStatus.innerHTML='<div class="error">تعذر التحديث، تم الاحتفاظ بالبيانات القديمة.</div>';
-}finally{
-refreshVideosBtn.disabled=false;
-refreshVideosBtn.textContent='🔄 تحديث البيانات';
+const options=type==="good"?["⭐","⭐⭐","⭐⭐⭐","⭐⭐⭐⭐","⭐⭐⭐⭐⭐"]:["😕 سيئ","😠 سيئ جدًا","⛔ غير مقبول"];
+const first=document.createElement("option");
+first.value="";
+first.textContent="اختر درجة التقييم";
+rating.appendChild(first);
+options.forEach(value=>{
+const option=document.createElement("option");
+option.value=value;
+option.textContent=value;
+rating.appendChild(option);
+});
+$("ratingNote").textContent=type==="good"?"اختر عدد النجوم المناسب للتقييم.":"اختر درجة التقييم المناسبة للحالة.";
+$("ratingWrap").classList.remove("hidden");
 }
-}
-function saveSubscriptionsCache(code,list){
-try{
-localStorage.setItem('videos_subscriptions_'+code,JSON.stringify({data:list,savedAt:Date.now()}));
-}catch(e){}
-}
-function getSubscriptionsCache(code){
-try{
-const cached=localStorage.getItem('videos_subscriptions_'+code);
-if(!cached)return null;
-const parsed=JSON.parse(cached);
-return parsed.data||null;
-}catch(e){
-return null;
-}
-}
-function getVideosKey(code,item){
-return 'videos_data_'+code+'_'+String(item.subscription)+'_'+String(item.column);
-}
-function saveVideosCache(code,item,list){
-try{
-localStorage.setItem(getVideosKey(code,item),JSON.stringify({data:list,savedAt:Date.now()}));
-}catch(e){}
-}
-function getVideosCache(code,item){
-try{
-const cached=localStorage.getItem(getVideosKey(code,item));
-if(!cached)return null;
-const parsed=JSON.parse(cached);
-return parsed.data||null;
-}catch(e){
-return null;
-}
-}
-function renderVideos(list){
-videos.innerHTML='';
-if(!list.length){
-videos.innerHTML='<div class="message">لا توجد فيديوهات لهذا الاشتراك</div>';
+$("student").addEventListener("change",()=>{
+hideBanner();
+const index=$("student").value;
+if(index===""){
+resetStudentFields();
 return;
 }
-list.forEach(video=>{
-const div=document.createElement('div');
-div.className='item';
-div.innerHTML='<strong>'+escapeHtml(video.name)+'</strong>';
-div.addEventListener('click',()=>openVideo(video.target));
-videos.appendChild(div);
+const student=students[Number(index)];
+if(!student){
+resetStudentFields();
+return;
+}
+resetStudentFields();
+renderSubscriptions(student);
 });
+$("subscription").addEventListener("change",()=>{
+hideBanner();
+const number=Number($("subscription").value);
+selectedSubscription=selectedStudent&&number?(selectedStudent.subscriptions||[]).find(s=>Number(s.number)===number):null;
+if(!selectedSubscription){
+$("subscriptionInfo").classList.add("hidden");
+$("evaluationCard").classList.add("hidden");
+return;
 }
-function openVideo(target){
-let url=String(target||'').trim();
-if(!url)return;
-if(!/^https?:\/\//i.test(url))url='https://drive.google.com/file/d/'+encodeURIComponent(url)+'/view';
-window.open(url,'_blank');
-}
-backSubscriptions.addEventListener('click',()=>{
-videosScreen.classList.add('hidden');
-subscriptionsScreen.classList.remove('hidden');
+$("subscriptionNumber").textContent="رقم الاشتراك "+selectedSubscription.number;
+$("subscriptionTitle").textContent=getDisplaySubscription(selectedSubscription.data);
+$("subscriptionInfo").classList.remove("hidden");
+$("evaluationCard").classList.remove("hidden");
+$("evaluationType").value="";
+$("rating").innerHTML="";
+$("ratingWrap").classList.add("hidden");
+$("notes").value="";
 });
-function escapeHtml(value){
-return String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[char]));
+$("evaluationType").addEventListener("change",updateRatingOptions);
+$("refreshBtn").addEventListener("click",requestStudents);
+$("submitBtn").addEventListener("click",async()=>{
+if(!selectedStudent||!selectedSubscription){
+showBanner("اختر الطالب والاشتراك أولًا.","error");
+return;
 }
+const evaluationType=$("evaluationType").value;
+const rating=$("rating").value;
+const notes=$("notes").value.trim();
+if(!evaluationType){
+showBanner("اختر نوع التقييم.","error");
+return;
+}
+if(!rating){
+showBanner("اختر درجة التقييم.","error");
+return;
+}
+const payload={
+action:"saveEvaluation",
+studentName:selectedStudent.studentName,
+studentCode:Number(selectedStudent.rowNumber),
+rowNumber:Number(selectedStudent.rowNumber),
+subscriptionNumber:Number(selectedSubscription.number),
+subscriptionData:selectedSubscription.data,
+evaluationType:evaluationType,
+rating:rating,
+notes:notes
+};
+const button=$("submitBtn");
+button.disabled=true;
+button.textContent="جاري حفظ التقييم...";
+showBanner("جاري التحقق من البيانات وحفظ التقييم...","loading");
+try{
+const response=await fetch(API_URL,{
+method:"POST",
+headers:{"Content-Type":"text/plain;charset=utf-8"},
+body:JSON.stringify(payload)
+});
+const data=await response.json();
+if(!data.success)throw new Error(data.message||"تعذر حفظ التقييم");
+showBanner(data.message||"تم حفظ التقييم بنجاح","success");
+$("evaluationType").value="";
+$("rating").innerHTML="";
+$("ratingWrap").classList.add("hidden");
+$("notes").value="";
+}catch(error){
+showBanner(error.message||"تعذر الاتصال بالخادم. تحقق من رابط النشر وإعدادات Apps Script.","error");
+}finally{
+button.disabled=false;
+button.textContent="✦ إرسال التقييم";
+}
+});
+requestStudents();
 </script>
 </body>
 </html>
